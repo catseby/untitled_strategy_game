@@ -2,6 +2,8 @@ extends Node3D
 
 @onready var axis = $Axis
 
+@export var map : GridMap
+
 func show_indicators(unit):
 	global_position = unit.global_position
 	
@@ -21,9 +23,8 @@ func show_indicators(unit):
 			
 			
 			if xd >= abs(y):
-
-				coords.append(Vector3i(x,0,y))
-
+				if map.is_cell_free(Vector3i(x*2,0,y*2), global_position):
+					coords.append(Vector3i(x,0,y))
 	
 	for i in coords.size():
 		if !coords.has(coords[i] - Vector3i(0,0,-1)):

@@ -5,7 +5,7 @@ extends CharacterBody3D
 @export var speed : float = 10.0
 @export var acceleration : float = 5.0
 @export var zoom_min : float = 2.0
-@export var zoom_max : float = 12.0
+@export var zoom_max : float = 20.0
 @export var zoom_speed : float = 4
 @export var zoom_acceleration : float = 2
 @export var zoom_deacceleration : float = 20

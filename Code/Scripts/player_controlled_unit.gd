@@ -1,6 +1,6 @@
 extends Node3D
 
-@export var move_range : int = 5
+@export var move_range : int = 2
 
 signal show_indicators(unit)
 
