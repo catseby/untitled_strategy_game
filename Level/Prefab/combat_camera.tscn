@@ -1,0 +1,13 @@
+[gd_scene load_steps=2 format=3 uid="uid://c644vfd66ieux"]
+
+[ext_resource type="Script" path="res://Code/Scripts/combat_camera.gd" id="1_x1pjw"]
+
+[node name="Combat_Camera" type="CharacterBody3D"]
+transform = Transform3D(0.707107, 0, 0.707107, 0, 1, 0, -0.707107, 0, 0.707107, 0, 0, 0)
+script = ExtResource("1_x1pjw")
+
+[node name="Camera3D" type="Camera3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0.866025, 0.5, 0, -0.5, 0.866025, 0, 3, 4)
+projection = 1
+current = true
+size = 4.0

@@ -7,7 +7,7 @@ albedo_texture = ExtResource("1_0imuh")
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_ncg17"]
 albedo_texture = ExtResource("1_0imuh")
-texture_filter = 0
+texture_filter = 2
 
 [sub_resource type="PlaneMesh" id="PlaneMesh_6k7pc"]
 material = SubResource("StandardMaterial3D_ncg17")
