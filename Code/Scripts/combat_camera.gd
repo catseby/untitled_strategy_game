@@ -12,12 +12,17 @@ extends CharacterBody3D
 var zoom_time = 0.0
 var zoom_velocity : float = 0.0
 
+@export var rotate_speed : float = 5
+@export var rotate_acceleration : float = 1
+@export var rotate_deacceleration : float = 10
+var rotate_velocity : float = 0
+
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _physics_process(delta: float) -> void:
 	var input = Vector2.ZERO
-	input.y = int(Input.is_action_pressed("ui_down")) - int(Input.is_action_pressed("ui_up"))
-	input.x = int(Input.is_action_pressed("ui_right")) - int(Input.is_action_pressed("ui_left"))
+	input.y = int(Input.is_action_pressed("down")) - int(Input.is_action_pressed("up"))
+	input.x = int(Input.is_action_pressed("right")) - int(Input.is_action_pressed("left"))
 	input = input.normalized()
 	
 	var forward = global_transform.basis.z
@@ -32,8 +37,7 @@ func _physics_process(delta: float) -> void:
 	
 	if Input.is_action_pressed("zoom_in") or Input.is_action_pressed("zoom_out"):
 		zoom = float(Input.is_action_pressed("zoom_out")) - float(Input.is_action_pressed("zoom_in"))
-		zoom = zoom / 4
-		print(zoom)
+		zoom = zoom / 6
 	
 	
 	if zoom != 0:
@@ -44,3 +48,13 @@ func _physics_process(delta: float) -> void:
 	camera.size += zoom_velocity
 	camera.size = clampf(camera.size,zoom_min,zoom_max)
 	
+	
+	var rotate_input = int(Input.is_action_pressed("rotate_right")) - int(Input.is_action_pressed("rotate_left"))
+	
+	if rotate_input != 0:
+		rotate_velocity = lerpf(rotate_velocity, rotate_input * rotate_speed , rotate_acceleration * delta)
+	else:
+		rotate_velocity = lerpf(rotate_velocity, 0, rotate_deacceleration * delta)
+
+	
+	rotation_degrees.y += rotate_velocity
