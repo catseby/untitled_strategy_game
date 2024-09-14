@@ -1,7 +1,16 @@
 extends CharacterBody3D
 
+@onready var camera = $Camera3D
+
 @export var speed : float = 10.0
 @export var acceleration : float = 5.0
+@export var zoom_min : float = 2.0
+@export var zoom_max : float = 12.0
+@export var zoom_speed : float = 4
+@export var zoom_acceleration : float = 2
+@export var zoom_deacceleration : float = 20
+var zoom_time = 0.0
+var zoom_velocity : float = 0.0
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -18,3 +27,20 @@ func _physics_process(delta: float) -> void:
 	velocity = velocity.lerp(relativeDir * speed, acceleration * delta)
 	
 	move_and_slide()
+	
+	var zoom = int(Input.is_action_just_pressed("zoom_out")) - int(Input.is_action_just_pressed("zoom_in"))
+	
+	if Input.is_action_pressed("zoom_in") or Input.is_action_pressed("zoom_out"):
+		zoom = float(Input.is_action_pressed("zoom_out")) - float(Input.is_action_pressed("zoom_in"))
+		zoom = zoom / 4
+		print(zoom)
+	
+	
+	if zoom != 0:
+		zoom_velocity = lerpf(zoom_velocity,zoom * zoom_speed, zoom_acceleration * delta)
+	else:
+		zoom_velocity = lerpf(zoom_velocity,0, zoom_deacceleration * delta)
+	
+	camera.size += zoom_velocity
+	camera.size = clampf(camera.size,zoom_min,zoom_max)
+	

@@ -9,9 +9,21 @@ func show_indicators(unit):
 	
 	var range = unit.move_range
 	var range_size = range * 2 + 1
-	for x in range_size:
-		for y in range_size:
-			coords.append(Vector3i(x-range,0,y-range))
+	for xi in range_size:
+		
+		var x = xi - range
+		
+		for yi in range_size:
+			
+			var y = yi - range
+			
+			var xd = abs(abs(x) - range)
+			
+			
+			if xd >= abs(y):
+
+				coords.append(Vector3i(x,0,y))
+
 	
 	for i in coords.size():
 		if !coords.has(coords[i] - Vector3i(0,0,-1)):
