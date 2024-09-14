@@ -4,6 +4,7 @@ const PCU = preload("res://Level/Prefab/player_controlled_unit.tscn")
 
 @export var units : Array[Node] = []
 @export var map : GridMap
+@export var action_indicator : Node3D
 
 func queue_units(queue : Array[Node]) -> void:
 	units.append_array(queue)
@@ -19,5 +20,6 @@ func _ready() -> void:
 
 func add_units() -> void:
 	for i in units.size():
-		units[i].global_position = get_child(i).global_position
 		get_parent().add_child(units[i])
+		units[i].global_position = get_child(i).global_position
+		units[i].show_indicators.connect(action_indicator.show_indicators)
