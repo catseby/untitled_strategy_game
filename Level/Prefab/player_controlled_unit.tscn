@@ -1,0 +1,12 @@
+[gd_scene load_steps=3 format=3 uid="uid://dtnub07jwdhiu"]
+
+[ext_resource type="Script" path="res://Code/Scripts/player_controlled_unit.gd" id="1_wm6lu"]
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_adwiy"]
+
+[node name="Player_Controlled_Unit" type="Node3D"]
+script = ExtResource("1_wm6lu")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+mesh = SubResource("CylinderMesh_adwiy")
