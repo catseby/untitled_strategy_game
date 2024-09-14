@@ -1,0 +1,19 @@
+[gd_scene load_steps=5 format=3 uid="uid://di7p7w2havwvk"]
+
+[ext_resource type="Texture2D" uid="uid://y2m5olarlnnc" path="res://Art/Textures/Prototype-Textures/Dark/texture_01.png" id="1_0imuh"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_xay46"]
+albedo_texture = ExtResource("1_0imuh")
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_ncg17"]
+albedo_texture = ExtResource("1_0imuh")
+texture_filter = 0
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_6k7pc"]
+material = SubResource("StandardMaterial3D_ncg17")
+
+[node name="Mesh_library" type="Node3D"]
+
+[node name="floor" type="MeshInstance3D" parent="."]
+material_override = SubResource("StandardMaterial3D_xay46")
+mesh = SubResource("PlaneMesh_6k7pc")
