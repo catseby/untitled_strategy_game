@@ -23,3 +23,4 @@ func add_units() -> void:
 		get_parent().add_child(units[i])
 		units[i].global_position = get_child(i).global_position
 		units[i].show_indicators.connect(action_indicator.show_indicators)
+	queue_free()

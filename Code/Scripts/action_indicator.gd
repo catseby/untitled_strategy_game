@@ -1,8 +1,13 @@
-extends Node3D
+extends GridMap
 
 @onready var axis = $Axis
+@onready var indicator = $Indicator
 
 @export var map : GridMap
+
+func set_indicator(ind_position):
+	indicator.position = ind_position
+	print(ind_position)
 
 func show_indicators(unit):
 	global_position = unit.global_position
@@ -25,16 +30,17 @@ func show_indicators(unit):
 			if xd >= abs(y):
 				if map.is_cell_free(Vector3i(x*2,0,y*2), global_position):
 					coords.append(Vector3i(x,0,y))
+					set_cell_item(Vector3i(x,0,y),0,0)
 	
 	for i in coords.size():
 		if !coords.has(coords[i] - Vector3i(0,0,-1)):
-			axis.get_child(0).set_cell_item(coords[i],0,0)
+			axis.get_child(0).set_cell_item(coords[i],1,0)
 		
 		if !coords.has(coords[i] - Vector3i(0,0,1)):
-			axis.get_child(1).set_cell_item(coords[i],0,10)
+			axis.get_child(1).set_cell_item(coords[i],1,10)
 		
 		if !coords.has(coords[i] - Vector3i(1,0,0)):
-			axis.get_child(2).set_cell_item(coords[i],0,22)
+			axis.get_child(2).set_cell_item(coords[i],1,22)
 		
 		if !coords.has(coords[i] - Vector3i(-1,0,0)):
-			axis.get_child(3).set_cell_item(coords[i],0,16)
+			axis.get_child(3).set_cell_item(coords[i],1,16)

@@ -17,6 +17,9 @@ var zoom_velocity : float = 0.0
 @export var rotate_deacceleration : float = 10
 var rotate_velocity : float = 0
 
+@export var action_indicator : GridMap
+
+signal ray_colliding(ray_position)
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _physics_process(delta: float) -> void:
@@ -58,3 +61,21 @@ func _physics_process(delta: float) -> void:
 
 	
 	rotation_degrees.y += rotate_velocity
+
+func _process(delta: float) -> void:
+	
+	var space_state = get_world_3d().direct_space_state
+	var mousepos = get_viewport().get_mouse_position()
+	
+	var origin = camera.project_ray_origin(mousepos)
+	var end = origin + camera.project_ray_normal(mousepos) * 100
+	var query = PhysicsRayQueryParameters3D.create(origin, end, 1)
+	query.collide_with_bodies = true
+	query.collide_with_areas = false
+	
+	var result = space_state.intersect_ray(query)
+	if result:
+		print(result.collider)
+		if result.collider is GridMap:
+			print(1)
+			result.collider.set_indicator(result.position)
