@@ -75,7 +75,5 @@ func _process(delta: float) -> void:
 	
 	var result = space_state.intersect_ray(query)
 	if result:
-		print(result.collider)
 		if result.collider is GridMap:
-			print(1)
 			result.collider.set_indicator(result.position)

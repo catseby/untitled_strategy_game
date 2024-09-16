@@ -6,8 +6,11 @@ extends GridMap
 @export var map : GridMap
 
 func set_indicator(ind_position):
-	indicator.position = ind_position
-	print(ind_position)
+	ind_position = to_local(ind_position)
+	var snap_position = local_to_map(ind_position)
+	
+	if get_cell_item(snap_position) != -1:
+		indicator.position = map_to_local(snap_position)
 
 func show_indicators(unit):
 	global_position = unit.global_position
