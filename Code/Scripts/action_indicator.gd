@@ -2,18 +2,43 @@ extends GridMap
 
 @onready var axis = $Axis
 @onready var indicator = $Indicator
+@onready var active_unit : Node3D
 
 @export var map : GridMap
+
+signal move(move_position)
+
+var indicator_position = Vector3i.ZERO
 
 func set_indicator(ind_position):
 	ind_position = to_local(ind_position)
 	var snap_position = local_to_map(ind_position)
 	
 	if get_cell_item(snap_position) != -1:
-		indicator.position = map_to_local(snap_position)
+		indicator_position = map_to_local(snap_position)
+		indicator.position = indicator_position
+
+func action():
+	active_unit.move(to_global(indicator_position))
+	clear_indicators()
+
+
+func clear_indicators():
+	visible = false
+	indicator.position = Vector3(1,0,1)
+	clear()
+	
+	active_unit = null
+	
+	for i in axis.get_child_count():
+		axis.get_child(i).clear()
+
 
 func show_indicators(unit):
-	global_position = unit.global_position
+	visible = true
+	active_unit = unit
+	
+	global_position = unit.global_position - Vector3(1,0,1)
 	
 	var coords : Array[Vector3i] = []
 	
@@ -28,7 +53,6 @@ func show_indicators(unit):
 			var y = yi - range
 			
 			var xd = abs(abs(x) - range)
-			
 			
 			if xd >= abs(y):
 				if map.is_cell_free(Vector3i(x*2,0,y*2), global_position):

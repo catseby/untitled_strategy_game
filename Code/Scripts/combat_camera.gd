@@ -58,7 +58,6 @@ func _physics_process(delta: float) -> void:
 		rotate_velocity = lerpf(rotate_velocity, rotate_input * rotate_speed , rotate_acceleration * delta)
 	else:
 		rotate_velocity = lerpf(rotate_velocity, 0, rotate_deacceleration * delta)
-
 	
 	rotation_degrees.y += rotate_velocity
 
@@ -77,3 +76,6 @@ func _process(delta: float) -> void:
 	if result:
 		if result.collider is GridMap:
 			result.collider.set_indicator(result.position)
+			
+			if Input.is_action_just_pressed("left_click"):
+				result.collider.action()
