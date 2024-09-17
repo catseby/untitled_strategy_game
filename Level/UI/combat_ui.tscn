@@ -1,7 +1,6 @@
-[gd_scene load_steps=3 format=3 uid="uid://dtoh1am0ml7nc"]
+[gd_scene load_steps=2 format=3 uid="uid://dtoh1am0ml7nc"]
 
 [ext_resource type="Script" path="res://Code/Scripts/combat_ui.gd" id="1_h1l8q"]
-[ext_resource type="PackedScene" uid="uid://7h127a6uvk7g" path="res://Level/UI/skill_button.tscn" id="2_1g3nh"]
 
 [node name="Combat_UI" type="Control"]
 layout_mode = 3
@@ -27,8 +26,3 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 alignment = 1
-
-[node name="Skill_Button" parent="Actions/Hbox" instance=ExtResource("2_1g3nh")]
-layout_mode = 2
-text = "Skill"
-autowrap_mode = 2

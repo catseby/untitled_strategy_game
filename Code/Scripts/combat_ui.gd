@@ -15,6 +15,7 @@ func display_actions(unit):
 	skills.add_child(m_button)
 	m_button.text = "Move"
 	m_button.was_pressed.connect(button_pressed)
+	print(skills.get_child(0))
 
 
 func button_pressed(button):
@@ -24,3 +25,13 @@ func button_pressed(button):
 	
 	for i in skills.get_child_count():
 		skills.get_child(i).queue_free()
+	
+	current_unit = null
+
+func _input(event: InputEvent) -> void:
+	if current_unit != null and event is InputEventKey:
+		if event.is_pressed() and not event.is_echo():
+			match event.keycode:
+				KEY_1:
+					print(skills.get_child(0))
+					button_pressed(skills.get_child(0))
