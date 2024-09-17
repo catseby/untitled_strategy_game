@@ -62,21 +62,6 @@ func show_indicators(unit):
 				fresh_next_pass.append(new_cell + Vector3i(0,0,-1))
 			
 		next_pass.append_array(fresh_next_pass)
-
-	#for xi in range_size:
-		#
-		#var x = xi - range
-		#
-		#for yi in range_size:
-			#
-			#var y = yi - range
-			#
-			#var xd = abs(abs(x) - range)
-			#
-			#if xd >= abs(y):
-				#if map.is_cell_free(Vector3i(x*2,0,y*2), global_position):
-					#coords.append(Vector3i(x,0,y))
-					#set_cell_item(Vector3i(x,0,y),0,0)
 	
 	for i in coords.size():
 		if !coords.has(coords[i] - Vector3i(0,0,-1)):
