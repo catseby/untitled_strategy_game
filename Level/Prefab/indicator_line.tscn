@@ -1,0 +1,11 @@
+[gd_scene load_steps=3 format=3 uid="uid://bbewjgskpwky"]
+
+[ext_resource type="Script" path="res://Code/Scripts/indicator_line.gd" id="1_hrcqf"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_cm8vn"]
+shading_mode = 0
+
+[node name="Indicator_Line" type="MeshInstance3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2, 0.05, 0)
+material_override = SubResource("StandardMaterial3D_cm8vn")
+script = ExtResource("1_hrcqf")
