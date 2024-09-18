@@ -1,12 +1,18 @@
 extends MeshInstance3D
 
-var right = 0.1
-var down = 0.1
+@export var line_width = 0.1
+var right = line_width
+var down = line_width
 
 func generate_line(array : Array[Vector3]):
 	var vertices = PackedVector3Array()
 	
+
+	
 	array.push_front(Vector3.ZERO)
+	array[array.size()-1] = array[array.size()-2].lerp(array[array.size()-1],0.45)
+	#array[array.size()-1] = array[array.size()-1] - Vector3(0.5,0,0)
+	print(array[array.size()-1])
 	
 	for i in array.size():
 		var cell_pos = array[i] * Vector3(2,0,2)
@@ -61,12 +67,6 @@ func generate_line(array : Array[Vector3]):
 				vertices.push_back(next_cell_pos + Vector3(-right,0, -down))
 				vertices.push_back(next_cell_pos + Vector3(right,0, -down))
 				vertices.push_back(cell_pos + Vector3(right,0,down))
-
-	
-	
-	vertices.push_back(array[0])
-	vertices.push_back(array[0])
-
 	
 	var arr_mesh = ArrayMesh.new()
 	var arrays = []
@@ -76,7 +76,6 @@ func generate_line(array : Array[Vector3]):
 	arr_mesh.add_surface_from_arrays(Mesh.PRIMITIVE_TRIANGLE_STRIP, arrays)
 	var m = MeshInstance3D.new()
 	
-	print(m)
 	m.mesh = arr_mesh
 	
 	mesh = m.mesh

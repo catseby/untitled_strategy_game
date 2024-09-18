@@ -6,6 +6,6 @@
 shading_mode = 0
 
 [node name="Indicator_Line" type="MeshInstance3D"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1, 0.05, 1)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1, 0.01, 1)
 material_override = SubResource("StandardMaterial3D_cm8vn")
 script = ExtResource("1_hrcqf")

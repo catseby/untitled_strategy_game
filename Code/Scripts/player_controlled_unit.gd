@@ -1,6 +1,6 @@
 extends Node3D
 
-@export var move_range : int = 5
+@export var move_range : int = 7
 
 signal await_command(unit)
 
