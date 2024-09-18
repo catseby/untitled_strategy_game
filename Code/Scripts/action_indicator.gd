@@ -23,6 +23,8 @@ func set_indicator(ind_position):
 func generate_path(end_position):
 	var cells = get_used_cells()
 	
+	print(cells)
+	
 	var AS = AStarGrid2D.new()
 	AS.region = Rect2i(-active_unit.move_range-1,-active_unit.move_range-1,
 	active_unit.move_range * 2 + 2,active_unit.move_range * 2 + 2)
@@ -33,6 +35,8 @@ func generate_path(end_position):
 	
 	
 	for cell in cells:
+		AS.set_point_weight_scale(Vector2i(cell.x,cell.z),cells.find(cell))
+		
 		if  !cells.has(cell + Vector3i(1,0,0)): #-----------------------RIGHT
 			AS.set_point_solid(Vector2i(cell.x,cell.z) + Vector2i(1,0))
 		if  !cells.has(cell + Vector3i(-1,0,0)):#-----------------------LEFT
@@ -47,7 +51,7 @@ func generate_path(end_position):
 	var pathV3 : Array[Vector3]
 	for p in path:
 		pathV3.push_back(Vector3(p.x,0,p.y))
-	print(path)
+	
 	indicator_line.generate_line(pathV3)
 
 func action():
