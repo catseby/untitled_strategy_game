@@ -20,40 +20,35 @@ func set_indicator(ind_position):
 		indicator.position = indicator_position
 		generate_path(snap_position)
 
-func generate_path(target_position):
+func generate_path(end_position):
 	var cells = get_used_cells()
-	var current_cell = Vector3i.ZERO
-	var path : Array[Vector3] = []
 	
-	while true:
-		
-		var p_paths = []
-		
-		if cells.has(current_cell + Vector3i(1,0,0)):
-			p_paths.append(current_cell + Vector3i(1,0,0))
-		
-		if cells.has(current_cell + Vector3i(-1,0,0)):
-			p_paths.append(current_cell + Vector3i(-1,0,0))
-		
-		if cells.has(current_cell + Vector3i(0,0,1)):
-			p_paths.append(current_cell + Vector3i(0,0,1))
-		
-		if cells.has(current_cell + Vector3i(0,0,-1)):
-			p_paths.append(current_cell + Vector3i(0,0,-1))
-		
-		var b_path = p_paths[0]
-		for i in p_paths.size():
-			if b_path.distance_to(target_position) > p_paths[i].distance_to(target_position):
-				b_path = p_paths[i]
-		
-		current_cell = b_path
-		path.push_back(Vector3(b_path))
-		
-		if b_path == target_position:
-			break
+	var AS = AStarGrid2D.new()
+	AS.region = Rect2i(-active_unit.move_range-1,-active_unit.move_range-1,
+	active_unit.move_range * 2 + 2,active_unit.move_range * 2 + 2)
+	AS.default_compute_heuristic = AStarGrid2D.HEURISTIC_MANHATTAN
+	AS.default_estimate_heuristic = AStarGrid2D.HEURISTIC_MANHATTAN
+	AS.diagonal_mode = AStarGrid2D.DIAGONAL_MODE_NEVER
+	AS.update()
 	
+	
+	for cell in cells:
+		if  !cells.has(cell + Vector3i(1,0,0)): #-----------------------RIGHT
+			AS.set_point_solid(Vector2i(cell.x,cell.z) + Vector2i(1,0))
+		if  !cells.has(cell + Vector3i(-1,0,0)):#-----------------------LEFT
+			AS.set_point_solid(Vector2i(cell.x,cell.z) + Vector2i(-1,0))
+		if  !cells.has(cell + Vector3i(0,0,1)):#------------------------DOWN
+			AS.set_point_solid(Vector2i(cell.x,cell.z) + Vector2i(0,1))
+		if  !cells.has(cell + Vector3i(0,0,-1)):#-----------------------UP
+			AS.set_point_solid(Vector2i(cell.x,cell.z) + Vector2i(0,-1))
+	
+	var path = AS.get_point_path(Vector2i.ZERO,Vector2i(end_position.x,end_position.z))
+	
+	var pathV3 : Array[Vector3]
+	for p in path:
+		pathV3.push_back(Vector3(p.x,0,p.y))
 	print(path)
-	indicator_line.generate_line(path)
+	indicator_line.generate_line(pathV3)
 
 func action():
 	active_unit.move(to_global(indicator.position))

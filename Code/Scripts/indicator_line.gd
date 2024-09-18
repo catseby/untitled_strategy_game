@@ -7,12 +7,8 @@ var down = line_width
 func generate_line(array : Array[Vector3]):
 	var vertices = PackedVector3Array()
 	
-
-	
-	array.push_front(Vector3.ZERO)
 	array[array.size()-1] = array[array.size()-2].lerp(array[array.size()-1],0.45)
 	#array[array.size()-1] = array[array.size()-1] - Vector3(0.5,0,0)
-	print(array[array.size()-1])
 	
 	for i in array.size():
 		var cell_pos = array[i] * Vector3(2,0,2)
