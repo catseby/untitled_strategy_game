@@ -1,8 +1,12 @@
-[gd_scene load_steps=3 format=3 uid="uid://dtnub07jwdhiu"]
+[gd_scene load_steps=5 format=3 uid="uid://dtnub07jwdhiu"]
 
 [ext_resource type="Script" path="res://Code/Scripts/player_controlled_unit.gd" id="1_wm6lu"]
+[ext_resource type="Script" path="res://Code/Scripts/onfield_unit_status.gd" id="2_e8ouy"]
 
 [sub_resource type="CylinderMesh" id="CylinderMesh_adwiy"]
+
+[sub_resource type="ViewportTexture" id="ViewportTexture_mhmme"]
+viewport_path = NodePath("onfield_unit_status/SubViewport")
 
 [node name="Player_Controlled_Unit" type="Node3D"]
 script = ExtResource("1_wm6lu")
@@ -12,3 +16,19 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
 mesh = SubResource("CylinderMesh_adwiy")
 
 [node name="Skills" type="Node" parent="."]
+
+[node name="onfield_unit_status" type="Sprite3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 0)
+offset = Vector2(50, 0)
+pixel_size = 0.02
+billboard = 1
+texture = SubResource("ViewportTexture_mhmme")
+script = ExtResource("2_e8ouy")
+
+[node name="SubViewport" type="SubViewport" parent="onfield_unit_status"]
+size = Vector2i(32, 24)
+
+[node name="Label" type="Label" parent="onfield_unit_status/SubViewport"]
+offset_right = 40.0
+offset_bottom = 40.0
+text = "Test"

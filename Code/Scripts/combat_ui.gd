@@ -15,8 +15,7 @@ func display_actions(unit):
 	skills.add_child(m_button)
 	m_button.text = "Move"
 	m_button.was_pressed.connect(button_pressed)
-	print(skills.get_child(0))
-
+	m_button.has_enough_ap(unit.action_points)
 
 func button_pressed(button):
 	match button.type:
@@ -33,5 +32,5 @@ func _input(event: InputEvent) -> void:
 		if event.is_pressed() and not event.is_echo():
 			match event.keycode:
 				KEY_1:
-					print(skills.get_child(0))
-					button_pressed(skills.get_child(0))
+					if skills.get_child(0).active:
+						button_pressed(skills.get_child(0))

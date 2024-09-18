@@ -23,7 +23,6 @@ func set_indicator(ind_position):
 func generate_path(end_position):
 	var cells = get_used_cells()
 	
-	print(cells)
 	
 	var AS = AStarGrid2D.new()
 	AS.region = Rect2i(-active_unit.move_range-1,-active_unit.move_range-1,
