@@ -11,10 +11,10 @@
 [ext_resource type="PackedScene" uid="uid://bbewjgskpwky" path="res://Level/Prefab/indicator_line.tscn" id="9_pic8w"]
 [ext_resource type="PackedScene" uid="uid://dtoh1am0ml7nc" path="res://Level/UI/combat_ui.tscn" id="9_uepik"]
 
+[sub_resource type="SphereMesh" id="SphereMesh_wj6n4"]
+
 [sub_resource type="Environment" id="Environment_kd1qp"]
 background_mode = 1
-
-[sub_resource type="SphereMesh" id="SphereMesh_wj6n4"]
 
 [node name="Test_Level" type="Node3D"]
 script = ExtResource("1_8nem6")
@@ -29,13 +29,6 @@ script = ExtResource("3_80y2h")
 metadata/_editor_floor_ = Vector3(0, 0, 0)
 
 [node name="Combat_Camera" parent="." instance=ExtResource("2_drpwp")]
-
-[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
-environment = SubResource("Environment_kd1qp")
-
-[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
-transform = Transform3D(0.707107, 0.5, -0.5, 0, 0.707107, 0.707107, 0.707107, -0.5, 0.5, 0, 0, 0)
-light_energy = 2.0
 
 [node name="Player_Spawn" type="Node3D" parent="." node_paths=PackedStringArray("map", "action_indicator", "combat_ui")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1, 0, 2)
@@ -84,3 +77,10 @@ metadata/_editor_floor_ = Vector3(0, 0, 0)
 [node name="Indicator_Line" parent="Action_Indicator" instance=ExtResource("9_pic8w")]
 
 [node name="Combat_UI" parent="." instance=ExtResource("9_uepik")]
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_kd1qp")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(0.707107, 0.5, -0.5, 0, 0.707107, 0.707107, 0.707107, -0.5, 0.5, 0, 0, 0)
+light_energy = 2.0

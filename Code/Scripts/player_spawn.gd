@@ -23,6 +23,7 @@ func add_units() -> void:
 	for i in units.size():
 		get_parent().add_child(units[i])
 		units[i].global_position = get_child(i).global_position
+		
 		combat_ui.move.connect(action_indicator.show_indicators)
 		units[i].await_command.connect(combat_ui.display_actions)
 	queue_free()

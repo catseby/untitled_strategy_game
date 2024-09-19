@@ -20,3 +20,8 @@ func move(new_position):
 	global_position = new_position
 	await get_tree().create_timer(1).timeout
 	await_command.emit(self)
+
+func rest():
+	action_points = max_action_points
+	status.set_action_points(action_points)
+	print(action_points)
