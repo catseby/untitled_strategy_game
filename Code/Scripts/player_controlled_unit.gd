@@ -7,6 +7,8 @@ extends Node3D
 @export var max_action_points : int = 2 
 var action_points = max_action_points
 
+var turn_order : int = 100
+
 signal await_command(unit)
 
 # Called when the node enters the scene tree for the first time.
@@ -22,6 +24,9 @@ func move(new_position):
 	await_command.emit(self)
 
 func rest():
+	var pr : float = (1.0 / max_action_points) * 100
+	turn_order = action_points * pr + pr
+	
 	action_points = max_action_points
 	status.set_action_points(action_points)
-	print(action_points)
+	print(turn_order)

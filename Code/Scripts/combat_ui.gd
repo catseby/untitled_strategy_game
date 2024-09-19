@@ -30,13 +30,10 @@ func display_actions(unit):
 
 
 func button_pressed(button):
-	print(current_unit)
 	match button.key:
 		KEY_0:
-			print("huh")
 			current_unit.rest()
 		KEY_1:
-			print("asd")
 			move.emit(current_unit)
 	
 	for i in skills.get_child_count():
