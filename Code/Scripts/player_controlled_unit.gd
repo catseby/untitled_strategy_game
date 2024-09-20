@@ -10,11 +10,12 @@ var action_points = max_action_points
 var turn_order : int = 100
 
 signal await_command(unit)
+signal next
 
-# Called when the node enters the scene tree for the first time.
-func _ready() -> void:
+func act():
 	await get_tree().create_timer(1).timeout
 	await_command.emit(self)
+
 
 func move(new_position):
 	action_points -= 1
@@ -29,4 +30,4 @@ func rest():
 	
 	action_points = max_action_points
 	status.set_action_points(action_points)
-	print(turn_order)
+	next.emit()

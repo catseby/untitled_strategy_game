@@ -1,0 +1,8 @@
+[gd_scene format=3 uid="uid://djtfkwskautj7"]
+
+[node name="Turn_Indicator" type="Label"]
+theme_override_font_sizes/font_size = 32
+text = "123 Test"
+horizontal_alignment = 3
+vertical_alignment = 1
+clip_text = true

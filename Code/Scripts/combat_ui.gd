@@ -2,7 +2,7 @@ extends Control
 
 const SKILL_BUTTON = preload("res://Level/UI/skill_button.tscn")
 
-@onready var skills = $Actions/Hbox
+@onready var skills = $Center/Actions
 
 var current_unit : Node3D
 
@@ -40,3 +40,6 @@ func button_pressed(button):
 		skills.get_child(i).queue_free()
 	
 	current_unit = null
+
+func update_turn_order():
+	pass

@@ -44,6 +44,27 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2, 0, 1)
 mesh = SubResource("SphereMesh_wj6n4")
 skeleton = NodePath("../..")
 
+[node name="2" type="Node3D" parent="Player_Spawn"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 1)
+
+[node name="1" type="MeshInstance3D" parent="Player_Spawn/2"]
+mesh = SubResource("SphereMesh_wj6n4")
+skeleton = NodePath("../..")
+
+[node name="3" type="Node3D" parent="Player_Spawn"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2, 0, 1)
+
+[node name="1" type="MeshInstance3D" parent="Player_Spawn/3"]
+mesh = SubResource("SphereMesh_wj6n4")
+skeleton = NodePath("../..")
+
+[node name="4" type="Node3D" parent="Player_Spawn"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4, 0, 1)
+
+[node name="1" type="MeshInstance3D" parent="Player_Spawn/4"]
+mesh = SubResource("SphereMesh_wj6n4")
+skeleton = NodePath("../..")
+
 [node name="Action_Indicator" type="GridMap" parent="." node_paths=PackedStringArray("map")]
 mesh_library = ExtResource("3_ud5g1")
 cell_center_y = false
@@ -84,3 +105,5 @@ environment = SubResource("Environment_kd1qp")
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
 transform = Transform3D(0.707107, 0.5, -0.5, 0, 0.707107, 0.707107, 0.707107, -0.5, 0.5, 0, 0, 0)
 light_energy = 2.0
+
+[node name="Turn_Order" type="Node" parent="."]

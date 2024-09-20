@@ -17,13 +17,18 @@ func _init() -> void:
 
 func _ready() -> void:
 	var pcu = PCU.instantiate()
-	queue_units([pcu])
+	var pcu2 = PCU.instantiate()
+	queue_units([pcu,pcu2])
 
 func add_units() -> void:
+	combat_ui.move.connect(action_indicator.show_indicators)
+	
 	for i in units.size():
-		get_parent().add_child(units[i])
+		
+		get_parent().turn_order.add_child(units[i])
 		units[i].global_position = get_child(i).global_position
 		
-		combat_ui.move.connect(action_indicator.show_indicators)
 		units[i].await_command.connect(combat_ui.display_actions)
+		units[i].next.connect(get_parent().next)
+		
 	queue_free()
