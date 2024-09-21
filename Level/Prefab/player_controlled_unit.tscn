@@ -26,9 +26,16 @@ texture = SubResource("ViewportTexture_mhmme")
 script = ExtResource("2_e8ouy")
 
 [node name="SubViewport" type="SubViewport" parent="onfield_unit_status"]
-size = Vector2i(32, 24)
+size = Vector2i(42, 38)
 
 [node name="Label" type="Label" parent="onfield_unit_status/SubViewport"]
 offset_right = 40.0
 offset_bottom = 40.0
+text = "Test"
+
+[node name="Label2" type="Label" parent="onfield_unit_status/SubViewport"]
+offset_top = 22.0
+offset_right = 40.0
+offset_bottom = 62.0
+theme_override_font_sizes/font_size = 8
 text = "Test"

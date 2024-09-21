@@ -18,7 +18,13 @@ func _init() -> void:
 func _ready() -> void:
 	var pcu = PCU.instantiate()
 	var pcu2 = PCU.instantiate()
-	queue_units([pcu,pcu2])
+	var pcu3 = PCU.instantiate()
+	
+	pcu.name = "Bob"
+	pcu2.name = "Eve"
+	pcu3.name = "Brick"
+
+	queue_units([pcu,pcu2,pcu3])
 
 func add_units() -> void:
 	combat_ui.move.connect(action_indicator.show_indicators)

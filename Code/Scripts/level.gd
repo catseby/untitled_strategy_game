@@ -2,6 +2,7 @@ extends Node3D
 
 @onready var player_spawn = $Player_Spawn
 @onready var turn_order = $Turn_Order
+@onready var ui = $Combat_UI
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
@@ -9,9 +10,26 @@ func _ready() -> void:
 	next()
 
 func next():
-	turn_order.move_child(turn_order.get_child(0),turn_order.get_child_count()-1)
+	for unit in turn_order.get_children():
+		unit.turn_order += 10
+	
+	var unit_0 = turn_order.get_child(0)
+	for i in turn_order.get_child_count(): #Most likekly gonna have to sort it from the back
+		
+		if i == 0:
+			continue
+		
+		var unit = turn_order.get_child(i)
+		
+		if unit.turn_order < unit_0.turn_order:
+			turn_order.move_child(turn_order.get_child(0),i)
+			print("yeah")
+			break
+		
+		elif i == turn_order.get_child_count() - 1:
+				turn_order.move_child(unit_0,turn_order.get_child_count()-1)
 	
 	turn_order.get_child(0).act()
 	
-	for unit in turn_order.get_children():
-		unit.turn_order += 10
+	
+	ui.update_turn_order(turn_order.get_children())

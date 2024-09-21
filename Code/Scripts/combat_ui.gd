@@ -1,8 +1,10 @@
 extends Control
 
 const SKILL_BUTTON = preload("res://Level/UI/skill_button.tscn")
+const TURN_INDICATOR = preload("res://Level/UI/turn_indicator.tscn")
 
 @onready var skills = $Center/Actions
+@onready var turn_order = $Right/Turn_Order
 
 var current_unit : Node3D
 
@@ -41,5 +43,12 @@ func button_pressed(button):
 	
 	current_unit = null
 
-func update_turn_order():
-	pass
+func update_turn_order(array):
+	for child in turn_order.get_children():
+		child.queue_free()
+	
+	for i in array.size():
+		var unit = array[array.size() - 1 - i]
+		var ti = TURN_INDICATOR.instantiate()
+		turn_order.add_child(ti)
+		ti.text = str(unit.turn_order) + " " + str(unit.name)

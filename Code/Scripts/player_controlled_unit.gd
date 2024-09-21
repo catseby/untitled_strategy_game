@@ -12,10 +12,12 @@ var turn_order : int = 100
 signal await_command(unit)
 signal next
 
+func _ready() -> void:
+	$onfield_unit_status/SubViewport/Label2.text = name
+
 func act():
 	await get_tree().create_timer(1).timeout
 	await_command.emit(self)
-
 
 func move(new_position):
 	action_points -= 1
