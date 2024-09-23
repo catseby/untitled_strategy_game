@@ -61,8 +61,8 @@ func action():
 func clear_indicators():
 	visible = false
 	indicator.position = Vector3(1,0,1)
+	indicator_line.mesh = null
 	clear()
-	
 	active_unit = null
 	
 	for i in axis.get_child_count():
@@ -100,13 +100,13 @@ func show_indicators(unit):
 	
 	for i in coords.size():
 		if !coords.has(coords[i] - Vector3i(0,0,-1)):
-			axis.get_child(0).set_cell_item(coords[i],1,0)
+			axis.get_child(0).set_cell_item(coords[i],2,0)
 		
 		if !coords.has(coords[i] - Vector3i(0,0,1)):
-			axis.get_child(1).set_cell_item(coords[i],1,10)
+			axis.get_child(1).set_cell_item(coords[i],2,10)
 		
 		if !coords.has(coords[i] - Vector3i(1,0,0)):
-			axis.get_child(2).set_cell_item(coords[i],1,22)
+			axis.get_child(2).set_cell_item(coords[i],2,22)
 		
 		if !coords.has(coords[i] - Vector3i(-1,0,0)):
-			axis.get_child(3).set_cell_item(coords[i],1,16)
+			axis.get_child(3).set_cell_item(coords[i],2,16)

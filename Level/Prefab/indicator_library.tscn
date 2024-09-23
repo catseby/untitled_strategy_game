@@ -1,4 +1,15 @@
-[gd_scene load_steps=8 format=3 uid="uid://bkq64ocxps5q8"]
+[gd_scene load_steps=24 format=3 uid="uid://bkq64ocxps5q8"]
+
+[ext_resource type="Material" uid="uid://b804q3r4p8y0y" path="res://Art/Materials/white_indicator.tres" id="1_3gner"]
+[ext_resource type="Material" uid="uid://cu6cy2hmq6m1f" path="res://Art/Materials/blue_indicator.tres" id="2_5je5b"]
+[ext_resource type="Material" uid="uid://c7o81gpennanu" path="res://Art/Materials/green_indicator.tres" id="3_y3j3g"]
+[ext_resource type="Material" uid="uid://daplgo4waulo7" path="res://Art/Materials/orange_indicator.tres" id="4_iix0n"]
+[ext_resource type="Material" uid="uid://dqoolh2yubcfu" path="res://Art/Materials/red_indicator.tres" id="5_58evh"]
+[ext_resource type="Material" uid="uid://beiyw8w2tl8n0" path="res://Art/Materials/white_big_indicator.tres" id="6_d2g0s"]
+[ext_resource type="Material" uid="uid://t88txa38xxj4" path="res://Art/Materials/blue_big_indicator.tres" id="7_3wma3"]
+[ext_resource type="Material" uid="uid://m5na52dqh3c5" path="res://Art/Materials/green_big_indicator.tres" id="8_t22ct"]
+[ext_resource type="Material" uid="uid://dsc7pluipv62h" path="res://Art/Materials/orange_big_indicator.tres" id="9_o67kj"]
+[ext_resource type="Material" uid="uid://bskyyarrnrosy" path="res://Art/Materials/red_big_indicator.tres" id="10_2g17v"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_13mae"]
 transparency = 1
@@ -11,25 +22,53 @@ size = Vector3(2, 0.2, 2)
 [sub_resource type="BoxShape3D" id="BoxShape3D_5fpc4"]
 size = Vector3(2, 0.2, 2)
 
-[sub_resource type="Gradient" id="Gradient_8x2jp"]
-colors = PackedColorArray(0, 0, 0, 0, 1, 1, 1, 1)
-
-[sub_resource type="GradientTexture2D" id="GradientTexture2D_kjobm"]
-gradient = SubResource("Gradient_8x2jp")
-width = 16
-height = 16
-fill_from = Vector2(0.5, 0.7)
-fill_to = Vector2(0.5, 1)
-
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_ru2ac"]
-transparency = 1
-cull_mode = 2
-shading_mode = 0
-albedo_texture = SubResource("GradientTexture2D_kjobm")
-texture_filter = 2
-
 [sub_resource type="QuadMesh" id="QuadMesh_6umnh"]
-material = SubResource("StandardMaterial3D_ru2ac")
+material = ExtResource("1_3gner")
+size = Vector2(2, 1)
+center_offset = Vector3(0, 0.5, 1)
+
+[sub_resource type="QuadMesh" id="QuadMesh_7xk0v"]
+material = ExtResource("2_5je5b")
+size = Vector2(2, 1)
+center_offset = Vector3(0, 0.5, 1)
+
+[sub_resource type="QuadMesh" id="QuadMesh_68rwr"]
+material = ExtResource("3_y3j3g")
+size = Vector2(2, 1)
+center_offset = Vector3(0, 0.5, 1)
+
+[sub_resource type="QuadMesh" id="QuadMesh_5kqrr"]
+material = ExtResource("4_iix0n")
+size = Vector2(2, 1)
+center_offset = Vector3(0, 0.5, 1)
+
+[sub_resource type="QuadMesh" id="QuadMesh_ttmgh"]
+material = ExtResource("5_58evh")
+size = Vector2(2, 1)
+center_offset = Vector3(0, 0.5, 1)
+
+[sub_resource type="QuadMesh" id="QuadMesh_tsw68"]
+material = ExtResource("6_d2g0s")
+size = Vector2(2, 1)
+center_offset = Vector3(0, 0.5, 1)
+
+[sub_resource type="QuadMesh" id="QuadMesh_43su8"]
+material = ExtResource("7_3wma3")
+size = Vector2(2, 1)
+center_offset = Vector3(0, 0.5, 1)
+
+[sub_resource type="QuadMesh" id="QuadMesh_wv38y"]
+material = ExtResource("8_t22ct")
+size = Vector2(2, 1)
+center_offset = Vector3(0, 0.5, 1)
+
+[sub_resource type="QuadMesh" id="QuadMesh_8fh2d"]
+material = ExtResource("9_o67kj")
+size = Vector2(2, 1)
+center_offset = Vector3(0, 0.5, 1)
+
+[sub_resource type="QuadMesh" id="QuadMesh_rlu5t"]
+material = ExtResource("10_2g17v")
 size = Vector2(2, 1)
 center_offset = Vector3(0, 0.5, 1)
 
@@ -47,4 +86,49 @@ shape = SubResource("BoxShape3D_5fpc4")
 [node name="white" type="MeshInstance3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3, 0, 1)
 mesh = SubResource("QuadMesh_6umnh")
+skeleton = NodePath("")
+
+[node name="blue" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5, 0, 1)
+mesh = SubResource("QuadMesh_7xk0v")
+skeleton = NodePath("")
+
+[node name="green" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7, 0, 1)
+mesh = SubResource("QuadMesh_68rwr")
+skeleton = NodePath("")
+
+[node name="orange" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 9, 0, 1)
+mesh = SubResource("QuadMesh_5kqrr")
+skeleton = NodePath("")
+
+[node name="red" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 11, 0, 1)
+mesh = SubResource("QuadMesh_ttmgh")
+skeleton = NodePath("")
+
+[node name="white_big" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3, 0, 2)
+mesh = SubResource("QuadMesh_tsw68")
+skeleton = NodePath("")
+
+[node name="blue_big" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5, 0, 2)
+mesh = SubResource("QuadMesh_43su8")
+skeleton = NodePath("")
+
+[node name="green_big" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7, 0, 2)
+mesh = SubResource("QuadMesh_wv38y")
+skeleton = NodePath("")
+
+[node name="orange_big" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 9, 0, 2)
+mesh = SubResource("QuadMesh_8fh2d")
+skeleton = NodePath("")
+
+[node name="red_big" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 11, 0, 2)
+mesh = SubResource("QuadMesh_rlu5t")
 skeleton = NodePath("")
