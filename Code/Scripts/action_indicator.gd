@@ -23,6 +23,15 @@ enum INDEXES {
 	RED_BIG = 10
 }
 
+var colors = [
+	Color.WHITE,
+	Color("00b4ff"),
+	Color("00b400"),
+	Color("ffb400"),
+	Color("ff0000")
+	]
+
+
 enum COLORS {
 	WHITE = 0,
 	BLUE = 1,
@@ -79,7 +88,7 @@ func generate_path(end_position):
 	for p in path:
 		pathV3.push_back(Vector3(p.x,0,p.y))
 	
-	indicator_line.generate_line(pathV3)
+	indicator_line.generate_line(pathV3,colors[COLORS.BLUE])
 
 func action():
 	active_unit.move(to_global(indicator.position))
