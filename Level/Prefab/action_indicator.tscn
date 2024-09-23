@@ -1,0 +1,37 @@
+[gd_scene load_steps=5 format=3 uid="uid://duvwnynqo85h1"]
+
+[ext_resource type="MeshLibrary" uid="uid://dsve5dxv1ldse" path="res://Art/Mesh-Libraries/indicator_meshlib.tres" id="1_httlo"]
+[ext_resource type="Script" path="res://Code/Scripts/action_indicator.gd" id="2_l1ymw"]
+[ext_resource type="PackedScene" uid="uid://can3gonmfrh27" path="res://Level/Prefab/indicator.tscn" id="3_45jg7"]
+[ext_resource type="PackedScene" uid="uid://bbewjgskpwky" path="res://Level/Prefab/indicator_line.tscn" id="4_x78iq"]
+
+[node name="Action_Indicator" type="GridMap"]
+mesh_library = ExtResource("1_httlo")
+cell_center_y = false
+script = ExtResource("2_l1ymw")
+
+[node name="Axis" type="Node3D" parent="."]
+
+[node name="indicator_bottom" type="GridMap" parent="Axis"]
+mesh_library = ExtResource("1_httlo")
+cell_center_y = false
+metadata/_editor_floor_ = Vector3(0, 0, 0)
+
+[node name="indicator_top" type="GridMap" parent="Axis"]
+mesh_library = ExtResource("1_httlo")
+cell_center_y = false
+metadata/_editor_floor_ = Vector3(0, 0, 0)
+
+[node name="indicator_left" type="GridMap" parent="Axis"]
+mesh_library = ExtResource("1_httlo")
+cell_center_y = false
+metadata/_editor_floor_ = Vector3(0, 0, 0)
+
+[node name="indicator_right" type="GridMap" parent="Axis"]
+mesh_library = ExtResource("1_httlo")
+cell_center_y = false
+metadata/_editor_floor_ = Vector3(0, 0, 0)
+
+[node name="Indicator" parent="." instance=ExtResource("3_45jg7")]
+
+[node name="Indicator_Line" parent="." instance=ExtResource("4_x78iq")]

@@ -1,17 +1,12 @@
-[gd_scene load_steps=13 format=3 uid="uid://cjgp38vxsy2j0"]
+[gd_scene load_steps=9 format=3 uid="uid://cjgp38vxsy2j0"]
 
 [ext_resource type="Script" path="res://Code/Scripts/level.gd" id="1_8nem6"]
 [ext_resource type="MeshLibrary" uid="uid://c2w55vytcwik" path="res://Art/Mesh-Libraries/prototype_meshlib.tres" id="1_ntgl0"]
 [ext_resource type="PackedScene" uid="uid://c644vfd66ieux" path="res://Level/Prefab/combat_camera.tscn" id="2_drpwp"]
-[ext_resource type="Script" path="res://Code/Scripts/player_spawn.gd" id="3_8n44v"]
 [ext_resource type="Script" path="res://Code/Scripts/map.gd" id="3_80y2h"]
-[ext_resource type="MeshLibrary" uid="uid://dsve5dxv1ldse" path="res://Art/Mesh-Libraries/indicator_meshlib.tres" id="3_ud5g1"]
-[ext_resource type="Script" path="res://Code/Scripts/action_indicator.gd" id="5_qx4kv"]
-[ext_resource type="PackedScene" uid="uid://can3gonmfrh27" path="res://Level/Prefab/indicator.tscn" id="8_rvmk6"]
-[ext_resource type="PackedScene" uid="uid://bbewjgskpwky" path="res://Level/Prefab/indicator_line.tscn" id="9_pic8w"]
+[ext_resource type="PackedScene" uid="uid://dmv0ghqasdrsj" path="res://Level/Prefab/player_spawn.tscn" id="5_p1hy0"]
+[ext_resource type="PackedScene" uid="uid://duvwnynqo85h1" path="res://Level/Prefab/action_indicator.tscn" id="6_4wwu7"]
 [ext_resource type="PackedScene" uid="uid://dtoh1am0ml7nc" path="res://Level/UI/combat_ui.tscn" id="9_uepik"]
-
-[sub_resource type="SphereMesh" id="SphereMesh_wj6n4"]
 
 [sub_resource type="Environment" id="Environment_kd1qp"]
 background_mode = 1
@@ -28,74 +23,16 @@ data = {
 script = ExtResource("3_80y2h")
 metadata/_editor_floor_ = Vector3(0, 0, 0)
 
-[node name="Combat_Camera" parent="." instance=ExtResource("2_drpwp")]
+[node name="Combat_Camera" parent="." node_paths=PackedStringArray("action_indicator") instance=ExtResource("2_drpwp")]
+action_indicator = NodePath("../Action_Indicator")
 
-[node name="Player_Spawn" type="Node3D" parent="." node_paths=PackedStringArray("map", "action_indicator", "combat_ui")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1, 0, 2)
-script = ExtResource("3_8n44v")
+[node name="Player_Spawn" parent="." node_paths=PackedStringArray("map", "action_indicator", "combat_ui") instance=ExtResource("5_p1hy0")]
 map = NodePath("../Map")
 action_indicator = NodePath("../Action_Indicator")
 combat_ui = NodePath("../Combat_UI")
 
-[node name="1" type="Node3D" parent="Player_Spawn"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2, 0, 1)
-
-[node name="1" type="MeshInstance3D" parent="Player_Spawn/1"]
-mesh = SubResource("SphereMesh_wj6n4")
-skeleton = NodePath("../..")
-
-[node name="2" type="Node3D" parent="Player_Spawn"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 1)
-
-[node name="1" type="MeshInstance3D" parent="Player_Spawn/2"]
-mesh = SubResource("SphereMesh_wj6n4")
-skeleton = NodePath("../..")
-
-[node name="3" type="Node3D" parent="Player_Spawn"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2, 0, 1)
-
-[node name="1" type="MeshInstance3D" parent="Player_Spawn/3"]
-mesh = SubResource("SphereMesh_wj6n4")
-skeleton = NodePath("../..")
-
-[node name="4" type="Node3D" parent="Player_Spawn"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4, 0, 1)
-
-[node name="1" type="MeshInstance3D" parent="Player_Spawn/4"]
-mesh = SubResource("SphereMesh_wj6n4")
-skeleton = NodePath("../..")
-
-[node name="Action_Indicator" type="GridMap" parent="." node_paths=PackedStringArray("map")]
-mesh_library = ExtResource("3_ud5g1")
-cell_center_y = false
-script = ExtResource("5_qx4kv")
+[node name="Action_Indicator" parent="." node_paths=PackedStringArray("map") instance=ExtResource("6_4wwu7")]
 map = NodePath("../Map")
-
-[node name="Axis" type="Node3D" parent="Action_Indicator"]
-
-[node name="indicator_bottom" type="GridMap" parent="Action_Indicator/Axis"]
-mesh_library = ExtResource("3_ud5g1")
-cell_center_y = false
-metadata/_editor_floor_ = Vector3(0, 0, 0)
-
-[node name="indicator_top" type="GridMap" parent="Action_Indicator/Axis"]
-mesh_library = ExtResource("3_ud5g1")
-cell_center_y = false
-metadata/_editor_floor_ = Vector3(0, 0, 0)
-
-[node name="indicator_left" type="GridMap" parent="Action_Indicator/Axis"]
-mesh_library = ExtResource("3_ud5g1")
-cell_center_y = false
-metadata/_editor_floor_ = Vector3(0, 0, 0)
-
-[node name="indicator_right" type="GridMap" parent="Action_Indicator/Axis"]
-mesh_library = ExtResource("3_ud5g1")
-cell_center_y = false
-metadata/_editor_floor_ = Vector3(0, 0, 0)
-
-[node name="Indicator" parent="Action_Indicator" instance=ExtResource("8_rvmk6")]
-
-[node name="Indicator_Line" parent="Action_Indicator" instance=ExtResource("9_pic8w")]
 
 [node name="Combat_UI" parent="." instance=ExtResource("9_uepik")]
 

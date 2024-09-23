@@ -1,0 +1,40 @@
+[gd_scene load_steps=3 format=3 uid="uid://dmv0ghqasdrsj"]
+
+[ext_resource type="Script" path="res://Code/Scripts/player_spawn.gd" id="1_s3ib6"]
+
+[sub_resource type="SphereMesh" id="SphereMesh_wj6n4"]
+
+[node name="Player_Spawn" type="Node3D" node_paths=PackedStringArray("map", "action_indicator", "combat_ui")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1, 0, 2)
+script = ExtResource("1_s3ib6")
+map = NodePath("")
+action_indicator = NodePath("")
+combat_ui = NodePath("")
+
+[node name="1" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2, 0, 1)
+
+[node name="1" type="MeshInstance3D" parent="1"]
+mesh = SubResource("SphereMesh_wj6n4")
+skeleton = NodePath("../..")
+
+[node name="2" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 1)
+
+[node name="1" type="MeshInstance3D" parent="2"]
+mesh = SubResource("SphereMesh_wj6n4")
+skeleton = NodePath("../..")
+
+[node name="3" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2, 0, 1)
+
+[node name="1" type="MeshInstance3D" parent="3"]
+mesh = SubResource("SphereMesh_wj6n4")
+skeleton = NodePath("../..")
+
+[node name="4" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4, 0, 1)
+
+[node name="1" type="MeshInstance3D" parent="4"]
+mesh = SubResource("SphereMesh_wj6n4")
+skeleton = NodePath("../..")

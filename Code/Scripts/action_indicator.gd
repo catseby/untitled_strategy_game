@@ -6,8 +6,32 @@ extends GridMap
 @onready var indicator_line = $Indicator_Line
 
 @export var map : GridMap
+var cell_default
 
 signal move(move_position)
+
+enum INDEXES {
+	WHITE = 1,
+	WHITE_BIG = 6,
+	BLUE = 2,
+	BLUE_BIG = 7,
+	GREEN = 3,
+	GREEN_BIG = 8,
+	ORANGE = 4,
+	ORANGE_BIG = 9,
+	RED = 5,
+	RED_BIG = 10
+}
+
+enum COLORS {
+	WHITE = 0,
+	BLUE = 1,
+	GREEN = 2,
+	ORANGE = 3,
+	RED = 4
+}
+
+
 
 func set_indicator(ind_position):
 	ind_position = to_local(ind_position)
@@ -18,11 +42,15 @@ func set_indicator(ind_position):
 	
 	if get_cell_item(snap_position) != -1 and indicator_position != indicator.position:
 		indicator.position = indicator_position
+		
+		clear_axis()
+		set_axis(cell_default,2)
+		set_axis([local_to_map(Vector3i(indicator.position))],7)
+		
 		generate_path(snap_position)
 
 func generate_path(end_position):
 	var cells = get_used_cells()
-	
 	
 	var AS = AStarGrid2D.new()
 	AS.region = Rect2i(-active_unit.move_range-1,-active_unit.move_range-1,
@@ -58,15 +86,17 @@ func action():
 	clear_indicators()
 
 
+#OUTLINES
+
 func clear_indicators():
 	visible = false
 	indicator.position = Vector3(1,0,1)
 	indicator_line.mesh = null
 	clear()
 	active_unit = null
+	cell_default = null
 	
-	for i in axis.get_child_count():
-		axis.get_child(i).clear()
+	clear_axis()
 
 
 func show_indicators(unit):
@@ -98,15 +128,23 @@ func show_indicators(unit):
 			
 		next_pass.append_array(fresh_next_pass)
 	
+	cell_default = coords
+	set_axis(coords,2)
+
+func clear_axis():
+	for i in axis.get_child_count():
+		axis.get_child(i).clear()
+
+func set_axis(coords : Array[Vector3i],index = 1):
 	for i in coords.size():
 		if !coords.has(coords[i] - Vector3i(0,0,-1)):
-			axis.get_child(0).set_cell_item(coords[i],2,0)
+			axis.get_child(0).set_cell_item(coords[i],index,0)
 		
 		if !coords.has(coords[i] - Vector3i(0,0,1)):
-			axis.get_child(1).set_cell_item(coords[i],2,10)
+			axis.get_child(1).set_cell_item(coords[i],index,10)
 		
 		if !coords.has(coords[i] - Vector3i(1,0,0)):
-			axis.get_child(2).set_cell_item(coords[i],2,22)
+			axis.get_child(2).set_cell_item(coords[i],index,22)
 		
 		if !coords.has(coords[i] - Vector3i(-1,0,0)):
-			axis.get_child(3).set_cell_item(coords[i],2,16)
+			axis.get_child(3).set_cell_item(coords[i],index,16)

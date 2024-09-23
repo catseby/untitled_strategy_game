@@ -23,7 +23,6 @@ func next():
 		
 		if unit.turn_order < unit_0.turn_order:
 			turn_order.move_child(turn_order.get_child(0),i)
-			print("yeah")
 			break
 		
 		elif i == turn_order.get_child_count() - 1:

@@ -19,6 +19,7 @@ mesh = SubResource("CylinderMesh_adwiy")
 
 [node name="onfield_unit_status" type="Sprite3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 0)
+sorting_offset = 1.0
 offset = Vector2(50, 0)
 pixel_size = 0.02
 billboard = 1

@@ -4,11 +4,11 @@ extends MeshInstance3D
 var right = line_width
 var down = line_width
 
-func generate_line(array : Array[Vector3]):
+
+func generate_line(array : Array[Vector3],color = Color.WHITE):
 	var vertices = PackedVector3Array()
 	
 	array[array.size()-1] = array[array.size()-2].lerp(array[array.size()-1],0.45)
-	#array[array.size()-1] = array[array.size()-1] - Vector3(0.5,0,0)
 	
 	for i in array.size():
 		var cell_pos = array[i] * Vector3(2,0,2)
@@ -73,5 +73,7 @@ func generate_line(array : Array[Vector3]):
 	var m = MeshInstance3D.new()
 	
 	m.mesh = arr_mesh
+	
+	material_override.albedo_color = color
 	
 	mesh = m.mesh
