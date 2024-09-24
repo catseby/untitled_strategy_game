@@ -27,7 +27,7 @@ func _ready() -> void:
 	queue_units([pcu,pcu2,pcu3])
 
 func add_units() -> void:
-	combat_ui.move.connect(action_indicator.show_indicators)
+	combat_ui.move.connect(action_indicator.movement_indicators)
 	action_indicator.action_made.connect(combat_ui._on_confirm_pressed)
 	combat_ui.cancel_action.connect(action_indicator.cancel)
 
@@ -38,6 +38,7 @@ func add_units() -> void:
 		units[i].global_position = get_child(i).global_position
 		
 		units[i].await_command.connect(combat_ui.display_actions)
+		units[i].await_command.connect(action_indicator.highlight_indicators)
 		units[i].next.connect(get_parent().next)
 		
 	queue_free()

@@ -56,6 +56,8 @@ func button_pressed(button):
 				if confirmed:
 					current_unit.rest()
 					clear()
+					cancel_action.emit()
+
 			
 			KEY_1:
 				move.emit(current_unit)

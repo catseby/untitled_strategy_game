@@ -112,10 +112,14 @@ func clear_indicators():
 	
 	clear_axis()
 
-
-func show_indicators(unit):
+func highlight_indicators(unit):
 	visible = true
 	active_unit = unit
+	set_axis([Vector3i(local_to_map(to_local(unit.global_position)))],6)
+
+func movement_indicators(unit):
+	visible = true
+	active_unit = unit #Maybe needs some cleanup
 	
 	global_position = unit.global_position - Vector3(1,0,1)
 	
@@ -149,7 +153,7 @@ func clear_axis():
 	for i in axis.get_child_count():
 		axis.get_child(i).clear()
 
-func set_axis(coords : Array[Vector3i],index = 1):
+func set_axis(coords : Array[Vector3i] = [Vector3i.ZERO],index = 1):
 	for i in coords.size():
 		if !coords.has(coords[i] - Vector3i(0,0,-1)):
 			axis.get_child(0).set_cell_item(coords[i],index,0)

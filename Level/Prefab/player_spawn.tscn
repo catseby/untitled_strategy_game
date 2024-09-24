@@ -4,12 +4,9 @@
 
 [sub_resource type="SphereMesh" id="SphereMesh_wj6n4"]
 
-[node name="Player_Spawn" type="Node3D" node_paths=PackedStringArray("map", "action_indicator", "combat_ui")]
+[node name="Player_Spawn" type="Node3D"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1, 0, 2)
 script = ExtResource("1_s3ib6")
-map = NodePath("")
-action_indicator = NodePath("")
-combat_ui = NodePath("")
 
 [node name="1" type="Node3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2, 0, 1)
