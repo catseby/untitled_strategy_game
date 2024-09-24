@@ -42,34 +42,35 @@ func display_actions(unit):
 
 
 func button_pressed(button):
-	match button.key:
-		KEY_0:
-			yesno.visible = true
-			yesno_text.text = "End Turn?"
-			skills.visible = false
-			
-			var confirmed = await user_choice
-			
-			if confirmed:
-				current_unit.rest()
-				clear()
-			else:
+	if skills.visible:
+		match button.key:
+			KEY_0:
+				yesno.visible = true
+				yesno_text.text = "End Turn?"
+				skills.visible = false
+				
+				var confirmed = await user_choice
+				
 				skills.visible = true
-		
-		KEY_1:
-			move.emit(current_unit)
-			skills.visible = false
-			cancel.visible = true
-			cancel_text.text = "Choose Your Destination."
+				
+				if confirmed:
+					current_unit.rest()
+					clear()
 			
-			var confirmed = await user_choice
-			
-			skills.visible = true
-			
-			if confirmed:
-				clear()
-			else:
-				cancel_action.emit()
+			KEY_1:
+				move.emit(current_unit)
+				skills.visible = false
+				cancel.visible = true
+				cancel_text.text = "Choose Your Destination."
+				
+				var confirmed = await user_choice
+				
+				skills.visible = true
+				
+				if confirmed:
+					clear()
+				else:
+					cancel_action.emit()
 
 
 func clear():
