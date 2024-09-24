@@ -34,8 +34,10 @@ alignment = 1
 visible = false
 layout_mode = 0
 offset_left = 240.0
+offset_top = 134.0
 offset_right = 720.0
-offset_bottom = 134.0
+offset_bottom = 268.0
+metadata/_edit_group_ = true
 
 [node name="Vbox" type="VBoxContainer" parent="Center/Cancel"]
 layout_mode = 0
@@ -51,17 +53,20 @@ text = "Choose Your Destination"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="Button" type="Button" parent="Center/Cancel/Vbox"]
+[node name="no" type="Button" parent="Center/Cancel/Vbox"]
 custom_minimum_size = Vector2(0, 67)
 layout_mode = 2
 theme_override_font_sizes/font_size = 28
 text = "Cancel"
 
 [node name="YesNo" type="Panel" parent="Center"]
+visible = false
 layout_mode = 0
 offset_left = 240.0
+offset_top = 134.0
 offset_right = 720.0
-offset_bottom = 134.0
+offset_bottom = 268.0
+metadata/_edit_group_ = true
 
 [node name="Vbox" type="VBoxContainer" parent="Center/YesNo"]
 layout_mode = 0
@@ -114,3 +119,7 @@ alignment = 2
 
 [node name="Label" parent="Right/Turn_Order" instance=ExtResource("2_maujg")]
 layout_mode = 2
+
+[connection signal="pressed" from="Center/Cancel/Vbox/no" to="." method="_on_cancel_pressed"]
+[connection signal="pressed" from="Center/YesNo/Vbox/Hbox/no" to="." method="_on_cancel_pressed"]
+[connection signal="pressed" from="Center/YesNo/Vbox/Hbox/yes" to="." method="_on_confirm_pressed"]

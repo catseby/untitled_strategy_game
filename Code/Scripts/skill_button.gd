@@ -1,8 +1,8 @@
 extends Button
 
-
 @export var required_action_points : int = 1
 @export var key = KEY_0
+
 var skill : Node
 
 var active = true

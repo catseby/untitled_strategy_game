@@ -1,6 +1,6 @@
 extends MeshInstance3D
 
-@export var line_width = 0.1
+@export var line_width = 0.08
 var right = line_width
 var down = line_width
 

@@ -6,9 +6,11 @@ extends GridMap
 @onready var indicator_line = $Indicator_Line
 
 @export var map : GridMap
+@export var ui : Control
 var cell_default
 
 signal move(move_position)
+signal action_made
 
 enum INDEXES {
 	WHITE = 1,
@@ -91,9 +93,12 @@ func generate_path(end_position):
 	indicator_line.generate_line(pathV3,colors[COLORS.BLUE])
 
 func action():
+	action_made.emit()
 	active_unit.move(to_global(indicator.position))
 	clear_indicators()
 
+func cancel():
+	clear_indicators()
 
 #OUTLINES
 

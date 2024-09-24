@@ -6,9 +6,19 @@ const TURN_INDICATOR = preload("res://Level/UI/turn_indicator.tscn")
 @onready var skills = $Center/Actions
 @onready var turn_order = $Right/Turn_Order
 
+@onready var cancel = $Center/Cancel
+@onready var cancel_text = $Center/Cancel/Vbox/Title
+
+@onready var yesno = $Center/YesNo
+@onready var yesno_text = $Center/YesNo/Vbox/Title
+
 var current_unit : Node3D
+var current_key = null
 
 signal move(unit)
+signal cancel_action
+
+signal user_choice(choice : bool)
 
 # Called when the node enters the scene tree for the first time.
 func display_actions(unit):
@@ -34,10 +44,35 @@ func display_actions(unit):
 func button_pressed(button):
 	match button.key:
 		KEY_0:
-			current_unit.rest()
+			yesno.visible = true
+			yesno_text.text = "End Turn?"
+			skills.visible = false
+			
+			var confirmed = await user_choice
+			
+			if confirmed:
+				current_unit.rest()
+				clear()
+			else:
+				skills.visible = true
+		
 		KEY_1:
 			move.emit(current_unit)
-	
+			skills.visible = false
+			cancel.visible = true
+			cancel_text.text = "Choose Your Destination."
+			
+			var confirmed = await user_choice
+			
+			skills.visible = true
+			
+			if confirmed:
+				clear()
+			else:
+				cancel_action.emit()
+
+
+func clear():
 	for i in skills.get_child_count():
 		skills.get_child(i).queue_free()
 	
@@ -52,3 +87,14 @@ func update_turn_order(array):
 		var ti = TURN_INDICATOR.instantiate()
 		turn_order.add_child(ti)
 		ti.text = str(unit.turn_order) + " " + str(unit.name)
+
+
+func _on_cancel_pressed() -> void:
+	yesno.visible = false
+	cancel.visible = false
+	user_choice.emit(false)
+
+func _on_confirm_pressed() -> void:
+	yesno.visible = false
+	cancel.visible = false
+	user_choice.emit(true)

@@ -31,8 +31,9 @@ map = NodePath("../Map")
 action_indicator = NodePath("../Action_Indicator")
 combat_ui = NodePath("../Combat_UI")
 
-[node name="Action_Indicator" parent="." node_paths=PackedStringArray("map") instance=ExtResource("6_4wwu7")]
+[node name="Action_Indicator" parent="." node_paths=PackedStringArray("map", "ui") instance=ExtResource("6_4wwu7")]
 map = NodePath("../Map")
+ui = NodePath("../Combat_UI")
 
 [node name="Combat_UI" parent="." instance=ExtResource("9_uepik")]
 

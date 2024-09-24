@@ -28,6 +28,9 @@ func _ready() -> void:
 
 func add_units() -> void:
 	combat_ui.move.connect(action_indicator.show_indicators)
+	action_indicator.action_made.connect(combat_ui._on_confirm_pressed)
+	combat_ui.cancel_action.connect(action_indicator.cancel)
+
 	
 	for i in units.size():
 		

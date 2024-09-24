@@ -10,6 +10,7 @@ var action_points = max_action_points
 var turn_order : int = 100
 
 signal await_command(unit)
+signal action_fufilled
 signal next
 
 func _ready() -> void:
