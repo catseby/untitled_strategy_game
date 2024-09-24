@@ -30,6 +30,72 @@ grow_vertical = 2
 theme_override_constants/separation = 12
 alignment = 1
 
+[node name="Cancel" type="Panel" parent="Center"]
+visible = false
+layout_mode = 0
+offset_left = 240.0
+offset_right = 720.0
+offset_bottom = 134.0
+
+[node name="Vbox" type="VBoxContainer" parent="Center/Cancel"]
+layout_mode = 0
+offset_right = 480.0
+offset_bottom = 134.0
+theme_override_constants/separation = 0
+
+[node name="Title" type="Label" parent="Center/Cancel/Vbox"]
+custom_minimum_size = Vector2(0, 67)
+layout_mode = 2
+theme_override_font_sizes/font_size = 28
+text = "Choose Your Destination"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Button" type="Button" parent="Center/Cancel/Vbox"]
+custom_minimum_size = Vector2(0, 67)
+layout_mode = 2
+theme_override_font_sizes/font_size = 28
+text = "Cancel"
+
+[node name="YesNo" type="Panel" parent="Center"]
+layout_mode = 0
+offset_left = 240.0
+offset_right = 720.0
+offset_bottom = 134.0
+
+[node name="Vbox" type="VBoxContainer" parent="Center/YesNo"]
+layout_mode = 0
+offset_right = 480.0
+offset_bottom = 134.0
+theme_override_constants/separation = 0
+
+[node name="Title" type="Label" parent="Center/YesNo/Vbox"]
+custom_minimum_size = Vector2(0, 67)
+layout_mode = 2
+theme_override_font_sizes/font_size = 28
+text = "End Turn?"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Hbox" type="HBoxContainer" parent="Center/YesNo/Vbox"]
+custom_minimum_size = Vector2(0, 67)
+layout_mode = 2
+theme_override_constants/separation = 0
+
+[node name="no" type="Button" parent="Center/YesNo/Vbox/Hbox"]
+custom_minimum_size = Vector2(0, 67)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 28
+text = "No"
+
+[node name="yes" type="Button" parent="Center/YesNo/Vbox/Hbox"]
+custom_minimum_size = Vector2(0, 67)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 28
+text = "Yes"
+
 [node name="Right" type="Control" parent="."]
 anchors_preset = 0
 offset_left = 1440.0
