@@ -40,6 +40,13 @@ func display_actions(unit):
 	r_button.required_action_points = 0
 	r_button.check_required_ap(unit.action_points)
 
+func _input(event: InputEvent) -> void:
+	if event is InputEventKey and !skills.visible:
+		if event.is_pressed() and not event.is_echo():
+			if event.keycode == KEY_ENTER and current_key != null:
+				_on_confirm_pressed()
+			elif event.keycode == KEY_ESCAPE:
+				_on_cancel_pressed()
 
 func button_pressed(button):
 	if skills.visible:
@@ -48,6 +55,7 @@ func button_pressed(button):
 				yesno.visible = true
 				yesno_text.text = "End Turn?"
 				skills.visible = false
+				current_key = KEY_0
 				
 				var confirmed = await user_choice
 				
@@ -57,7 +65,7 @@ func button_pressed(button):
 					current_unit.rest()
 					clear()
 					cancel_action.emit()
-
+				current_key = null
 			
 			KEY_1:
 				move.emit(current_unit)
@@ -73,6 +81,9 @@ func button_pressed(button):
 					clear()
 				else:
 					cancel_action.emit()
+	
+	elif current_key != null and button.key == current_key:
+		_on_confirm_pressed()
 
 
 func clear():

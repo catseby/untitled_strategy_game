@@ -21,4 +21,4 @@ func _input(event: InputEvent) -> void:
 	if event is InputEventKey and active:
 		if event.is_pressed() and not event.is_echo():
 			if event.keycode == key:
-					was_pressed.emit(self)
+				was_pressed.emit(self)
