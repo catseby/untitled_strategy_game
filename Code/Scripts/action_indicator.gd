@@ -120,6 +120,7 @@ func highlight_indicators(unit):
 func movement_indicators(unit):
 	visible = true
 	active_unit = unit #Maybe needs some cleanup
+	clear_axis()
 	
 	global_position = unit.global_position - Vector3(1,0,1)
 	
@@ -136,14 +137,23 @@ func movement_indicators(unit):
 			
 			var new_cell = next_pass.pop_front()
 			if map.is_cell_free(new_cell * Vector3i(2,0,2), global_position):
-				coords.append(new_cell)
-				set_cell_item(new_cell,0,0)
-				
-				fresh_next_pass.append(new_cell + Vector3i(1,0,0))
-				fresh_next_pass.append(new_cell + Vector3i(-1,0,0))
-				fresh_next_pass.append(new_cell + Vector3i(0,0,1))
-				fresh_next_pass.append(new_cell + Vector3i(0,0,-1))
-			
+				if !map.is_cell_occupied(new_cell * Vector3i(2,0,2), global_position):
+					coords.append(new_cell)
+					set_cell_item(new_cell,0,0)
+					
+					fresh_next_pass.append(new_cell + Vector3i(1,0,0))
+					fresh_next_pass.append(new_cell + Vector3i(-1,0,0))
+					fresh_next_pass.append(new_cell + Vector3i(0,0,1)) #---------------Needs to be cleaned up a bit
+					fresh_next_pass.append(new_cell + Vector3i(0,0,-1))
+					
+				elif new_cell == Vector3i.ZERO:
+					coords.append(new_cell)
+					
+					fresh_next_pass.append(new_cell + Vector3i(1,0,0))
+					fresh_next_pass.append(new_cell + Vector3i(-1,0,0))
+					fresh_next_pass.append(new_cell + Vector3i(0,0,1))
+					fresh_next_pass.append(new_cell + Vector3i(0,0,-1))		
+		
 		next_pass.append_array(fresh_next_pass)
 	
 	cell_default = coords
