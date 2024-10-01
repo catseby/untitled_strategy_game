@@ -1,7 +1,8 @@
-[gd_scene load_steps=5 format=3 uid="uid://dtnub07jwdhiu"]
+[gd_scene load_steps=6 format=3 uid="uid://dtnub07jwdhiu"]
 
 [ext_resource type="Script" path="res://Code/Scripts/player_controlled_unit.gd" id="1_wm6lu"]
 [ext_resource type="Script" path="res://Code/Scripts/onfield_unit_status.gd" id="2_e8ouy"]
+[ext_resource type="PackedScene" uid="uid://dxspgwhxw6hp0" path="res://Level/Prefab/skill_outer.tscn" id="2_wi0kb"]
 
 [sub_resource type="CylinderMesh" id="CylinderMesh_adwiy"]
 
@@ -16,6 +17,8 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
 mesh = SubResource("CylinderMesh_adwiy")
 
 [node name="Skills" type="Node" parent="."]
+
+[node name="Skill-Outer" parent="Skills" instance=ExtResource("2_wi0kb")]
 
 [node name="onfield_unit_status" type="Sprite3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 0)

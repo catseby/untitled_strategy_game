@@ -1,6 +1,7 @@
 extends Node3D
 
 @onready var status = $onfield_unit_status
+@onready var skills = $Skills
 
 @export var move_range : int = 7
 

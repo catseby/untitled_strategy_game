@@ -31,6 +31,13 @@ func display_actions(unit):
 	m_button.key = KEY_1
 	m_button.check_required_ap(unit.action_points)
 	
+	for skill in unit.skills.get_children():
+		var s_button = SKILL_BUTTON.instantiate()
+		skills.add_child(s_button)
+		s_button.text = skill.name
+		s_button.was_pressed.connect(button_pressed)
+		s_button.key = KEY_4
+		s_button.check_required_ap(unit.action_points)
 	
 	var r_button = SKILL_BUTTON.instantiate()
 	skills.add_child(r_button)
