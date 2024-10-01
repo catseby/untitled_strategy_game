@@ -9,6 +9,8 @@ extends GridMap
 @export var ui : Control
 var cell_default
 
+var final_path : Array[Vector3] = []
+
 signal move(move_position)
 signal action_made
 
@@ -62,6 +64,7 @@ func set_indicator(ind_position):
 
 func generate_path(end_position):
 	var cells = get_used_cells()
+	final_path.clear()
 	
 	var AS = AStarGrid2D.new()
 	AS.region = Rect2i(-active_unit.move_range-1,-active_unit.move_range-1,
@@ -88,13 +91,16 @@ func generate_path(end_position):
 	
 	var pathV3 : Array[Vector3]
 	for p in path:
+		final_path.push_back(to_global(map_to_local(Vector3(p.x,0,p.y))))
 		pathV3.push_back(Vector3(p.x,0,p.y))
+	
+	
 	
 	indicator_line.generate_line(pathV3,colors[COLORS.BLUE])
 
 func action():
 	action_made.emit()
-	active_unit.move(to_global(indicator.position))
+	active_unit.move(final_path)
 	clear_indicators()
 
 func cancel():
@@ -104,6 +110,7 @@ func cancel():
 
 func clear_indicators():
 	visible = false
+	
 	indicator.position = Vector3(1,0,1)
 	indicator_line.mesh = null
 	clear()
