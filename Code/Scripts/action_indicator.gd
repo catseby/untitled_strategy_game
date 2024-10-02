@@ -94,8 +94,6 @@ func generate_path(end_position):
 		final_path.push_back(to_global(map_to_local(Vector3(p.x,0,p.y))))
 		pathV3.push_back(Vector3(p.x,0,p.y))
 	
-	
-	
 	indicator_line.generate_line(pathV3,colors[COLORS.BLUE])
 
 func action():
@@ -110,7 +108,6 @@ func cancel():
 
 func clear_indicators():
 	visible = false
-	
 	indicator.position = Vector3(1,0,1)
 	indicator_line.mesh = null
 	clear()
@@ -150,7 +147,7 @@ func movement_indicators(unit):
 					
 					fresh_next_pass.append(new_cell + Vector3i(1,0,0))
 					fresh_next_pass.append(new_cell + Vector3i(-1,0,0))
-					fresh_next_pass.append(new_cell + Vector3i(0,0,1)) #---------------Needs to be cleaned up a bit
+					fresh_next_pass.append(new_cell + Vector3i(0,0,1))
 					fresh_next_pass.append(new_cell + Vector3i(0,0,-1))
 					
 				elif new_cell == Vector3i.ZERO:
@@ -159,16 +156,12 @@ func movement_indicators(unit):
 					fresh_next_pass.append(new_cell + Vector3i(1,0,0))
 					fresh_next_pass.append(new_cell + Vector3i(-1,0,0))
 					fresh_next_pass.append(new_cell + Vector3i(0,0,1))
-					fresh_next_pass.append(new_cell + Vector3i(0,0,-1))		
+					fresh_next_pass.append(new_cell + Vector3i(0,0,-1))
 		
 		next_pass.append_array(fresh_next_pass)
 	
 	cell_default = coords
 	set_axis(coords,2)
-
-func clear_axis():
-	for i in axis.get_child_count():
-		axis.get_child(i).clear()
 
 func set_axis(coords : Array[Vector3i] = [Vector3i.ZERO],index = 1):
 	for i in coords.size():
@@ -183,3 +176,7 @@ func set_axis(coords : Array[Vector3i] = [Vector3i.ZERO],index = 1):
 		
 		if !coords.has(coords[i] - Vector3i(-1,0,0)):
 			axis.get_child(3).set_cell_item(coords[i],index,16)
+
+func clear_axis():
+	for i in axis.get_child_count():
+		axis.get_child(i).clear()

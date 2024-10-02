@@ -20,7 +20,8 @@ signal cancel_action
 
 signal user_choice(choice : bool)
 
-# Called when the node enters the scene tree for the first time.
+
+#region Skill Display
 func display_actions(unit):
 	current_unit = unit
 	
@@ -31,12 +32,15 @@ func display_actions(unit):
 	m_button.key = KEY_1
 	m_button.check_required_ap(unit.action_points)
 	
+	var pk = [KEY_2,KEY_3,KEY_4,KEY_5,KEY_6,KEY_7,KEY_8]
 	for skill in unit.skills.get_children():
 		var s_button = SKILL_BUTTON.instantiate()
 		skills.add_child(s_button)
 		s_button.text = skill.name
+		s_button.key = pk.pop_front()
 		s_button.was_pressed.connect(button_pressed)
-		s_button.key = KEY_4
+
+		s_button.skill = skill
 		s_button.check_required_ap(unit.action_points)
 	
 	var r_button = SKILL_BUTTON.instantiate()
@@ -59,56 +63,47 @@ func button_pressed(button):
 	if skills.visible:
 		match button.key:
 			KEY_0:
-				yesno.visible = true
-				yesno_text.text = "End Turn?"
-				skills.visible = false
-				current_key = KEY_0
-				
-				var confirmed = await user_choice
-				
-				skills.visible = true
-				
-				if confirmed:
+				if await ask_question():
 					current_unit.rest()
 					clear()
 					cancel_action.emit()
-				current_key = null
 			
 			KEY_1:
 				move.emit(current_unit)
-				skills.visible = false
-				cancel.visible = true
-				cancel_text.text = "Choose Your Destination."
 				
-				var confirmed = await user_choice
-				
-				skills.visible = true
-				
-				if confirmed:
+				if await ask_choice():
 					clear()
 				else:
 					cancel_action.emit()
+			
+			_:
+				if !button.skill.include_self:
+					ask_choice('Choose target for '+ button.skill.name)
 	
 	elif current_key != null and button.key == current_key:
 		_on_confirm_pressed()
 
-
-func clear():
-	for i in skills.get_child_count():
-		skills.get_child(i).queue_free()
+func ask_question(key = KEY_0,text : String = "End Turn?") -> bool:
+	yesno.visible = true
+	yesno_text.text = text
+	skills.visible = false
+	current_key = key
 	
-	current_unit = null
-
-func update_turn_order(array):
-	for child in turn_order.get_children():
-		child.queue_free()
+	var confirmed = await user_choice
 	
-	for i in array.size():
-		var unit = array[array.size() - 1 - i]
-		var ti = TURN_INDICATOR.instantiate()
-		turn_order.add_child(ti)
-		ti.text = str(unit.turn_order) + " " + str(unit.name)
+	skills.visible = true
+	
+	return confirmed
 
+func ask_choice(text : String = "Choose Your Destination.") -> bool:
+	skills.visible = false
+	cancel.visible = true
+	cancel_text.text = text
+	
+	var confirmed = await user_choice
+	skills.visible = true
+	
+	return confirmed
 
 func _on_cancel_pressed() -> void:
 	yesno.visible = false
@@ -119,3 +114,21 @@ func _on_confirm_pressed() -> void:
 	yesno.visible = false
 	cancel.visible = false
 	user_choice.emit(true)
+
+func clear():
+	for i in skills.get_child_count():
+		skills.get_child(i).queue_free()
+	
+	current_key = null
+	current_unit = null
+#endregion
+
+func update_turn_order(array):
+	for child in turn_order.get_children():
+		child.queue_free()
+	
+	for i in array.size():
+		var unit = array[array.size() - 1 - i]
+		var ti = TURN_INDICATOR.instantiate()
+		turn_order.add_child(ti)
+		ti.text = str(unit.turn_order) + " " + str(unit.name)
