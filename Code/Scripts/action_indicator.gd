@@ -24,9 +24,7 @@ enum INDEXES {
 	ORANGE = 4,
 	ORANGE_BIG = 9,
 	RED = 5,
-	RED_BIG = 10
-}
-
+	RED_BIG = 10}
 var colors = [
 	Color.WHITE,
 	Color("00b4ff"),
@@ -34,17 +32,18 @@ var colors = [
 	Color("ffb400"),
 	Color("ff0000")
 	]
-
-
 enum COLORS {
 	WHITE = 0,
 	BLUE = 1,
 	GREEN = 2,
 	ORANGE = 3,
-	RED = 4
+	RED = 4}
+
+var current_action
+enum ACTION {
+	MOVE,
+	SKILL
 }
-
-
 
 func set_indicator(ind_position):
 	ind_position = to_local(ind_position)
@@ -98,7 +97,9 @@ func generate_path(end_position):
 
 func action():
 	action_made.emit()
-	active_unit.move(final_path)
+	match current_action:
+		ACTION.MOVE:
+			active_unit.move(final_path)
 	clear_indicators()
 
 func cancel():
@@ -113,6 +114,7 @@ func clear_indicators():
 	clear()
 	active_unit = null
 	cell_default = null
+	current_action = null
 	
 	clear_axis()
 
@@ -124,6 +126,7 @@ func highlight_indicators(unit):
 func movement_indicators(unit):
 	visible = true
 	active_unit = unit #Maybe needs some cleanup
+	current_action = ACTION.MOVE
 	clear_axis()
 	
 	global_position = unit.global_position - Vector3(1,0,1)
@@ -162,6 +165,9 @@ func movement_indicators(unit):
 	
 	cell_default = coords
 	set_axis(coords,2)
+
+func skill_indicators(skill):
+	pass
 
 func set_axis(coords : Array[Vector3i] = [Vector3i.ZERO],index = 1):
 	for i in coords.size():

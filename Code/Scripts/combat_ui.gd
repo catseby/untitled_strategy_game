@@ -16,6 +16,7 @@ var current_unit : Node3D
 var current_key = null
 
 signal move(unit)
+signal skill(unit,skill)
 signal cancel_action
 
 signal user_choice(choice : bool)
@@ -79,6 +80,8 @@ func button_pressed(button):
 			_:
 				if !button.skill.include_self:
 					ask_choice('Choose target for '+ button.skill.name)
+				else:
+					ask_question(button.key,'Use ' + button.skill.name + "?")
 	
 	elif current_key != null and button.key == current_key:
 		_on_confirm_pressed()
