@@ -1,5 +1,7 @@
 extends GridMap
 
+var GridCalculator = preload("res://Code/Scripts/grid_calculator.gd")
+
 @onready var axis = $Axis
 @onready var indicator = $Indicator
 @onready var active_unit : Node3D
@@ -136,44 +138,17 @@ func movement_indicators(unit):
 	current_action = ACTION.MOVE
 	clear_axis()
 	current_index = INDEXES.BLUE
-
 	
 	global_position = unit.global_position - Vector3(1,0,1)
 	
-	var coords : Array[Vector3i] = []
+	var gc = GridCalculator.new(global_position,map)
+	var cells = gc.get_available_cells(unit.move_range)
 	
-	var range = unit.move_range
-	var range_size = range * 2 + 1
+	for cell in cells:
+		set_cell_item(cell,0,0)
 	
-	var next_pass : Array[Vector3i] = [Vector3i.ZERO]
-	for i in range:
-		var fresh_next_pass : Array[Vector3i] = []
-		
-		while next_pass.size() > 0:
-			
-			var new_cell = next_pass.pop_front()
-			if map.is_cell_free(new_cell * Vector3i(2,0,2), global_position)  and !coords.has(new_cell):
-				if !map.is_cell_occupied(new_cell * Vector3i(2,0,2), global_position):
-					coords.append(new_cell)
-					set_cell_item(new_cell,0,0)
-					
-					fresh_next_pass.append(new_cell + Vector3i(1,0,0))
-					fresh_next_pass.append(new_cell + Vector3i(-1,0,0))
-					fresh_next_pass.append(new_cell + Vector3i(0,0,1))
-					fresh_next_pass.append(new_cell + Vector3i(0,0,-1))
-					
-				elif new_cell == Vector3i.ZERO:
-					coords.append(new_cell)
-					
-					fresh_next_pass.append(new_cell + Vector3i(1,0,0))
-					fresh_next_pass.append(new_cell + Vector3i(-1,0,0))
-					fresh_next_pass.append(new_cell + Vector3i(0,0,1))
-					fresh_next_pass.append(new_cell + Vector3i(0,0,-1))
-		
-		next_pass.append_array(fresh_next_pass)
-	
-	cell_default = coords
-	set_axis(coords,2)
+	cell_default = cells
+	set_axis(cells,2)
 
 func skill_indicators(unit,skill):
 	visible = true
@@ -185,42 +160,14 @@ func skill_indicators(unit,skill):
 	
 	global_position = unit.global_position - Vector3(1,0,1)
 	
-	var coords : Array[Vector3i] = []
+	var gc = GridCalculator.new(global_position)
+	var cells = gc.get_available_cells(skill.range)
 	
-	var range = skill.range
-	var range_size = range * 2 + 1
+	for cell in cells:
+		set_cell_item(cell,0,0)
 	
-	var next_pass : Array[Vector3i] = [Vector3i.ZERO]
-	for i in range:
-		var fresh_next_pass : Array[Vector3i] = []
-		
-		while next_pass.size() > 0:
-			var new_cell = next_pass.pop_front()
-			print(new_cell)
-			if map.is_cell_free(new_cell * Vector3i(2,0,2), global_position) and !coords.has(new_cell):
-				if !map.is_cell_occupied(new_cell * Vector3i(2,0,2), global_position):
-					coords.append(new_cell)
-					set_cell_item(new_cell,0,0)
-					
-					fresh_next_pass.append(new_cell + Vector3i(1,0,0))
-					fresh_next_pass.append(new_cell + Vector3i(-1,0,0))
-					fresh_next_pass.append(new_cell + Vector3i(0,0,1))
-					fresh_next_pass.append(new_cell + Vector3i(0,0,-1))
-					
-				elif new_cell == Vector3i.ZERO:
-					coords.append(new_cell)
-					if skill.include_self:
-						set_cell_item(new_cell,0,0)
-					
-					fresh_next_pass.append(new_cell + Vector3i(1,0,0))
-					fresh_next_pass.append(new_cell + Vector3i(-1,0,0))
-					fresh_next_pass.append(new_cell + Vector3i(0,0,1))
-					fresh_next_pass.append(new_cell + Vector3i(0,0,-1))
-		
-		next_pass.append_array(fresh_next_pass)
-	
-	cell_default = coords
-	set_axis(coords,INDEXES.RED)
+	cell_default = cells
+	set_axis(cells,INDEXES.RED)
 
 func set_axis(coords : Array[Vector3i] = [Vector3i.ZERO],index = 1):
 	for i in coords.size():
