@@ -28,6 +28,7 @@ func _ready() -> void:
 
 func add_units() -> void:
 	combat_ui.move.connect(action_indicator.movement_indicators)
+	combat_ui.skill.connect(action_indicator.skill_indicators)
 	action_indicator.action_made.connect(combat_ui._on_confirm_pressed)
 	combat_ui.cancel_action.connect(action_indicator.cancel)
 

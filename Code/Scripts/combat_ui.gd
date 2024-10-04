@@ -78,8 +78,9 @@ func button_pressed(button):
 					cancel_action.emit()
 			
 			_:
-				if !button.skill.include_self:
+				if button.skill.require_target:
 					ask_choice('Choose target for '+ button.skill.name)
+					skill.emit(current_unit,button.skill)
 				else:
 					ask_question(button.key,'Use ' + button.skill.name + "?")
 	

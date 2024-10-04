@@ -1,9 +1,9 @@
 extends Node
 
 @export var AOE : Array[Vector3i] = [Vector3i.ZERO]
-@export var range : int = 1
+@export var range : int = 5
 @export var include_self : bool = false
-@export var require_target : bool = false
+@export var require_target : bool = true
 @export var color = COLORS.RED
 
 enum COLORS {

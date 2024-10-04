@@ -14,6 +14,9 @@ var final_path : Array[Vector3] = []
 signal move(move_position)
 signal action_made
 
+var current_index = INDEXES.BLUE
+var current_skill
+
 enum INDEXES {
 	WHITE = 1,
 	WHITE_BIG = 6,
@@ -56,10 +59,11 @@ func set_indicator(ind_position):
 		indicator.position = indicator_position
 		
 		clear_axis()
-		set_axis(cell_default,2)
-		set_axis([local_to_map(Vector3i(indicator.position))],7)
+		set_axis(cell_default,current_index)
+		set_axis([local_to_map(Vector3i(indicator.position))],current_index + 5)
 		
-		generate_path(snap_position)
+		if current_action == ACTION.MOVE:
+			generate_path(snap_position)
 
 func generate_path(end_position):
 	var cells = get_used_cells()
@@ -115,6 +119,9 @@ func clear_indicators():
 	active_unit = null
 	cell_default = null
 	current_action = null
+	current_index = INDEXES.WHITE
+	current_skill = null
+
 	
 	clear_axis()
 
@@ -128,6 +135,8 @@ func movement_indicators(unit):
 	active_unit = unit #Maybe needs some cleanup
 	current_action = ACTION.MOVE
 	clear_axis()
+	current_index = INDEXES.BLUE
+
 	
 	global_position = unit.global_position - Vector3(1,0,1)
 	
@@ -143,7 +152,7 @@ func movement_indicators(unit):
 		while next_pass.size() > 0:
 			
 			var new_cell = next_pass.pop_front()
-			if map.is_cell_free(new_cell * Vector3i(2,0,2), global_position):
+			if map.is_cell_free(new_cell * Vector3i(2,0,2), global_position)  and !coords.has(new_cell):
 				if !map.is_cell_occupied(new_cell * Vector3i(2,0,2), global_position):
 					coords.append(new_cell)
 					set_cell_item(new_cell,0,0)
@@ -166,8 +175,52 @@ func movement_indicators(unit):
 	cell_default = coords
 	set_axis(coords,2)
 
-func skill_indicators(skill):
-	pass
+func skill_indicators(unit,skill):
+	visible = true
+	active_unit = unit
+	current_action = ACTION.SKILL
+	clear_axis()
+	current_index = INDEXES.RED
+	current_skill = skill
+	
+	global_position = unit.global_position - Vector3(1,0,1)
+	
+	var coords : Array[Vector3i] = []
+	
+	var range = skill.range
+	var range_size = range * 2 + 1
+	
+	var next_pass : Array[Vector3i] = [Vector3i.ZERO]
+	for i in range:
+		var fresh_next_pass : Array[Vector3i] = []
+		
+		while next_pass.size() > 0:
+			var new_cell = next_pass.pop_front()
+			print(new_cell)
+			if map.is_cell_free(new_cell * Vector3i(2,0,2), global_position) and !coords.has(new_cell):
+				if !map.is_cell_occupied(new_cell * Vector3i(2,0,2), global_position):
+					coords.append(new_cell)
+					set_cell_item(new_cell,0,0)
+					
+					fresh_next_pass.append(new_cell + Vector3i(1,0,0))
+					fresh_next_pass.append(new_cell + Vector3i(-1,0,0))
+					fresh_next_pass.append(new_cell + Vector3i(0,0,1))
+					fresh_next_pass.append(new_cell + Vector3i(0,0,-1))
+					
+				elif new_cell == Vector3i.ZERO:
+					coords.append(new_cell)
+					if skill.include_self:
+						set_cell_item(new_cell,0,0)
+					
+					fresh_next_pass.append(new_cell + Vector3i(1,0,0))
+					fresh_next_pass.append(new_cell + Vector3i(-1,0,0))
+					fresh_next_pass.append(new_cell + Vector3i(0,0,1))
+					fresh_next_pass.append(new_cell + Vector3i(0,0,-1))
+		
+		next_pass.append_array(fresh_next_pass)
+	
+	cell_default = coords
+	set_axis(coords,INDEXES.RED)
 
 func set_axis(coords : Array[Vector3i] = [Vector3i.ZERO],index = 1):
 	for i in coords.size():
