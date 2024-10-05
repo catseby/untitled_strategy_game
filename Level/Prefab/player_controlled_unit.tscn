@@ -19,7 +19,8 @@ mesh = SubResource("CylinderMesh_adwiy")
 [node name="Skills" type="Node" parent="."]
 
 [node name="Attack" parent="Skills" instance=ExtResource("2_wi0kb")]
-AOE = Array[Vector3i]([Vector3i(0, 0, 0), Vector3i(1, 0, 0), Vector3i(0, 0, 1)])
+AOE = Array[Vector3i]([Vector3i(0, 0, 0), Vector3i(0, 0, 1), Vector3i(0, 0, -1), Vector3i(1, 0, 0)])
+range = 2
 
 [node name="Heal" parent="Skills" instance=ExtResource("2_wi0kb")]
 range = 3

@@ -31,7 +31,7 @@ func get_new_path(cells,active_unit : Node3D,end_position):
 	var path = AS.get_point_path(Vector2i.ZERO,Vector2i(end_position.x,end_position.z))
 	return path
 
-func get_available_cells(range) -> Array[Vector3i]:
+func get_available_cells(range,include_self : bool = false) -> Array[Vector3i]:
 	var coords : Array[Vector3i] = []
 	var range_size = range * 2 + 1
 	

@@ -67,8 +67,12 @@ func set_indicator(ind_position):
 			generate_path(snap_position)
 			set_axis([local_to_map(Vector3i(indicator.position))],current_index + 5)
 		else:
+			var dir = Vector2(1,1).direction_to(Vector2(indicator.position.x,indicator.position.z))
+			var angl = rad_to_deg(-dir.angle())
+			print(angl)
+			
 			var aoe : Array[Vector3i] = []
-			for area in current_skill.AOE:
+			for area in get_rotated_cells(current_skill.AOE,angl):
 				aoe.append(local_to_map(Vector3i(indicator.position)) + area)
 			
 			set_axis(aoe,current_index + 5)
@@ -131,7 +135,8 @@ func movement_indicators(unit):
 	var cells = gc.get_available_cells(unit.move_range)
 	
 	for cell in cells:
-		set_cell_item(cell,0,0)
+		if cell != Vector3i.ZERO:
+			set_cell_item(cell,0,0)
 	
 	cell_default = cells
 	set_axis(cells,2)
@@ -151,10 +156,18 @@ func skill_indicators(unit,skill):
 	var cells = gc.get_available_cells(skill.range)
 	
 	for cell in cells:
-		set_cell_item(cell,0,0)
+		if cell != Vector3i.ZERO or skill.include_self:
+			set_cell_item(cell,0,0)
 	
 	cell_default = cells
 	set_axis(cells,INDEXES.RED)
+
+func get_rotated_cells(cells,deg) -> Array[Vector3i]:
+	var new_cells : Array[Vector3i] = []
+	for cell in cells:
+		var new_cell = Vector3(cell).rotated(Vector3i.UP,deg_to_rad(deg))
+		new_cells.append(Vector3i(new_cell))
+	return new_cells
 
 func set_axis(coords : Array[Vector3i] = [Vector3i.ZERO],index = 1):
 	for i in coords.size():
