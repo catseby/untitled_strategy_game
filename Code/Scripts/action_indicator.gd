@@ -171,15 +171,26 @@ func get_rotated_cells(cells,deg) -> Array[Vector3i]:
 
 func set_axis(coords : Array[Vector3i] = [Vector3i.ZERO],index = 1):
 	for i in coords.size():
+		
 		if !coords.has(coords[i] - Vector3i(0,0,-1)):
 			axis.get_child(0).set_cell_item(coords[i],index,0)
-		
+		elif axis.get_child(0).get_cell_item(coords[i]) != index:
+			axis.get_child(0).set_cell_item(coords[i],-1,0)
+			
 		if !coords.has(coords[i] - Vector3i(0,0,1)):
 			axis.get_child(1).set_cell_item(coords[i],index,10)
+		elif axis.get_child(1).get_cell_item(coords[i]) != index:
+			axis.get_child(1).set_cell_item(coords[i],-1,0)
+		
 		if !coords.has(coords[i] - Vector3i(1,0,0)):
 			axis.get_child(2).set_cell_item(coords[i],index,22)
+		elif axis.get_child(2).get_cell_item(coords[i]) != index:
+			axis.get_child(2).set_cell_item(coords[i],-1,0)
+		
 		if !coords.has(coords[i] - Vector3i(-1,0,0)):
 			axis.get_child(3).set_cell_item(coords[i],index,16)
+		elif axis.get_child(3).get_cell_item(coords[i]) != index:
+			axis.get_child(3).set_cell_item(coords[i],-1,0)
 
 func clear_axis():
 	for i in axis.get_child_count():
