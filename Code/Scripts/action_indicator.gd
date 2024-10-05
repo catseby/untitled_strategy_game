@@ -62,37 +62,22 @@ func set_indicator(ind_position):
 		
 		clear_axis()
 		set_axis(cell_default,current_index)
-		set_axis([local_to_map(Vector3i(indicator.position))],current_index + 5)
 		
 		if current_action == ACTION.MOVE:
 			generate_path(snap_position)
+			set_axis([local_to_map(Vector3i(indicator.position))],current_index + 5)
+		else:
+			var aoe : Array[Vector3i] = []
+			for area in current_skill.AOE:
+				aoe.append(local_to_map(Vector3i(indicator.position)) + area)
+			
+			set_axis(aoe,current_index + 5)
 
 func generate_path(end_position):
-	var cells = get_used_cells()
 	final_path.clear()
 	
-	var AS = AStarGrid2D.new()
-	AS.region = Rect2i(-active_unit.move_range-1,-active_unit.move_range-1,
-	active_unit.move_range * 2 + 2,active_unit.move_range * 2 + 2)
-	AS.default_compute_heuristic = AStarGrid2D.HEURISTIC_MANHATTAN
-	AS.default_estimate_heuristic = AStarGrid2D.HEURISTIC_MANHATTAN
-	AS.diagonal_mode = AStarGrid2D.DIAGONAL_MODE_NEVER
-	AS.update()
-	
-	
-	for cell in cells:
-		AS.set_point_weight_scale(Vector2i(cell.x,cell.z),cells.find(cell))
-		
-		if  !cells.has(cell + Vector3i(1,0,0)): #-----------------------RIGHT
-			AS.set_point_solid(Vector2i(cell.x,cell.z) + Vector2i(1,0))
-		if  !cells.has(cell + Vector3i(-1,0,0)):#-----------------------LEFT
-			AS.set_point_solid(Vector2i(cell.x,cell.z) + Vector2i(-1,0))
-		if  !cells.has(cell + Vector3i(0,0,1)):#------------------------DOWN
-			AS.set_point_solid(Vector2i(cell.x,cell.z) + Vector2i(0,1))
-		if  !cells.has(cell + Vector3i(0,0,-1)):#-----------------------UP
-			AS.set_point_solid(Vector2i(cell.x,cell.z) + Vector2i(0,-1))
-	
-	var path = AS.get_point_path(Vector2i.ZERO,Vector2i(end_position.x,end_position.z))
+	var gc = GridCalculator.new()
+	var path = gc.get_new_path(get_used_cells(),active_unit,end_position)
 	
 	var pathV3 : Array[Vector3]
 	for p in path:
@@ -133,6 +118,7 @@ func highlight_indicators(unit):
 	set_axis([Vector3i(local_to_map(to_local(unit.global_position)))],6)
 
 func movement_indicators(unit):
+	clear_indicators()
 	visible = true
 	active_unit = unit #Maybe needs some cleanup
 	current_action = ACTION.MOVE
@@ -151,6 +137,7 @@ func movement_indicators(unit):
 	set_axis(cells,2)
 
 func skill_indicators(unit,skill):
+	clear_indicators()
 	visible = true
 	active_unit = unit
 	current_action = ACTION.SKILL
@@ -176,10 +163,8 @@ func set_axis(coords : Array[Vector3i] = [Vector3i.ZERO],index = 1):
 		
 		if !coords.has(coords[i] - Vector3i(0,0,1)):
 			axis.get_child(1).set_cell_item(coords[i],index,10)
-		
 		if !coords.has(coords[i] - Vector3i(1,0,0)):
 			axis.get_child(2).set_cell_item(coords[i],index,22)
-		
 		if !coords.has(coords[i] - Vector3i(-1,0,0)):
 			axis.get_child(3).set_cell_item(coords[i],index,16)
 

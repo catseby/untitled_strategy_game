@@ -67,7 +67,8 @@ func button_pressed(button):
 				if await ask_question():
 					current_unit.rest()
 					clear()
-					cancel_action.emit()
+				else:
+					_on_cancel_pressed()
 			
 			KEY_1:
 				move.emit(current_unit)
@@ -75,7 +76,8 @@ func button_pressed(button):
 				if await ask_choice():
 					clear()
 				else:
-					cancel_action.emit()
+					_on_cancel_pressed()
+
 			
 			_:
 				if button.skill.require_target:
@@ -113,6 +115,8 @@ func _on_cancel_pressed() -> void:
 	yesno.visible = false
 	cancel.visible = false
 	user_choice.emit(false)
+	cancel_action.emit()
+
 
 func _on_confirm_pressed() -> void:
 	yesno.visible = false
