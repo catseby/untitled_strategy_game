@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" path="res://Code/Scripts/player_controlled_unit.gd" id="1_wm6lu"]
 [ext_resource type="Script" path="res://Code/Scripts/onfield_unit_status.gd" id="2_e8ouy"]
-[ext_resource type="PackedScene" uid="uid://dxspgwhxw6hp0" path="res://Level/Prefab/skill_outer.tscn" id="2_wi0kb"]
+[ext_resource type="PackedScene" uid="uid://dxspgwhxw6hp0" path="res://Level/Prefab/skill.tscn" id="2_wi0kb"]
 
 [sub_resource type="CylinderMesh" id="CylinderMesh_adwiy"]
 
@@ -20,10 +20,12 @@ mesh = SubResource("CylinderMesh_adwiy")
 
 [node name="Attack" parent="Skills" instance=ExtResource("2_wi0kb")]
 AOE = Array[Vector3i]([Vector3i(0, 0, 0), Vector3i(0, 0, 1), Vector3i(0, 0, -1), Vector3i(1, 0, 0)])
-range = 2
+range = 4
 
 [node name="Heal" parent="Skills" instance=ExtResource("2_wi0kb")]
 range = 3
+include_self = true
+color = 3
 
 [node name="onfield_unit_status" type="Sprite3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 0)

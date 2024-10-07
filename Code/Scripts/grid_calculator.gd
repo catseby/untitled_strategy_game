@@ -7,6 +7,36 @@ func _init(new_global_position : Vector3 = Vector3.ZERO, new_map : GridMap = nul
 	map = new_map
 	global_position = new_global_position
 
+#func get_skill_angle(pos : Vector3 = Vector3.ZERO,skill_aoe : Array[Vector3i] = [Vector3i.ZERO]):
+	#var dir = Vector2(1,1).direction_to(Vector2(pos.x,pos.z))
+	#var angl = rad_to_deg(-dir.angle())
+	#
+	#var aoe : Array[Vector3i] = []
+	#for area in get_rotated_cells(skill_aoe,angl):
+		#aoe.append(local_to_map(Vector3i(pos)) + area)
+	#
+#
+#func get_rotated_cells(cells,deg) -> Array[Vector3i]:
+	#var new_cells : Array[Vector3i] = []
+	#for cell in cells:
+		#var new_cell = Vector3(cell).rotated(Vector3i.UP,deg_to_rad(deg))
+		#new_cells.append(Vector3i(new_cell))
+	#return new_cells
+
+func apply_skill(skill,aoe):
+	print(aoe)
+	for area in aoe:
+		print(area)
+		if map.is_cell_occupied(area * Vector3i(2,0,2), global_position):
+			skill.apply_effect(map.get_unit(area * Vector3i(2,0,2), global_position))
+
+func get_rotated_cells(cells,deg) -> Array[Vector3i]:
+	var new_cells : Array[Vector3i] = []
+	for cell in cells:
+		var new_cell = Vector3(cell).rotated(Vector3i.UP,deg_to_rad(deg))
+		new_cells.append(Vector3i(round(new_cell)))
+	return new_cells
+
 func get_new_path(cells,active_unit : Node3D,end_position):
 	var AS = AStarGrid2D.new()
 	AS.region = Rect2i(-active_unit.move_range-1,-active_unit.move_range-1,

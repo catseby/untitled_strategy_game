@@ -35,7 +35,6 @@ func move(new_path):
 	path = new_path
 	state = MOVING
 
-
 func rest():
 	var pr : float = (1.0 / max_action_points) * 100
 	turn_order = action_points * pr + pr
@@ -55,3 +54,6 @@ func _physics_process(delta: float) -> void:
 			if path.is_empty():
 				state = IDLE
 				await_command.emit(self)
+
+func hit(attack):
+	print(attack.damage)

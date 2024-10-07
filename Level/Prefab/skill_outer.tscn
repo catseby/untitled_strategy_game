@@ -1,6 +1,0 @@
-[gd_scene load_steps=2 format=3 uid="uid://dxspgwhxw6hp0"]
-
-[ext_resource type="Script" path="res://Code/Scripts/skill_outer.gd" id="1_nehrf"]
-
-[node name="Skill-Outer" type="Node"]
-script = ExtResource("1_nehrf")

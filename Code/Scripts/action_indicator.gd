@@ -18,6 +18,7 @@ signal action_made
 
 var current_index = INDEXES.BLUE
 var current_skill
+var current_aoe : Array[Vector3i] = []
 
 enum INDEXES {
 	WHITE = 1,
@@ -69,11 +70,14 @@ func set_indicator(ind_position):
 		else:
 			var dir = Vector2(1,1).direction_to(Vector2(indicator.position.x,indicator.position.z))
 			var angl = rad_to_deg(-dir.angle())
-			print(angl)
 			
 			var aoe : Array[Vector3i] = []
-			for area in get_rotated_cells(current_skill.AOE,angl):
+			var gc = GridCalculator.new()
+			current_aoe.clear()
+			
+			for area in gc.get_rotated_cells(current_skill.AOE,angl):
 				aoe.append(local_to_map(Vector3i(indicator.position)) + area)
+				current_aoe.append(local_to_map(Vector3i(indicator.position)) + area)
 			
 			set_axis(aoe,current_index + 5)
 
@@ -95,6 +99,10 @@ func action():
 	match current_action:
 		ACTION.MOVE:
 			active_unit.move(final_path)
+		ACTION.SKILL:
+			var gc = GridCalculator.new(global_position,map)
+			gc.apply_skill(current_skill,current_aoe)
+			
 	clear_indicators()
 
 func cancel():
@@ -147,12 +155,12 @@ func skill_indicators(unit,skill):
 	active_unit = unit
 	current_action = ACTION.SKILL
 	clear_axis()
-	current_index = INDEXES.RED
+	current_index = skill.color
 	current_skill = skill
 	
 	global_position = unit.global_position - Vector3(1,0,1)
 	
-	var gc = GridCalculator.new(global_position)
+	var gc = GridCalculator.new(global_position,map)
 	var cells = gc.get_available_cells(skill.range)
 	
 	for cell in cells:
@@ -160,14 +168,7 @@ func skill_indicators(unit,skill):
 			set_cell_item(cell,0,0)
 	
 	cell_default = cells
-	set_axis(cells,INDEXES.RED)
-
-func get_rotated_cells(cells,deg) -> Array[Vector3i]:
-	var new_cells : Array[Vector3i] = []
-	for cell in cells:
-		var new_cell = Vector3(cell).rotated(Vector3i.UP,deg_to_rad(deg))
-		new_cells.append(Vector3i(new_cell))
-	return new_cells
+	set_axis(cells,current_index)
 
 func set_axis(coords : Array[Vector3i] = [Vector3i.ZERO],index = 1):
 	for i in coords.size():
