@@ -161,7 +161,7 @@ func skill_indicators(unit,skill):
 	global_position = unit.global_position - Vector3(1,0,1)
 	
 	var gc = GridCalculator.new(global_position,map)
-	var cells = gc.get_available_cells(skill.range)
+	var cells = gc.get_available_visible_cells(skill.range)
 	
 	for cell in cells:
 		if cell != Vector3i.ZERO or skill.include_self:

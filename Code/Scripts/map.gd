@@ -27,8 +27,6 @@ func is_cell_occupied(coords : Vector3i, map_position : Vector3) -> bool:
 	
 	for child in turn_order.get_children():
 		var c_pos = local_to_map(to_local(Vector3i(child.global_position)))
-		print("asd" + str(c_pos) + " " + str(tc))
-
 		
 		if c_pos == tc:
 			occupied = true
@@ -46,7 +44,6 @@ func get_unit(coords : Vector3i, map_position : Vector3) -> Node3D:
 	
 	for child in turn_order.get_children():
 		var c_pos = local_to_map(to_local(Vector3i(child.global_position)))
-		print("unit " + str(c_pos) + " " + str(tc))
 		
 		if c_pos == tc:
 			unit = child

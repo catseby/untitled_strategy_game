@@ -24,9 +24,7 @@ func _init(new_global_position : Vector3 = Vector3.ZERO, new_map : GridMap = nul
 	#return new_cells
 
 func apply_skill(skill,aoe):
-	print(aoe)
 	for area in aoe:
-		print(area)
 		if map.is_cell_occupied(area * Vector3i(2,0,2), global_position):
 			skill.apply_effect(map.get_unit(area * Vector3i(2,0,2), global_position))
 
@@ -61,7 +59,7 @@ func get_new_path(cells,active_unit : Node3D,end_position):
 	var path = AS.get_point_path(Vector2i.ZERO,Vector2i(end_position.x,end_position.z))
 	return path
 
-func get_available_cells(range,include_self : bool = false) -> Array[Vector3i]:
+func get_available_cells(range) -> Array[Vector3i]:
 	var coords : Array[Vector3i] = []
 	var range_size = range * 2 + 1
 	
@@ -84,3 +82,64 @@ func get_available_cells(range,include_self : bool = false) -> Array[Vector3i]:
 		next_pass.append_array(fresh_next_pass)
 	
 	return coords
+
+func get_available_visible_cells(range):
+	var coords = get_available_cells(range)
+	
+	var rows = arrange_into_rows(coords)
+	var arr : Array[Vector3i] = []
+	arr.append_array(rows[1][3])
+	
+	return arr
+
+func arrange_into_rows(points: Array[Vector3i]) -> Array:
+	var rows = [[[]],[[]],[[]],[[]]]
+	
+	while points.size() > 0:
+		var point = points.pop_front()
+		
+		if point == Vector3i.ZERO:
+			continue
+		
+		var index = 0
+		var direction = Vector3i(round(Vector3.ZERO.direction_to(Vector3(point))))
+		var direction_index = 0
+		
+		match direction:
+			Vector3i.RIGHT:
+				direction_index = 0
+				index = abs(point.x) - 1
+			Vector3i.BACK, Vector3i(1,0,1), Vector3i(-1,0,1):
+				direction_index = 1
+				index = abs(point.z) - 1
+			Vector3i.LEFT:
+				direction_index = 2
+				index = abs(point.x) - 1
+			Vector3i.FORWARD,  Vector3i(1,0,-1), Vector3i(-1,0,-1):
+				direction_index = 3
+				index = abs(point.z) - 1
+		
+		if !rows[direction_index].size() - 1 > index:
+			rows[direction_index].append([])
+		
+		print(index)
+		print(direction)
+		
+		rows[direction_index][index].append(Vector3i(point))
+		
+	return rows
+
+func next_to_blacklist(cell,blacklist):
+	var is_next_to = false
+	
+	if blacklist.has(cell + Vector3i(1,0,0)):
+		is_next_to = true
+	if blacklist.has(cell + Vector3i(-1,0,0)):
+		is_next_to = true
+	if blacklist.has(cell + Vector3i(0,0,1)):
+		is_next_to = true
+	if blacklist.has(cell + Vector3i(0,0,-1)):
+		is_next_to = true
+	
+	print(is_next_to)
+	return is_next_to
