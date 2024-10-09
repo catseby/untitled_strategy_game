@@ -3,25 +3,17 @@ extends Node
 var map : GridMap
 var global_position : Vector3
 
+class Tile:
+	var position
+	var is_wall = false
+	
+	func _init(pos : Vector3i, wall : bool = false) -> void:
+		position = pos
+		is_wall = wall
+
 func _init(new_global_position : Vector3 = Vector3.ZERO, new_map : GridMap = null) -> void:
 	map = new_map
 	global_position = new_global_position
-
-#func get_skill_angle(pos : Vector3 = Vector3.ZERO,skill_aoe : Array[Vector3i] = [Vector3i.ZERO]):
-	#var dir = Vector2(1,1).direction_to(Vector2(pos.x,pos.z))
-	#var angl = rad_to_deg(-dir.angle())
-	#
-	#var aoe : Array[Vector3i] = []
-	#for area in get_rotated_cells(skill_aoe,angl):
-		#aoe.append(local_to_map(Vector3i(pos)) + area)
-	#
-#
-#func get_rotated_cells(cells,deg) -> Array[Vector3i]:
-	#var new_cells : Array[Vector3i] = []
-	#for cell in cells:
-		#var new_cell = Vector3(cell).rotated(Vector3i.UP,deg_to_rad(deg))
-		#new_cells.append(Vector3i(new_cell))
-	#return new_cells
 
 func apply_skill(skill,aoe):
 	for area in aoe:
@@ -59,9 +51,12 @@ func get_new_path(cells,active_unit : Node3D,end_position):
 	var path = AS.get_point_path(Vector2i.ZERO,Vector2i(end_position.x,end_position.z))
 	return path
 
-func get_available_cells(range) -> Array[Vector3i]:
+func get_available_cells(range,include_all : bool = false) -> Array[Vector3i]:
 	var coords : Array[Vector3i] = []
 	var range_size = range * 2 + 1
+	
+	if map == null:
+		include_all = true
 	
 	var next_pass : Array[Vector3i] = [Vector3i.ZERO]
 	for i in range:
@@ -70,8 +65,8 @@ func get_available_cells(range) -> Array[Vector3i]:
 		while next_pass.size() > 0:
 			var new_cell = next_pass.pop_front()
 			
-			if map == null or map.is_cell_free(new_cell * Vector3i(2,0,2), global_position) and !coords.has(new_cell):
-				if map == null or !map.is_cell_occupied(new_cell * Vector3i(2,0,2), global_position) or new_cell == Vector3i.ZERO:
+			if include_all or map.is_cell_free(new_cell * Vector3i(2,0,2), global_position) and !coords.has(new_cell):
+				if include_all or !map.is_cell_occupied(new_cell * Vector3i(2,0,2), global_position) or new_cell == Vector3i.ZERO:
 					coords.append(new_cell)
 					
 					fresh_next_pass.append(new_cell + Vector3i(1,0,0))
@@ -84,13 +79,29 @@ func get_available_cells(range) -> Array[Vector3i]:
 	return coords
 
 func get_available_visible_cells(range):
-	var coords = get_available_cells(range)
+	var coords = get_available_cells(range,true)
 	
-	var rows = arrange_into_rows(coords)
-	var arr : Array[Vector3i] = []
-	arr.append_array(rows[1][3])
+	var row_groups = arrange_into_rows(coords)
 	
-	return arr
+	for i in row_groups.size():
+		var rows = row_groups[i]
+		var slopes : Array[Vector3] = []
+		match i:
+			0:
+				slopes.append_array([Vector3(1,0,-1),Vector3(1,0,1),Vector3(1,0,0)])
+			1:
+				slopes.append_array([Vector3(1,0,1),Vector3(-1,0,1),Vector3(0,0,1)])
+			2:
+				slopes.append_array([Vector3(-1,0,-1),Vector3(-1,0,1),Vector3(-1,0,0)])
+			3:
+				slopes.append_array([Vector3(1,0,-1),Vector3(-1,0,-1),Vector3(0,0,-1)])
+		
+		
+		
+		print(slopes)
+	
+	
+	return coords
 
 func arrange_into_rows(points: Array[Vector3i]) -> Array:
 	var rows = [[[]],[[]],[[]],[[]]]
@@ -122,10 +133,13 @@ func arrange_into_rows(points: Array[Vector3i]) -> Array:
 		if !rows[direction_index].size() - 1 > index:
 			rows[direction_index].append([])
 		
-		print(index)
-		print(direction)
+		var tile : Tile
+		if !map.is_cell_free(point * Vector3i(2,0,2),global_position) or map.is_cell_occupied(point * Vector3i(2,0,2),global_position):
+			tile = Tile.new(point,true)
+		else:
+			tile = Tile.new(point)
 		
-		rows[direction_index][index].append(Vector3i(point))
+		rows[direction_index][index].append(tile)
 		
 	return rows
 
