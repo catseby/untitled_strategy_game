@@ -1,11 +1,14 @@
 extends Node
 
+const SymetricShadowcasting = preload("res://Code/Scripts/symmetric_shadowcasting.gd")
+
 var map : GridMap
 var global_position : Vector3
 
 class Tile:
+	
 	var position
-	var is_wall = false
+	var is_wall
 	
 	func _init(pos : Vector3i, wall : bool = false) -> void:
 		position = pos
@@ -80,35 +83,40 @@ func get_available_cells(range,include_all : bool = false) -> Array[Vector3i]:
 
 func get_available_visible_cells(range):
 	var coords = get_available_cells(range,true)
-	
 	var row_groups = arrange_into_rows(coords)
+	var visible_coords : Array[Vector3i] = []
 	
 	for i in row_groups.size():
 		var rows = row_groups[i]
 		var slopes : Array[Vector3] = []
+		var slope_tangents : Array[Vector3] = []
 		match i:
 			0:
-				slopes.append_array([Vector3(1,0,-1),Vector3(1,0,1),Vector3(1,0,0)])
+				slopes.append_array([Vector3(1,0,-1).normalized(),Vector3(1,0,1).normalized(),Vector3(1,0,0)])
+				slope_tangents.append_array([Vector3(-0.5,0,0.5),Vector3(-0.5,0,-0.5)])
 			1:
-				slopes.append_array([Vector3(1,0,1),Vector3(-1,0,1),Vector3(0,0,1)])
+				slopes.append_array([Vector3(1,0,1).normalized(),Vector3(-1,0,1).normalized(),Vector3(0,0,1)])
+				slope_tangents.append_array([Vector3(-0.5,0,0.5),Vector3(0.5,0,0.5)])
 			2:
-				slopes.append_array([Vector3(-1,0,-1),Vector3(-1,0,1),Vector3(-1,0,0)])
+				slopes.append_array([Vector3(-1,0,-1).normalized(),Vector3(-1,0,1).normalized(),Vector3(-1,0,0)])
+				slope_tangents.append_array([Vector3(0.5,0,-0.5),Vector3(0.5,0,0.5)])
 			3:
-				slopes.append_array([Vector3(1,0,-1),Vector3(-1,0,-1),Vector3(0,0,-1)])
+				slopes.append_array([Vector3(1,0,-1).normalized(),Vector3(-1,0,-1).normalized(),Vector3(0,0,-1)])
+				slope_tangents.append_array([Vector3(0.5,0,-0.5),Vector3(-0.5,0,-0.5)])
 		
-		
-		
-		print(slopes)
+		if i == 1:
+			var SS = SymetricShadowcasting.new(rows,slopes,slope_tangents)
+			visible_coords.append_array(SS.get_revealed_tiles())
 	
 	
-	return coords
+	return visible_coords
 
-func arrange_into_rows(points: Array[Vector3i]) -> Array:
+func arrange_into_rows(points: Array[Vector3i]):
 	var rows = [[[]],[[]],[[]],[[]]]
 	
 	while points.size() > 0:
 		var point = points.pop_front()
-		
+		#print(point)
 		if point == Vector3i.ZERO:
 			continue
 		
@@ -136,11 +144,16 @@ func arrange_into_rows(points: Array[Vector3i]) -> Array:
 		var tile : Tile
 		if !map.is_cell_free(point * Vector3i(2,0,2),global_position) or map.is_cell_occupied(point * Vector3i(2,0,2),global_position):
 			tile = Tile.new(point,true)
+			#print("tile as wall")
 		else:
-			tile = Tile.new(point)
+			tile = Tile.new(point,false)
+		#print(tile.position)
 		
 		rows[direction_index][index].append(tile)
 		
+	
+	for point in rows[0][0]:
+		print(point.position)
 	return rows
 
 func next_to_blacklist(cell,blacklist):
