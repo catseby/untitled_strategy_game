@@ -23,7 +23,7 @@ AOE = Array[Vector3i]([Vector3i(0, 0, 0), Vector3i(0, 0, 1), Vector3i(0, 0, -1),
 range = 7
 
 [node name="Heal" parent="Skills" instance=ExtResource("2_wi0kb")]
-range = 4
+range = 2
 include_self = true
 color = 3
 

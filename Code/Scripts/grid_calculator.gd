@@ -9,10 +9,13 @@ class Tile:
 	
 	var position
 	var is_wall
+	var corner = Vector2(0,0.75)
 	
-	func _init(pos : Vector3i, wall : bool = false) -> void:
+	func _init(pos : Vector3i, wall : bool = false, vertical : bool = false) -> void:
 		position = pos
 		is_wall = wall
+		if vertical:
+			corner = Vector2(0.75,0)
 
 func _init(new_global_position : Vector3 = Vector3.ZERO, new_map : GridMap = null) -> void:
 	map = new_map
@@ -83,46 +86,30 @@ func get_available_cells(range,include_all : bool = false) -> Array[Vector3i]:
 
 func get_available_visible_cells(range):
 	var coords = get_available_cells(range,true)
-	var row_groups = arrange_into_rows(coords,range)
-	var visible_coords : Array[Vector3i] = []
+	var tiles : Array[Tile]
+	var rows = arrange_into_rows(coords,range)
 	
-	for i in row_groups.size():
-		var rows = row_groups[i]
-		var slopes : Array[Vector2] = []
-		var slope_tangents : Array[Vector3] = []
-		match i:
-			0:
-				#slopes.append_array([Vector3(1,0,-1).normalized(),Vector3(1,0,1).normalized(),Vector3(1,0,0)])
-				slopes.append_array([Vector2.DOWN,Vector2.UP])
-				slope_tangents.append_array([Vector3(-0.5,0,0.5),Vector3(-0.5,0,-0.5)])
-			1:
-				#slopes.append_array([Vector3(1,0,1).normalized(),Vector3(-1,0,1).normalized(),Vector3(0,0,1)])
-				slope_tangents.append_array([Vector3(-0.5,0,0.5),Vector3(0.5,0,0.5)])
-				slopes.append_array([Vector2.LEFT,Vector2.RIGHT])
-			2:
-				#slopes.append_array([Vector3(-1,0,-1).normalized(),Vector3(-1,0,1).normalized(),Vector3(-1,0,0)])
-				slope_tangents.append_array([Vector3(0.5,0,-0.5),Vector3(0.5,0,0.5)])
-				slopes.append_array([Vector2.UP,Vector2.DOWN])
-			3:
-				#slopes.append_array([Vector3(1,0,-1).normalized(),Vector3(-1,0,-1).normalized(),Vector3(0,0,-1)])
-				slope_tangents.append_array([Vector3(0.5,0,-0.5),Vector3(-0.5,0,-0.5)])
-				slopes.append_array([Vector2.RIGHT,Vector2.LEFT])
-		
-		#if i == 1:
-		var SS = SymetricShadowcasting.new(rows,slopes,slope_tangents)
-		visible_coords.append_array(await SS.get_revealed_tiles())
+	#for point in coords:
+		#var tile : Tile
+		#
+		#if !map.is_cell_free(point * Vector3i(2,0,2),global_position) or map.is_cell_occupied(point * Vector3i(2,0,2),global_position):
+			#tile = Tile.new(point,true)
+		#else:
+			#tile = Tile.new(point,false)
+		#
+		#tiles.append(tile)
 	
-	#var t : Array[Vector3i] = [row_groups[1][0][0].position]
+	var SS = SymetricShadowcasting.new(rows)
+	var visible_coords : Array[Vector3i] = SS.get_visible_tiles()
 	
 	return visible_coords
 
 func arrange_into_rows(points: Array[Vector3i], row_count : int):
-	var rows = [[],[],[],[]]
+	var rows = []
 	
-	for i in rows.size():
-		for j in row_count - 1:
-			var empty_row : Array[Tile] = []
-			rows[i].append(empty_row)
+	for j in row_count - 1:
+		var empty_row : Array[Tile] = []
+		rows.append(empty_row)
 	
 	while points.size() > 0:
 		var point = points.pop_front()
@@ -132,47 +119,26 @@ func arrange_into_rows(points: Array[Vector3i], row_count : int):
 		
 		var index = 0
 		var direction = Vector3i(round(Vector3.ZERO.direction_to(Vector3(point))))
-		var direction_index = 0
+		var vertical = false
 		
 		match direction:
 			Vector3i.RIGHT:
-				direction_index = 0
 				index = abs(point.x) - 1
 			Vector3i.BACK, Vector3i(1,0,1), Vector3i(-1,0,1):
-				direction_index = 1
+				vertical = true
 				index = abs(point.z) - 1
 			Vector3i.LEFT:
-				direction_index = 2
 				index = abs(point.x) - 1
 			Vector3i.FORWARD,  Vector3i(1,0,-1), Vector3i(-1,0,-1):
-				direction_index = 3
+				vertical = true
 				index = abs(point.z) - 1
 		
 		var tile : Tile
 		if !map.is_cell_free(point * Vector3i(2,0,2),global_position) or map.is_cell_occupied(point * Vector3i(2,0,2),global_position):
-			tile = Tile.new(point,true)
-			#print("tile as wall")
+			tile = Tile.new(point,true,vertical)
 		else:
-			tile = Tile.new(point,false)
-		#print(tile.position)
+			tile = Tile.new(point,false,vertical)
 		
-		rows[direction_index][index].append(tile)
+		rows[index].append(tile)
 	
-	
-	#print(rows[1])
 	return rows
-
-func next_to_blacklist(cell,blacklist):
-	var is_next_to = false
-	
-	if blacklist.has(cell + Vector3i(1,0,0)):
-		is_next_to = true
-	if blacklist.has(cell + Vector3i(-1,0,0)):
-		is_next_to = true
-	if blacklist.has(cell + Vector3i(0,0,1)):
-		is_next_to = true
-	if blacklist.has(cell + Vector3i(0,0,-1)):
-		is_next_to = true
-	
-	print(is_next_to)
-	return is_next_to
