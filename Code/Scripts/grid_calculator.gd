@@ -83,40 +83,50 @@ func get_available_cells(range,include_all : bool = false) -> Array[Vector3i]:
 
 func get_available_visible_cells(range):
 	var coords = get_available_cells(range,true)
-	var row_groups = arrange_into_rows(coords)
+	var row_groups = arrange_into_rows(coords,range)
 	var visible_coords : Array[Vector3i] = []
 	
 	for i in row_groups.size():
 		var rows = row_groups[i]
-		var slopes : Array[Vector3] = []
+		var slopes : Array[Vector2] = []
 		var slope_tangents : Array[Vector3] = []
 		match i:
 			0:
-				slopes.append_array([Vector3(1,0,-1).normalized(),Vector3(1,0,1).normalized(),Vector3(1,0,0)])
+				#slopes.append_array([Vector3(1,0,-1).normalized(),Vector3(1,0,1).normalized(),Vector3(1,0,0)])
+				slopes.append_array([Vector2.DOWN,Vector2.UP])
 				slope_tangents.append_array([Vector3(-0.5,0,0.5),Vector3(-0.5,0,-0.5)])
 			1:
-				slopes.append_array([Vector3(1,0,1).normalized(),Vector3(-1,0,1).normalized(),Vector3(0,0,1)])
+				#slopes.append_array([Vector3(1,0,1).normalized(),Vector3(-1,0,1).normalized(),Vector3(0,0,1)])
 				slope_tangents.append_array([Vector3(-0.5,0,0.5),Vector3(0.5,0,0.5)])
+				slopes.append_array([Vector2.LEFT,Vector2.RIGHT])
 			2:
-				slopes.append_array([Vector3(-1,0,-1).normalized(),Vector3(-1,0,1).normalized(),Vector3(-1,0,0)])
+				#slopes.append_array([Vector3(-1,0,-1).normalized(),Vector3(-1,0,1).normalized(),Vector3(-1,0,0)])
 				slope_tangents.append_array([Vector3(0.5,0,-0.5),Vector3(0.5,0,0.5)])
+				slopes.append_array([Vector2.UP,Vector2.DOWN])
 			3:
-				slopes.append_array([Vector3(1,0,-1).normalized(),Vector3(-1,0,-1).normalized(),Vector3(0,0,-1)])
+				#slopes.append_array([Vector3(1,0,-1).normalized(),Vector3(-1,0,-1).normalized(),Vector3(0,0,-1)])
 				slope_tangents.append_array([Vector3(0.5,0,-0.5),Vector3(-0.5,0,-0.5)])
+				slopes.append_array([Vector2.RIGHT,Vector2.LEFT])
 		
-		if i == 1:
-			var SS = SymetricShadowcasting.new(rows,slopes,slope_tangents)
-			visible_coords.append_array(SS.get_revealed_tiles())
+		#if i == 1:
+		var SS = SymetricShadowcasting.new(rows,slopes,slope_tangents)
+		visible_coords.append_array(await SS.get_revealed_tiles())
 	
+	#var t : Array[Vector3i] = [row_groups[1][0][0].position]
 	
 	return visible_coords
 
-func arrange_into_rows(points: Array[Vector3i]):
-	var rows = [[[]],[[]],[[]],[[]]]
+func arrange_into_rows(points: Array[Vector3i], row_count : int):
+	var rows = [[],[],[],[]]
+	
+	for i in rows.size():
+		for j in row_count - 1:
+			var empty_row : Array[Tile] = []
+			rows[i].append(empty_row)
 	
 	while points.size() > 0:
 		var point = points.pop_front()
-		#print(point)
+		
 		if point == Vector3i.ZERO:
 			continue
 		
@@ -138,9 +148,6 @@ func arrange_into_rows(points: Array[Vector3i]):
 				direction_index = 3
 				index = abs(point.z) - 1
 		
-		if !rows[direction_index].size() - 1 > index:
-			rows[direction_index].append([])
-		
 		var tile : Tile
 		if !map.is_cell_free(point * Vector3i(2,0,2),global_position) or map.is_cell_occupied(point * Vector3i(2,0,2),global_position):
 			tile = Tile.new(point,true)
@@ -150,10 +157,9 @@ func arrange_into_rows(points: Array[Vector3i]):
 		#print(tile.position)
 		
 		rows[direction_index][index].append(tile)
-		
 	
-	for point in rows[0][0]:
-		print(point.position)
+	
+	#print(rows[1])
 	return rows
 
 func next_to_blacklist(cell,blacklist):
