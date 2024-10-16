@@ -1,13 +1,14 @@
-[gd_scene load_steps=6 format=3 uid="uid://dtnub07jwdhiu"]
+[gd_scene load_steps=7 format=3 uid="uid://dtnub07jwdhiu"]
 
 [ext_resource type="Script" path="res://Code/Scripts/player_controlled_unit.gd" id="1_wm6lu"]
 [ext_resource type="Script" path="res://Code/Scripts/onfield_unit_status.gd" id="2_e8ouy"]
 [ext_resource type="PackedScene" uid="uid://dxspgwhxw6hp0" path="res://Level/Prefab/skill.tscn" id="2_wi0kb"]
+[ext_resource type="PackedScene" uid="uid://j7xt0cdh13f5" path="res://Level/UI/unit_hover_ui.tscn" id="4_rc3kq"]
 
 [sub_resource type="CylinderMesh" id="CylinderMesh_adwiy"]
 
 [sub_resource type="ViewportTexture" id="ViewportTexture_mhmme"]
-viewport_path = NodePath("onfield_unit_status/SubViewport")
+viewport_path = NodePath("onfield_unit_status/Unit_Hover_UI")
 
 [node name="Player_Controlled_Unit" type="Node3D"]
 script = ExtResource("1_wm6lu")
@@ -36,17 +37,7 @@ billboard = 1
 texture = SubResource("ViewportTexture_mhmme")
 script = ExtResource("2_e8ouy")
 
-[node name="SubViewport" type="SubViewport" parent="onfield_unit_status"]
+[node name="Unit_Hover_UI" type="SubViewport" parent="onfield_unit_status"]
 size = Vector2i(42, 38)
 
-[node name="Label" type="Label" parent="onfield_unit_status/SubViewport"]
-offset_right = 40.0
-offset_bottom = 40.0
-text = "Test"
-
-[node name="Label2" type="Label" parent="onfield_unit_status/SubViewport"]
-offset_top = 22.0
-offset_right = 40.0
-offset_bottom = 62.0
-theme_override_font_sizes/font_size = 8
-text = "Test"
+[node name="Unit_Hover_UI" parent="onfield_unit_status/Unit_Hover_UI" instance=ExtResource("4_rc3kq")]

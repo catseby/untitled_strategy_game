@@ -23,7 +23,7 @@ enum {
 }
 
 func _ready() -> void:
-	$onfield_unit_status/SubViewport/Label2.text = name
+	$onfield_unit_status/Unit_Hover_UI/Unit_Hover_UI/Label2.text = name
 
 func act():
 	await get_tree().create_timer(1).timeout

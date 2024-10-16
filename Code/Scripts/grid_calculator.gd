@@ -8,12 +8,17 @@ var global_position : Vector3
 class Tile:
 	
 	var position
-	var is_wall
+	var type
+	enum {
+		Floor,
+		Wall,
+		Unit
+	}
 	var corner = Vector2(0,0.75)
 	
-	func _init(pos : Vector3i, wall : bool = false, vertical : bool = false) -> void:
+	func _init(pos : Vector3i, new_type = Floor, vertical : bool = false) -> void:
 		position = pos
-		is_wall = wall
+		type = new_type
 		if vertical:
 			corner = Vector2(0.75,0)
 
@@ -89,18 +94,9 @@ func get_available_visible_cells(range):
 	var tiles : Array[Tile]
 	var rows = arrange_into_rows(coords,range)
 	
-	#for point in coords:
-		#var tile : Tile
-		#
-		#if !map.is_cell_free(point * Vector3i(2,0,2),global_position) or map.is_cell_occupied(point * Vector3i(2,0,2),global_position):
-			#tile = Tile.new(point,true)
-		#else:
-			#tile = Tile.new(point,false)
-		#
-		#tiles.append(tile)
-	
 	var SS = SymetricShadowcasting.new(rows)
 	var visible_coords : Array[Vector3i] = SS.get_visible_tiles()
+	visible_coords.append(Vector3i.ZERO)
 	
 	return visible_coords
 
@@ -134,10 +130,12 @@ func arrange_into_rows(points: Array[Vector3i], row_count : int):
 				index = abs(point.z) - 1
 		
 		var tile : Tile
-		if !map.is_cell_free(point * Vector3i(2,0,2),global_position) or map.is_cell_occupied(point * Vector3i(2,0,2),global_position):
-			tile = Tile.new(point,true,vertical)
+		if map.is_cell_occupied(point * Vector3i(2,0,2),global_position):
+			tile = Tile.new(point, Tile.Unit, vertical)
+		elif !map.is_cell_free(point * Vector3i(2,0,2),global_position):
+			tile = Tile.new(point,Tile.Wall,vertical)
 		else:
-			tile = Tile.new(point,false,vertical)
+			tile = Tile.new(point,Tile.Floor,vertical)
 		
 		rows[index].append(tile)
 	
