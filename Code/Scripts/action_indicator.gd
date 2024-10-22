@@ -160,15 +160,26 @@ func skill_indicators(unit,skill):
 	
 	global_position = unit.global_position - Vector3(1,0,1)
 	
-	var gc = GridCalculator.new(global_position,map)
-	var cells = await gc.get_available_visible_cells(skill.range)
+	if skill.require_target:
+		var gc = GridCalculator.new(global_position,map)
+		var cells = gc.get_available_visible_cells(skill.range)
+		
+		for cell in cells:
+			if cell != Vector3i.ZERO or skill.include_self:
+				set_cell_item(cell,0,0)
+		
+		cell_default = cells
+		set_axis(cells,current_index)
 	
-	for cell in cells:
-		if cell != Vector3i.ZERO or skill.include_self:
-			set_cell_item(cell,0,0)
-	
-	cell_default = cells
-	set_axis(cells,current_index)
+	else:
+		var gc = GridCalculator.new(global_position,map)
+		var cells = gc.get_aoe_cells(skill.range)
+		
+		cell_default = cells[0]
+		current_aoe = cells[1]
+		
+		set_axis(cells[0],current_index)
+		set_axis(cells[1],current_index + 5)
 
 func set_axis(coords : Array[Vector3i] = [Vector3i.ZERO],index = 1):
 	for i in coords.size():

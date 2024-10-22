@@ -85,6 +85,7 @@ func button_pressed(button):
 					skill.emit(current_unit,button.skill)
 				else:
 					ask_question(button.key,'Use ' + button.skill.name + "?")
+					skill.emit(current_unit,button.skill)
 	
 	elif current_key != null and button.key == current_key:
 		_on_confirm_pressed()

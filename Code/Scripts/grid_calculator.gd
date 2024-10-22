@@ -100,6 +100,19 @@ func get_available_visible_cells(range):
 	
 	return visible_coords
 
+func get_aoe_cells(range):
+	var coords : Array[Vector3i] = get_available_cells(range,true)
+	var units : Array[Vector3i] = []
+	for coord in coords:
+		if map.is_cell_occupied(coord * Vector3i(2,0,2), global_position):
+			units.append(coord)
+	
+	print(coords)
+	print(units)
+	
+	return [coords,units]
+
+
 func arrange_into_rows(points: Array[Vector3i], row_count : int):
 	var rows = []
 	
