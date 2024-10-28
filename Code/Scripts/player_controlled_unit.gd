@@ -5,6 +5,9 @@ extends Node3D
 
 @export var move_range : int = 9
 
+@export var max_hit_points : int = 2
+var hit_points = max_hit_points
+
 @export var max_action_points : int = 2 
 var action_points = max_action_points
 
@@ -56,4 +59,8 @@ func _physics_process(delta: float) -> void:
 				await_command.emit(self)
 
 func hit(attack):
-	print(attack.damage)
+	hit_points -= attack.damage
+	$AnimationPlayer.play("hit")
+	status.set_health_points(hit_points)
+	if hit_points <= 0:
+		queue_free()

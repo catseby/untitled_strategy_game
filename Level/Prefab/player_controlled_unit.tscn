@@ -1,20 +1,70 @@
-[gd_scene load_steps=7 format=3 uid="uid://dtnub07jwdhiu"]
+[gd_scene load_steps=13 format=3 uid="uid://dtnub07jwdhiu"]
 
 [ext_resource type="Script" path="res://Code/Scripts/player_controlled_unit.gd" id="1_wm6lu"]
+[ext_resource type="Shader" path="res://Code/Shaders/flash.gdshader" id="2_2yai8"]
 [ext_resource type="Script" path="res://Code/Scripts/onfield_unit_status.gd" id="2_e8ouy"]
 [ext_resource type="PackedScene" uid="uid://dxspgwhxw6hp0" path="res://Level/Prefab/skill.tscn" id="2_wi0kb"]
 [ext_resource type="PackedScene" uid="uid://j7xt0cdh13f5" path="res://Level/UI/unit_hover_ui.tscn" id="4_rc3kq"]
 
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_r46s0"]
+render_priority = 0
+shader = ExtResource("2_2yai8")
+shader_parameter/flash_color = Color(1, 1, 1, 1)
+shader_parameter/flash_speed = 40.0
+shader_parameter/flash_duration = 1.0
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_f6gsy"]
+next_pass = SubResource("ShaderMaterial_r46s0")
+
 [sub_resource type="CylinderMesh" id="CylinderMesh_adwiy"]
+material = SubResource("StandardMaterial3D_f6gsy")
 
 [sub_resource type="ViewportTexture" id="ViewportTexture_mhmme"]
 viewport_path = NodePath("onfield_unit_status/Unit_Hover_UI")
+
+[sub_resource type="Animation" id="Animation_jwlsi"]
+resource_name = "hit"
+length = 0.3
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("MeshInstance3D:instance_shader_parameters/active")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.3),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [true, false]
+}
+
+[sub_resource type="Animation" id="Animation_u0m6o"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("MeshInstance3D:instance_shader_parameters/active")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_8hbj7"]
+_data = {
+"RESET": SubResource("Animation_u0m6o"),
+"hit": SubResource("Animation_jwlsi")
+}
 
 [node name="Player_Controlled_Unit" type="Node3D"]
 script = ExtResource("1_wm6lu")
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+instance_shader_parameters/active = false
 mesh = SubResource("CylinderMesh_adwiy")
 
 [node name="Skills" type="Node" parent="."]
@@ -47,3 +97,8 @@ size = Vector2i(42, 38)
 render_target_update_mode = 3
 
 [node name="Unit_Hover_UI" parent="onfield_unit_status/Unit_Hover_UI" instance=ExtResource("4_rc3kq")]
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+"": SubResource("AnimationLibrary_8hbj7")
+}
