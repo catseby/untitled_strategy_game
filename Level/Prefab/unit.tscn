@@ -1,26 +1,25 @@
-[gd_scene load_steps=13 format=3 uid="uid://dtnub07jwdhiu"]
+[gd_scene load_steps=12 format=3 uid="uid://cjmj3ublgdrr6"]
 
-[ext_resource type="Script" path="res://Code/Scripts/player_controlled_unit.gd" id="1_wm6lu"]
-[ext_resource type="Shader" path="res://Code/Shaders/flash.gdshader" id="2_2yai8"]
-[ext_resource type="Script" path="res://Code/Scripts/onfield_unit_status.gd" id="2_e8ouy"]
-[ext_resource type="PackedScene" uid="uid://dxspgwhxw6hp0" path="res://Level/Prefab/skill.tscn" id="2_wi0kb"]
-[ext_resource type="PackedScene" uid="uid://j7xt0cdh13f5" path="res://Level/UI/unit_hover_ui.tscn" id="4_rc3kq"]
+[ext_resource type="Script" path="res://Code/Scripts/unit.gd" id="1_f05gt"]
+[ext_resource type="Script" path="res://Code/Scripts/onfield_unit_status.gd" id="2_e3vt1"]
+[ext_resource type="PackedScene" uid="uid://j7xt0cdh13f5" path="res://Level/UI/unit_hover_ui.tscn" id="3_xemgq"]
+[ext_resource type="Shader" path="res://Code/Shaders/flash.gdshader" id="4_nhlql"]
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_r46s0"]
+[sub_resource type="ViewportTexture" id="ViewportTexture_tl6pe"]
+viewport_path = NodePath("onfield_unit_status/Unit_Hover_UI")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_ihsw2"]
 render_priority = 0
-shader = ExtResource("2_2yai8")
+shader = ExtResource("4_nhlql")
 shader_parameter/flash_color = Color(1, 1, 1, 1)
 shader_parameter/flash_speed = 40.0
 shader_parameter/flash_duration = 1.0
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_f6gsy"]
-next_pass = SubResource("ShaderMaterial_r46s0")
+next_pass = SubResource("ShaderMaterial_ihsw2")
 
-[sub_resource type="CylinderMesh" id="CylinderMesh_adwiy"]
+[sub_resource type="CylinderMesh" id="CylinderMesh_ac5tf"]
 material = SubResource("StandardMaterial3D_f6gsy")
-
-[sub_resource type="ViewportTexture" id="ViewportTexture_mhmme"]
-viewport_path = NodePath("onfield_unit_status/Unit_Hover_UI")
 
 [sub_resource type="Animation" id="Animation_u0m6o"]
 length = 0.001
@@ -59,24 +58,10 @@ _data = {
 "hit": SubResource("Animation_jwlsi")
 }
 
-[node name="Player_Controlled_Unit" type="Node3D"]
-script = ExtResource("1_wm6lu")
-
-[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
-instance_shader_parameters/active = false
-mesh = SubResource("CylinderMesh_adwiy")
+[node name="Unit" type="Node3D"]
+script = ExtResource("1_f05gt")
 
 [node name="Skills" type="Node" parent="."]
-
-[node name="Attack" parent="Skills" instance=ExtResource("2_wi0kb")]
-AOE = Array[Vector3i]([Vector3i(0, 0, 0), Vector3i(0, 0, 1), Vector3i(0, 0, -1), Vector3i(1, 0, 0)])
-range = 7
-
-[node name="Heal" parent="Skills" instance=ExtResource("2_wi0kb")]
-include_self = true
-require_target = false
-color = 3
 
 [node name="onfield_unit_status" type="Sprite3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 0)
@@ -84,8 +69,8 @@ sorting_offset = 1.0
 offset = Vector2(50, 0)
 pixel_size = 0.02
 billboard = 1
-texture = SubResource("ViewportTexture_mhmme")
-script = ExtResource("2_e8ouy")
+texture = SubResource("ViewportTexture_tl6pe")
+script = ExtResource("2_e3vt1")
 
 [node name="Unit_Hover_UI" type="SubViewport" parent="onfield_unit_status"]
 disable_3d = true
@@ -96,7 +81,12 @@ canvas_item_default_texture_filter = 0
 size = Vector2i(42, 38)
 render_target_update_mode = 3
 
-[node name="Unit_Hover_UI" parent="onfield_unit_status/Unit_Hover_UI" instance=ExtResource("4_rc3kq")]
+[node name="Unit_Hover_UI" parent="onfield_unit_status/Unit_Hover_UI" instance=ExtResource("3_xemgq")]
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+instance_shader_parameters/active = false
+mesh = SubResource("CylinderMesh_ac5tf")
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 libraries = {

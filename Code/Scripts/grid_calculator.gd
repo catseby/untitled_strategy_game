@@ -6,7 +6,6 @@ var map : GridMap
 var global_position : Vector3
 
 class Tile:
-	
 	var position
 	var type
 	enum {

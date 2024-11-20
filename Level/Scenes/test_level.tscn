@@ -1,4 +1,4 @@
-[gd_scene load_steps=9 format=3 uid="uid://cjgp38vxsy2j0"]
+[gd_scene load_steps=10 format=3 uid="uid://cjgp38vxsy2j0"]
 
 [ext_resource type="Script" path="res://Code/Scripts/level.gd" id="1_8nem6"]
 [ext_resource type="MeshLibrary" uid="uid://c2w55vytcwik" path="res://Art/Mesh-Libraries/prototype_meshlib.tres" id="1_ntgl0"]
@@ -6,6 +6,7 @@
 [ext_resource type="Script" path="res://Code/Scripts/map.gd" id="3_80y2h"]
 [ext_resource type="PackedScene" uid="uid://dmv0ghqasdrsj" path="res://Level/Prefab/player_spawn.tscn" id="5_p1hy0"]
 [ext_resource type="PackedScene" uid="uid://duvwnynqo85h1" path="res://Level/Prefab/action_indicator.tscn" id="6_4wwu7"]
+[ext_resource type="PackedScene" uid="uid://djvedkfnhl6pm" path="res://Level/Prefab/enemy_spawn.tscn" id="8_j2dgj"]
 [ext_resource type="PackedScene" uid="uid://dtoh1am0ml7nc" path="res://Level/UI/combat_ui.tscn" id="9_uepik"]
 
 [sub_resource type="Environment" id="Environment_kd1qp"]
@@ -46,3 +47,6 @@ transform = Transform3D(0.707107, 0.5, -0.5, 0, 0.707107, 0.707107, 0.707107, -0
 light_energy = 2.0
 
 [node name="Turn_Order" type="Node" parent="."]
+
+[node name="Enemy_Spawn" parent="." instance=ExtResource("8_j2dgj")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5, 0, -1)
