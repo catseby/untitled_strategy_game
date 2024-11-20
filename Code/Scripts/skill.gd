@@ -1,5 +1,6 @@
 extends Node
 
+@onready var parent_unit = get_parent().get_parent()
 @export var AOE : Array[Vector3i] = [Vector3i.ZERO]
 @export var range : int = 5
 @export var include_self : bool = false
@@ -19,7 +20,6 @@ enum COLORS {
 var skill : Node = null
 
 func apply_effect(unit):
-	print("effect!")
 	unit.hit(Attack.new())
 
 class Attack :

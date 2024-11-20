@@ -1,12 +1,14 @@
 extends Node3D
 
+const GridCalculator = preload("res://Code/Scripts/grid_calculator.gd")
+
 const PCU = preload("res://Level/Prefab/player_controlled_unit.tscn")
-var GridCalculator = preload("res://Code/Scripts/grid_calculator.gd")
+const AI = preload("res://Level/Prefab/ai.tscn")
+
+@onready var ai = AI.instantiate()
 @onready var map = get_parent().get_node("Map")
 
 @export var units : Array[Node] = []
-@export var action_indicator : Node3D
-@export var combat_ui : Control
 
 func queue_units(queue : Array[Node]) -> void:
 	units.append_array(queue)

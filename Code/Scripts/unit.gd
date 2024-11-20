@@ -38,6 +38,13 @@ func move(new_path):
 	path = new_path
 	state = MOVING
 
+func skill():
+	action_points -= 1
+	status.set_action_points(action_points)
+	await_command.emit(self)
+
+
+
 func rest():
 	var pr : float = (1.0 / max_action_points) * 100
 	turn_order = action_points * pr + pr

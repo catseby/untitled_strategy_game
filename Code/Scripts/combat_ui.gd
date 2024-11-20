@@ -123,6 +123,7 @@ func _on_confirm_pressed() -> void:
 	yesno.visible = false
 	cancel.visible = false
 	user_choice.emit(true)
+	clear()
 
 func clear():
 	for i in skills.get_child_count():

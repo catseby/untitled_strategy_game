@@ -100,6 +100,7 @@ func action():
 		ACTION.MOVE:
 			active_unit.move(final_path)
 		ACTION.SKILL:
+			active_unit.skill()
 			var gc = GridCalculator.new(global_position,map)
 			gc.apply_skill(current_skill,current_aoe)
 			
