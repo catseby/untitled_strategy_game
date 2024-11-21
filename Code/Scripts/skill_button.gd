@@ -9,7 +9,6 @@ var active = true
 signal was_pressed(button : Button)
 
 func check_required_ap(cap):
-	print("check")
 	if cap < required_action_points:
 		active = false
 		modulate.a = 0.75
