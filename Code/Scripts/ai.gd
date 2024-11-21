@@ -22,6 +22,12 @@ class Action:
 	var position : Vector3
 	var type = ACTIONS.MOVE
 	
+	func _init(new_position : Vector3) -> void:
+		position = new_position
+
+class Values:
+	var distance_to_enemy = 1.0
+	var distance_to_enemy_multi = 1
 
 var action_array : Array[Action] = []
 
@@ -29,13 +35,24 @@ func fetch_action(unit):
 	if action_array.is_empty():
 		await calculate_turn(unit)
 	
+	print(action_array)
+	
 	var action : Action = action_array.pop_front()
+	var gc = GridCalculator.new(unit.global_position,map)
 	
 	match action.type:
 		ACTIONS.MOVE:
-			print("ai move")
+			var path = gc.get_new_path(map.get_used_cells(),unit,map.local_to_map(map.to_local(action.position)))
+			var pathV3 : Array[Vector3]
+			for p in path:
+				pathV3.push_back(Vector3(p.x,0,p.y))
+			#print(pathV3)
+			unit.move(pathV3)
 		ACTIONS.SKILL:
 			print("ai skill")
+	
+	if unit.action_points <= 0:
+		unit.rest()
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
@@ -45,29 +62,57 @@ func calculate_turn(unit):
 	var ap = unit.action_points
 	var possible_turns = []
 	
-	var gc = GridCalculator.new(unit.global_position,map)
 	var skill_count = unit.skills.get_child_count()
 	
-	print("pre")
-	var available_move_cells = gc.get_available_cells(unit.move_range)
-	print(available_move_cells.size())
-	print("post")
 	for i in ap:
 		var index = 0
+		var gc = GridCalculator.new(unit.global_position,map)
+		
+		if i != 0 and possible_turns[index][i-1].type == ACTIONS.MOVE:
+			gc.global_position = map.to_global(map.map_to_local(possible_turns[index][i-1].position))
+		
 		for j in skill_count:
 			if j == 0:
-				for k in available_move_cells.size():
+				var available_cells = gc.get_available_cells(unit.move_range)
+				for k in available_cells.size():
 					if i == 0:
-						var arr : Array[Action] = [Action.new()]
+						var arr : Array[Action] = [calculate_value(Action.new(available_cells[k]))]
+						#var arr : Array[Action] = [calculate_value(Action.new(Vector3(unit.to_global(available_cells[k])) + unit.global_position))]
 						possible_turns.append(arr)
 					else:
-						possible_turns[index].append(Action.new())
-					index += 1
-		print(index)
+						print(possible_turns[index-1])
+						possible_turns[index].append(calculate_value(Action.new(available_cells[k])))
+						#possible_turns[index].append(calculate_value(Action.new(Vector3(unit.to_global(available_cells[k])) + possible_turns[index][i-1].position)))
+						index += 1
+		
+		print(possible_turns.size())
+		print(possible_turns[possible_turns.size()-1])
 	
-	action_array = possible_turns[0]
+	var best_turn = possible_turns[0]
+	var best_value = -1000
+	for turn in possible_turns:
+		var value = 0
+		for action in turn:
+			value += action.value
+		if value > best_value:
+			best_turn = turn
+			best_value = value
+	
+	print(possible_turns)
+	print(best_turn)
+	print(best_turn[0].position)
+	print(best_turn[1].position)
+	action_array = best_turn
 	#print(possible_turns)
 
-# Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(delta: float) -> void:
-	pass
+func calculate_value(action):
+	match state:
+		ADVANCE:
+			var enemies = get_tree().get_nodes_in_group("Hunters")
+			var shortest_distance = action.position.distance_to(enemies[0].global_position)
+			for i in enemies.size():
+				var new_distance = action.position.distance_to(enemies[i].global_position)
+				if shortest_distance > new_distance:
+					shortest_distance = new_distance
+			action.value -= shortest_distance
+	return action
