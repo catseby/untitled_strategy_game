@@ -3,7 +3,7 @@ extends Node3D
 @onready var status = $onfield_unit_status
 @onready var skills = $Skills
 
-@export var move_range : int = 9
+@export var move_range : int = 5
 
 @export var max_hit_points : int = 2
 var hit_points = max_hit_points
