@@ -43,12 +43,13 @@ func fetch_action(unit):
 	var action : Action = action_array.pop_front()
 	var gc = GridCalculator.new(unit.global_position - Vector3(1,0,1),map)
 	
-	print(str(action.position) + " action.position")
-	print(str(action.cells) + " action.cells")
+	#print(str(action.position) + " action.position")
+	#print(str(action.cells) + " action.cells")
 	
 	match action.type:
 		ACTIONS.MOVE:
 			if action.position == Vector3.ZERO:
+				action_array = []
 				unit.rest()
 			else:
 				var path = gc.get_new_path(action.cells,unit,action.position)
@@ -103,30 +104,30 @@ func calculate_turn(unit):
 		possible_turns = new_possible_turns
 	
 	
-	var best_turn = possible_turns.pick_random()
-	
-	#print(best_turn[0].cells)
-	#var best_value = -1000
-	#for turn in possible_turns:
-		#var value = 0
-		#for action in turn:
-			#value += action.value
-		#if value > best_value:
-			#best_turn = turn
-			#best_value = value
+	var best_turn = possible_turns[0]	
+	var best_value = -1000
+	for turn in possible_turns:
+		var value = 0
+		for action in turn:
+			action = calculate_value(unit,action)
+			value += action.value
+		if value > best_value:
+			best_turn = turn
+			best_value = value
 	#
 	#print(best_turn[0].position)
 	#print(best_turn[1].position)
 	action_array = best_turn
 
 
-func calculate_value(action):
+func calculate_value(unit,action):
 	match state:
 		ADVANCE:
+			var position = unit.global_position + (action.position * Vector3(2,0,2))
 			var enemies = get_tree().get_nodes_in_group("Hunters")
-			var shortest_distance = action.position.distance_to(enemies[0].global_position)
+			var shortest_distance = position.distance_to(enemies[0].global_position)
 			for i in enemies.size():
-				var new_distance = action.position.distance_to(enemies[i].global_position)
+				var new_distance = position.distance_to(enemies[i].global_position)
 				if shortest_distance > new_distance:
 					shortest_distance = new_distance
 			action.value -= shortest_distance
