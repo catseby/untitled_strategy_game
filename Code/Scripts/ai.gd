@@ -86,39 +86,59 @@ func calculate_turn(unit):
 					var available_cells = gc.get_available_cells(unit.move_range)
 					
 					for l in available_cells.size():
+						var action = Action.new(available_cells[l],available_cells)
 						if i == 0:
-							new_possible_turns.append([Action.new(available_cells[l],available_cells)])
+							new_possible_turns.append([action])
 						else:
-							var action = Action.new(available_cells[l],available_cells)
 							var arr = []
 							arr.append_array(possible_turns[k])
 							arr.append(action)
 							new_possible_turns.append(arr)
 		
-		#print("""
-		#
-		#
-		#""")
-		#
-		#print(new_possible_turns)
 		possible_turns = new_possible_turns
 	
 	
-	var best_turn = possible_turns[0]	
-	var best_value = -1000
-	for turn in possible_turns:
+	
+	#---------ASSIGN VALUES TO POSSIBLE TURNS-----------
+	var unsorted_indexes = []
+	for i in possible_turns.size():
 		var value = 0
-		for action in turn:
+		for action in possible_turns[i]:
 			action = calculate_value(unit,action)
 			value += action.value
-		if value > best_value:
-			best_turn = turn
-			best_value = value
-	#
-	#print(best_turn[0].position)
-	#print(best_turn[1].position)
-	action_array = best_turn
+		unsorted_indexes.append([i,value])
+	
+	
+	#---------SORT BEST TO WORST MOVES
+	
+	var sorted_indexes = [unsorted_indexes[0]]
+	for i in unsorted_indexes.size():
+		if i == 0:
+			continue
+			
+		var index = unsorted_indexes[i]
+		for j in sorted_indexes.size():
+			
+			if j >= sorted_indexes.size() - 1:
+				sorted_indexes.append(index)
+				break
+			elif index[1] > sorted_indexes[j][1]:
+				sorted_indexes.insert(j,index)
+				break
+	
+	var factor = 0.01
+	var move_rating = round((sorted_indexes.size()-1) * factor)
+	var rand = randi_range(0,move_rating)
+	var index = sorted_indexes[rand][0]
+	print(str(rand) + "/" + str(move_rating) + " - " + str(rand/move_rating * 100) + "%")
+	
+	action_array = possible_turns[index]
 
+
+func choose_turn(unit,possible_turns):
+	for turn in possible_turns:
+		for action in turn:
+			action = calculate_value(unit,action)
 
 func calculate_value(unit,action):
 	match state:
