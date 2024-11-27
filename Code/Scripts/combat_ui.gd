@@ -17,6 +17,7 @@ var current_key = null
 
 signal move(unit)
 signal skill(unit,skill)
+signal confirm_action
 signal cancel_action
 
 signal user_choice(choice : bool)
@@ -84,8 +85,10 @@ func button_pressed(button):
 					ask_choice('Choose target for '+ button.skill.name)
 					skill.emit(current_unit,button.skill)
 				else:
-					ask_question(button.key,'Use ' + button.skill.name + "?")
 					skill.emit(current_unit,button.skill)
+					if await ask_question(button.key,'Use ' + button.skill.name + "?"):
+						confirm_action.emit()
+
 	
 	elif current_key != null and button.key == current_key:
 		_on_confirm_pressed()

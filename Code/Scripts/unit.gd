@@ -41,7 +41,7 @@ func move(new_path):
 func skill():
 	action_points -= 1
 	status.set_action_points(action_points)
-	await_command.emit(self)
+	act()
 
 
 

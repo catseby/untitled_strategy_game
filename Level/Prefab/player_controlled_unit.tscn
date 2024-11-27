@@ -72,6 +72,11 @@ mesh = SubResource("CylinderMesh_adwiy")
 [node name="Attack" parent="Skills" instance=ExtResource("2_wi0kb")]
 range = 2
 
+[node name="Heal" parent="Skills" instance=ExtResource("2_wi0kb")]
+include_self = true
+require_target = false
+color = 3
+
 [node name="onfield_unit_status" type="Sprite3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 0)
 sorting_offset = 1.0
@@ -96,8 +101,3 @@ render_target_update_mode = 3
 libraries = {
 "": SubResource("AnimationLibrary_8hbj7")
 }
-
-[node name="Heal" parent="." instance=ExtResource("2_wi0kb")]
-include_self = true
-require_target = false
-color = 3

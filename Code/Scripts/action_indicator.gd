@@ -95,16 +95,21 @@ func generate_path(end_position):
 	indicator_line.generate_line(pathV3,colors[COLORS.BLUE])
 
 func action():
-	action_made.emit()
+	if current_skill == null or current_skill.require_target:
+		action_made.emit()
 	match current_action:
 		ACTION.MOVE:
 			active_unit.move(final_path)
 		ACTION.SKILL:
-			active_unit.skill()
 			var gc = GridCalculator.new(global_position,map)
 			gc.apply_skill(current_skill,current_aoe)
+			active_unit.skill()
+
 			
 	clear_indicators()
+
+func confirm():
+	action()
 
 func cancel():
 	clear_indicators()
@@ -121,6 +126,7 @@ func clear_indicators():
 	current_action = null
 	current_index = INDEXES.WHITE
 	current_skill = null
+	current_aoe = []
 
 	
 	clear_axis()
@@ -181,6 +187,8 @@ func skill_indicators(unit,skill):
 		
 		set_axis(cells[0],current_index)
 		set_axis(cells[1],current_index + 5)
+		
+		print(current_aoe)
 
 func set_axis(coords : Array[Vector3i] = [Vector3i.ZERO],index = 1):
 	for i in coords.size():

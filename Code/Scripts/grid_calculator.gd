@@ -103,7 +103,7 @@ func get_aoe_cells(range):
 	var coords : Array[Vector3i] = get_available_cells(range,true)
 	var units : Array[Vector3i] = []
 	for coord in coords:
-		if map.is_cell_occupied(coord * Vector3i(2,0,2), global_position):
+		if map.is_cell_occupied(coord * Vector3i(2,0,2), global_position) and !units.has(coord):
 			units.append(coord)
 	
 	return [coords,units]
