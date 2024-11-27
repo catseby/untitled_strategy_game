@@ -106,9 +106,6 @@ func get_aoe_cells(range):
 		if map.is_cell_occupied(coord * Vector3i(2,0,2), global_position):
 			units.append(coord)
 	
-	print(coords)
-	print(units)
-	
 	return [coords,units]
 
 

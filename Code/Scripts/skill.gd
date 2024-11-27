@@ -6,6 +6,7 @@ extends Node
 @export var include_self : bool = false
 @export var require_target : bool = true
 @export var required_ap : int = 1
+@export var end_turn : bool = false
 @export var color = COLORS.RED
 
 

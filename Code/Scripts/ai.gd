@@ -4,7 +4,7 @@ const GridCalculator = preload("res://Code/Scripts/grid_calculator.gd")
 
 @onready var map = get_parent().get_node("Map")
 
-enum ACTIONS {
+enum ACTION {
 	MOVE,
 	SKILL
 }
@@ -20,16 +20,16 @@ enum {
 class Action:
 	var value : float = 0.0
 	var position : Vector3
-	var type = ACTIONS.MOVE
+	var type = ACTION.MOVE
 	var cells = []
 	
-	func _init(new_position : Vector3, new_cells = []) -> void:
+	func _init(new_position : Vector3, new_cells = [], new_type = ACTION.MOVE) -> void:
 		position = new_position
 		cells = new_cells
+		type = new_type
 
 class Values:
-	var distance_to_enemy = 1.0
-	var distance_to_enemy_multi = 1
+	var distance_to_enemy = 0.01
 
 var action_array : Array = []
 
@@ -47,7 +47,7 @@ func fetch_action(unit):
 	#print(str(action.cells) + " action.cells")
 	
 	match action.type:
-		ACTIONS.MOVE:
+		ACTION.MOVE:
 			if action.position == Vector3.ZERO:
 				action_array = []
 				unit.rest()
@@ -58,7 +58,7 @@ func fetch_action(unit):
 					pathV3.push_back(unit.to_global(Vector3(p.x * 2,0,p.y * 2)))
 				print(str(pathV3) + " path")
 				unit.move(pathV3)
-		ACTIONS.SKILL:
+		ACTION.SKILL:
 			print("ai skill")
 
 # Called when the node enters the scene tree for the first time.
@@ -70,7 +70,7 @@ func calculate_turn(unit):
 	var ap = unit.action_points
 	var possible_turns = [[Action.new(Vector3.ZERO)]]
 	
-	var skill_count = unit.skills.get_child_count()
+	var skill_count = unit.skills.get_child_count() + 1
 	
 	for i in ap:
 		
@@ -80,13 +80,51 @@ func calculate_turn(unit):
 			if j == 0:
 				
 				for k in possible_turns.size():
-					var current_position = (possible_turns[k][i-1].position * Vector3(2,0,2)) + position
+					#var current_position = (possible_turns[k][i-1].position * Vector3(2,0,2)) + position
+					var current_position : Vector3
+					for l in possible_turns[k].size():
+						var index = possible_turns[k].size() - 1 - l
+						if possible_turns[k][index].type == ACTION.MOVE:
+							current_position = (possible_turns[k][index].position * Vector3(2,0,2)) + position
+							break
 					
 					var gc = GridCalculator.new(current_position,map)
 					var available_cells = gc.get_available_cells(unit.move_range)
 					
 					for l in available_cells.size():
 						var action = Action.new(available_cells[l],available_cells)
+						if i == 0:
+							new_possible_turns.append([action])
+						else:
+							var arr = []
+							arr.append_array(possible_turns[k])
+							arr.append(action)
+							new_possible_turns.append(arr)
+				
+			elif j != skill_count:
+				
+				var skill = unit.skills.get_child(j-1)
+				
+				print(skill)
+				for k in possible_turns.size():
+					
+					var current_position : Vector3
+					for l in possible_turns[k].size():
+						var index = possible_turns[k].size() - 1 - l
+						if possible_turns[k][index].type == ACTION.MOVE:
+							current_position = (possible_turns[k][index].position * Vector3(2,0,2)) + position
+							break
+					
+					var gc = GridCalculator.new(current_position,map)
+					var available_cells
+					
+					if skill.require_target:
+						available_cells = gc.get_available_visible_cells(skill.range)
+					else:
+						available_cells = gc.get_aoe_cells(skill.range)
+					
+					for l in available_cells.size():
+						var action = Action.new(available_cells[l],available_cells,ACTION.SKILL)
 						if i == 0:
 							new_possible_turns.append([action])
 						else:
@@ -141,6 +179,7 @@ func choose_turn(unit,possible_turns):
 			action = calculate_value(unit,action)
 
 func calculate_value(unit,action):
+	var values = Values.new()
 	match state:
 		ADVANCE:
 			var position = unit.global_position + (action.position * Vector3(2,0,2))
@@ -150,5 +189,5 @@ func calculate_value(unit,action):
 				var new_distance = position.distance_to(enemies[i].global_position)
 				if shortest_distance > new_distance:
 					shortest_distance = new_distance
-			action.value -= shortest_distance
+			action.value -= shortest_distance * values.distance_to_enemy
 	return action
