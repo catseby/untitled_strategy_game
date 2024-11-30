@@ -28,7 +28,7 @@ class Attack :
 	var knockback : int
 	var knockback_direction : Vector3
 	
-	func _init(dmg : int = -1,knbk : int = 0,knbk_dir : Vector3 = Vector3.ZERO) -> void:
+	func _init(dmg : int = 1,knbk : int = 0,knbk_dir : Vector3 = Vector3.ZERO) -> void:
 		damage = dmg
 		knockback = knockback
 		knockback_direction = knbk_dir

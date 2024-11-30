@@ -30,14 +30,32 @@ class Action:
 
 class Values:
 	var distance_to_enemy = 0.01
+	var invalid_action = -9999
 
 var action_array : Array = []
+var group : String
+
+
+func asses_situation():
+	var units = get_tree().get_nodes_in_group(group)
+	var enemies = get_tree().get_nodes_in_group("Hunters")
+	match state:
+		ADVANCE:
+			for unit in units:
+				for enemy in enemies:
+					if round(enemy.global_position.distance_to(unit.global_position)) < unit.move_range:
+						state = ENGAGE
+						print("engage")
+						break
+		ENGAGE:
+			pass
 
 func fetch_action(unit):
 	if unit.action_points <= 0:
 		unit.rest()
 		return
 	if action_array.is_empty():
+		asses_situation()
 		await calculate_turn(unit)
 	
 	var action : Action = action_array.pop_front()
@@ -60,6 +78,7 @@ func fetch_action(unit):
 				unit.move(pathV3)
 		ACTION.SKILL:
 			print("ai skill")
+			unit.skill()
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
@@ -120,18 +139,24 @@ func calculate_turn(unit):
 					
 					if skill.require_target:
 						available_cells = gc.get_available_visible_cells(skill.range)
+						for l in available_cells.size():
+							var action = Action.new(available_cells[l],skill.AOE,ACTION.SKILL)
+							
+							var dir = Vector2.ZERO.direction_to(Vector2(action.position.x,action.position.z))
+							var angl = rad_to_deg(-dir.angle())
+							
+							action.cells = gc.get_rotated_cells(action.cells,angl)
+							
+							if i == 0:
+								new_possible_turns.append([action])
+							else:
+								var arr = []
+								arr.append_array(possible_turns[k])
+								arr.append(action)
+								new_possible_turns.append(arr)
 					else:
 						available_cells = gc.get_aoe_cells(skill.range)
 					
-					for l in available_cells.size():
-						var action = Action.new(available_cells[l],available_cells,ACTION.SKILL)
-						if i == 0:
-							new_possible_turns.append([action])
-						else:
-							var arr = []
-							arr.append_array(possible_turns[k])
-							arr.append(action)
-							new_possible_turns.append(arr)
 		
 		possible_turns = new_possible_turns
 	
@@ -182,12 +207,15 @@ func calculate_value(unit,action):
 	var values = Values.new()
 	match state:
 		ADVANCE:
-			var position = unit.global_position + (action.position * Vector3(2,0,2))
-			var enemies = get_tree().get_nodes_in_group("Hunters")
-			var shortest_distance = position.distance_to(enemies[0].global_position)
-			for i in enemies.size():
-				var new_distance = position.distance_to(enemies[i].global_position)
-				if shortest_distance > new_distance:
-					shortest_distance = new_distance
-			action.value -= shortest_distance * values.distance_to_enemy
+			if action.type == ACTION.MOVE:
+				var position = unit.global_position + (action.position * Vector3(2,0,2))
+				var enemies = get_tree().get_nodes_in_group("Hunters")
+				var shortest_distance = position.distance_to(enemies[0].global_position)
+				for i in enemies.size():
+					var new_distance = position.distance_to(enemies[i].global_position)
+					if shortest_distance > new_distance:
+						shortest_distance = new_distance
+				action.value -= shortest_distance * values.distance_to_enemy
+			else:
+				action.value += values.invalid_action
 	return action
