@@ -2,6 +2,7 @@ extends Node3D
 
 @onready var status = $onfield_unit_status
 @onready var skills = $Skills
+@onready var anim = $AnimationPlayer
 
 @export var move_range : int = 5
 
@@ -41,8 +42,9 @@ func move(new_path):
 func skill():
 	action_points -= 1
 	status.set_action_points(action_points)
+	anim.play("attack")
+	await anim.animation_finished
 	act()
-
 
 
 func rest():
@@ -68,6 +70,7 @@ func _physics_process(delta: float) -> void:
 func hit(attack):
 	hit_points -= attack.damage
 	$AnimationPlayer.play("hit")
+	await $AnimationPlayer.animation_finished
 	status.set_health_points(hit_points)
 	if hit_points <= 0:
 		queue_free()

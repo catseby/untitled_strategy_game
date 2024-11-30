@@ -20,13 +20,15 @@ enum {
 class Action:
 	var value : float = 0.0
 	var position : Vector3
+	var skill : Node
 	var type = ACTION.MOVE
 	var cells = []
 	
-	func _init(new_position : Vector3, new_cells = [], new_type = ACTION.MOVE) -> void:
+	func _init(new_position : Vector3, new_cells = [], new_type = ACTION.MOVE, new_skill : Node = null) -> void:
 		position = new_position
 		cells = new_cells
 		type = new_type
+		skill = new_skill
 
 class Values:
 	var distance_to_enemy = 0.01
@@ -43,8 +45,8 @@ func asses_situation():
 		ADVANCE:
 			for unit in units:
 				for enemy in enemies:
-					if round(enemy.global_position.distance_to(unit.global_position)) < unit.move_range:
-						state = ENGAGE
+					if round(enemy.global_position.distance_to(unit.global_position)) < unit.move_range * 1.5:
+						#state = ENGAGE
 						print("engage")
 						break
 		ENGAGE:
@@ -77,7 +79,13 @@ func fetch_action(unit):
 				print(str(pathV3) + " path")
 				unit.move(pathV3)
 		ACTION.SKILL:
-			print("ai skill")
+			var new_aoe = []
+			for cell in action.cells:
+				print(action.position)
+				cell = Vector3i(action.position) + cell
+				new_aoe.append(cell)
+			print(new_aoe)
+			gc.apply_skill(action.skill,new_aoe)
 			unit.skill()
 
 # Called when the node enters the scene tree for the first time.
@@ -140,7 +148,7 @@ func calculate_turn(unit):
 					if skill.require_target:
 						available_cells = gc.get_available_visible_cells(skill.range)
 						for l in available_cells.size():
-							var action = Action.new(available_cells[l],skill.AOE,ACTION.SKILL)
+							var action = Action.new(available_cells[l],skill.AOE,ACTION.SKILL,skill)
 							
 							var dir = Vector2.ZERO.direction_to(Vector2(action.position.x,action.position.z))
 							var angl = rad_to_deg(-dir.angle())
@@ -218,4 +226,6 @@ func calculate_value(unit,action):
 				action.value -= shortest_distance * values.distance_to_enemy
 			else:
 				action.value += values.invalid_action
+		ENGAGE:
+			pass
 	return action
