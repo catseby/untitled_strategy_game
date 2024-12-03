@@ -32,8 +32,8 @@ class Action:
 
 class Values:
 	var distance_to_enemy = 0.01
-	var valid_target = 1
-	var invalid_target = -1
+	var valid_target = 10
+	var invalid_target = -4
 	var invalid_action = -9999
 
 var action_array : Array = []
@@ -71,23 +71,26 @@ func fetch_action(unit):
 	
 	match action.type:
 		ACTION.MOVE:
+			print("MOVE")
 			if action.position == Vector3.ZERO:
 				action_array = []
+				print("wth")
 				unit.rest()
 			else:
 				var path = gc.get_new_path(action.cells,unit,action.position)
 				var pathV3 : Array[Vector3]
 				for p in path:
 					pathV3.push_back(unit.to_global(Vector3(p.x * 2,0,p.y * 2)))
-				print(str(pathV3) + " path")
+				#print(str(pathV3) + " path")
 				unit.move(pathV3)
 		ACTION.SKILL:
+			print("SKILL")
 			var new_aoe = []
 			for cell in action.cells:
-				print(action.position)
+				#print(action.position)
 				cell = Vector3i(action.position) + cell
 				new_aoe.append(cell)
-			print(new_aoe)
+			#print(new_aoe)
 			gc.apply_skill(action.skill,new_aoe)
 			unit.skill()
 
@@ -110,13 +113,16 @@ func calculate_turn(unit):
 			if j == 0:
 				
 				for k in possible_turns.size():
-					#var current_position = (possible_turns[k][i-1].position * Vector3(2,0,2)) + position
-					var current_position : Vector3
-					for l in possible_turns[k].size():
-						var index = possible_turns[k].size() - 1 - l
-						if possible_turns[k][index].type == ACTION.MOVE:
-							current_position = (possible_turns[k][index].position * Vector3(2,0,2)) + position
-							break
+					if possible_turns[k][i-1].type == ACTION.SKILL:
+						continue
+					var current_position = (possible_turns[k][i-1].position * Vector3(2,0,2)) + position
+					#var current_position : Vector3 = position
+					#for l in possible_turns[k].size():
+						#var index = possible_turns[k].size() - 1 - l
+						#if possible_turns[k][index].type == ACTION.MOVE:
+							#print(possible_turns[k][index].type)
+							#current_position = (possible_turns[k][index].position * Vector3(2,0,2)) + position
+							#break
 					
 					var gc = GridCalculator.new(current_position,map)
 					var available_cells = gc.get_available_cells(unit.move_range)
@@ -135,15 +141,18 @@ func calculate_turn(unit):
 				
 				var skill = unit.skills.get_child(j-1)
 				
-				print(skill)
 				for k in possible_turns.size():
 					
-					var current_position : Vector3
-					for l in possible_turns[k].size():
-						var index = possible_turns[k].size() - 1 - l
-						if possible_turns[k][index].type == ACTION.MOVE:
-							current_position = (possible_turns[k][index].position * Vector3(2,0,2)) + position
-							break
+					if possible_turns[k][i-1].type == ACTION.SKILL:
+						continue
+					var current_position = (possible_turns[k][i-1].position * Vector3(2,0,2)) + position
+					#var current_position : Vector3 = position
+					#for l in possible_turns[k].size():
+						#var index = possible_turns[k].size() - 1 - l
+						#if possible_turns[k][index].type == ACTION.MOVE:
+							#print(possible_turns[k][index].type)
+							#current_position = (possible_turns[k][index].position * Vector3(2,0,2)) + position
+							#break
 					
 					var gc = GridCalculator.new(current_position,map)
 					var available_cells
@@ -203,8 +212,17 @@ func calculate_turn(unit):
 	var factor = 0.01
 	var move_rating = round((sorted_indexes.size()-1) * factor)
 	var rand = randi_range(0,move_rating)
-	var index = sorted_indexes[rand][0]
+	var index = sorted_indexes[0][0]
 	print(str(rand) + "/" + str(move_rating) + " - " + str(rand/move_rating * 100) + "%")
+	
+	var arr = []
+	for i in rand:
+		var turn = possible_turns[i]
+		var val = 0
+		for action in turn:
+			val += action.value
+		arr.append(val)
+	print(arr)
 	
 	action_array = possible_turns[index]
 
@@ -231,29 +249,31 @@ func calculate_value(unit,action):
 				calculate_move_value(unit,action)
 			elif action.type == ACTION.SKILL:
 				var skill = action.skill
-				var position = unit.global_position + (action.position * Vector3(2,0,2))
-
+				var position = Vector3i(unit.global_position + (action.position * Vector3(2,0,2)))
+				
 				for i in skill.targets.size():
 					var target = skill.targets[i]
 					var prec = (i+1) / skill.targets.size()
-					var targeted_units
-					match target:
-						skill.TARGETS.ENEMY, skill.TARGETS.ENEMY_LOW, skill.TARGETS.ENEMY_HIGH:
-							targeted_units = enemies
-						_:
-							targeted_units = friendlies
+					var targeted_units = enemies
+					#match target:
+						#skill.TARGETS.ENEMY, skill.TARGETS.ENEMY_LOW, skill.TARGETS.ENEMY_HIGH:
+							#targeted_units = enemies
+						#skill.TARGETS.FRIENDLY:
+							#targeted_units = friendlies
 					
-					if map.is_cell_occupied(position):
-						var detected_unit = map.get_unit(position)
+					if map.is_cell_occupied(action.position * Vector3(2,0,2),unit.global_position) and map:
+						var detected_unit = map.get_unit(action.position * Vector3(2,0,2),unit.global_position)
 						
 						if targeted_units.has(detected_unit):
-							action.value += values.valid_target
+							print(detected_unit)
+							action.value += values.valid_target * prec
 						else:
 							action.value += values.invalid_target
 						
 					else:
 						action.value += values.invalid_action
-				print(action.value)
+					
+				
 		
 	return action
 
