@@ -32,6 +32,8 @@ class Action:
 
 class Values:
 	var distance_to_enemy = 0.01
+	var valid_target = 1
+	var invalid_target = -1
 	var invalid_action = -9999
 
 var action_array : Array = []
@@ -46,8 +48,8 @@ func asses_situation():
 			for unit in units:
 				for enemy in enemies:
 					if round(enemy.global_position.distance_to(unit.global_position)) < unit.move_range * 1.5:
-						#state = ENGAGE
-						print("engage")
+						state = ENGAGE
+						print("state = ENGAGE")
 						break
 		ENGAGE:
 			pass
@@ -62,6 +64,7 @@ func fetch_action(unit):
 	
 	var action : Action = action_array.pop_front()
 	var gc = GridCalculator.new(unit.global_position - Vector3(1,0,1),map)
+	
 	
 	#print(str(action.position) + " action.position")
 	#print(str(action.cells) + " action.cells")
@@ -213,19 +216,57 @@ func choose_turn(unit,possible_turns):
 
 func calculate_value(unit,action):
 	var values = Values.new()
+	var enemies = get_tree().get_nodes_in_group("Hunters")
+	var friendlies = get_tree().get_nodes_in_group("Guards")
 	match state:
 		ADVANCE:
 			if action.type == ACTION.MOVE:
-				var position = unit.global_position + (action.position * Vector3(2,0,2))
-				var enemies = get_tree().get_nodes_in_group("Hunters")
-				var shortest_distance = position.distance_to(enemies[0].global_position)
-				for i in enemies.size():
-					var new_distance = position.distance_to(enemies[i].global_position)
-					if shortest_distance > new_distance:
-						shortest_distance = new_distance
-				action.value -= shortest_distance * values.distance_to_enemy
+				calculate_move_value(unit,action)
 			else:
 				action.value += values.invalid_action
+		
+		
 		ENGAGE:
-			pass
+			if action.type == ACTION.MOVE:
+				calculate_move_value(unit,action)
+			elif action.type == ACTION.SKILL:
+				var skill = action.skill
+				var position = unit.global_position + (action.position * Vector3(2,0,2))
+
+				for i in skill.targets.size():
+					var target = skill.targets[i]
+					var prec = (i+1) / skill.targets.size()
+					var targeted_units
+					match target:
+						skill.TARGETS.ENEMY, skill.TARGETS.ENEMY_LOW, skill.TARGETS.ENEMY_HIGH:
+							targeted_units = enemies
+						_:
+							targeted_units = friendlies
+					
+					if map.is_cell_occupied(position):
+						var detected_unit = map.get_unit(position)
+						
+						if targeted_units.has(detected_unit):
+							action.value += values.valid_target
+						else:
+							action.value += values.invalid_target
+						
+					else:
+						action.value += values.invalid_action
+				print(action.value)
+		
 	return action
+
+func calculate_move_value(unit,action):
+	var values = Values.new()
+	
+	var position = unit.global_position + (action.position * Vector3(2,0,2))
+	var enemies = get_tree().get_nodes_in_group("Hunters")
+	var shortest_distance = position.distance_to(enemies[0].global_position)
+	
+	for i in enemies.size():
+		var new_distance = position.distance_to(enemies[i].global_position)
+		if shortest_distance > new_distance:
+			shortest_distance = new_distance
+	
+	action.value -= shortest_distance * values.distance_to_enemy

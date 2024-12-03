@@ -10,6 +10,17 @@ extends Node
 @export var color = COLORS.RED
 
 
+enum TARGETS {
+	ENEMY,
+	ENEMY_HIGH,
+	ENEMY_LOW,
+	FRIENDLY,
+	FRIENDLY_HIGH,
+	FRIENDLY_LOW
+}
+
+@export var targets : Array[TARGETS] = [0]
+
 enum COLORS {
 	WHITE = 1,
 	BLUE = 2,

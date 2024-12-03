@@ -17,7 +17,7 @@ func is_cell_free(coords : Vector3i, map_position : Vector3) -> bool:
 	
 	return free
 
-func is_cell_occupied(coords : Vector3i, map_position : Vector3) -> bool:
+func is_cell_occupied(coords : Vector3i, map_position : Vector3 = Vector3.ZERO) -> bool:
 	var occupied = false
 	var bpos = map_position
 	var pos = global_position - bpos
@@ -34,7 +34,7 @@ func is_cell_occupied(coords : Vector3i, map_position : Vector3) -> bool:
 	
 	return occupied
 
-func get_unit(coords : Vector3i, map_position : Vector3) -> Node3D:
+func get_unit(coords : Vector3i, map_position : Vector3 = Vector3.ZERO) -> Node3D:
 	var unit = null
 	var bpos = map_position
 	var pos = global_position - bpos
