@@ -50,16 +50,16 @@ func asses_situation():
 			for unit in units:
 				for enemy in enemies:
 					if round(enemy.global_position.distance_to(unit.global_position)) < unit.move_range * 1.5:
-						state = ENGAGE
+						#state = ENGAGE
 						print("state = ENGAGE")
 						break
 		ENGAGE:
 			pass
 
 func fetch_action(unit):
-	#if unit.action_points <= 0:
-		#unit.rest()
-		#return
+	if unit.action_points <= 0:
+		unit.rest()
+		return
 	if action_array.is_empty():
 		print("thinking")
 		asses_situation()
@@ -80,17 +80,17 @@ func fetch_action(unit):
 	match action.type:
 		ACTION.MOVE:
 			print("MOVE")
-			#if action.position == Vector3.ZERO:
-				#action_array = []
-				#print("wth")
-				#unit.rest()
-			#else:
-			var path = gc.get_new_path(action.cells,unit,action.position)
-			var pathV3 : Array[Vector3]
-			for p in path:
-				pathV3.push_back(unit.to_global(Vector3(p.x * 2,0,p.y * 2)))
-			print(str(path) + " path")
-			unit.move(pathV3)
+			if action.position == Vector3.ZERO:
+				action_array = []
+				print("wth")
+				unit.rest()
+			else:
+				var path = gc.get_new_path(action.cells,unit,action.position)
+				var pathV3 : Array[Vector3]
+				for p in path:
+					pathV3.push_back(unit.to_global(Vector3(p.x * 2,0,p.y * 2)))
+				print(str(path) + " path")
+				unit.move(pathV3)
 		ACTION.SKILL:
 			print("SKILL")
 			var new_aoe = []
@@ -110,14 +110,11 @@ func calculate_turn(unit):
 	var position = unit.global_position 
 	var ap = unit.action_points
 	var t_arr : Array[Action] = [Action.new(Vector3.ZERO,position)]
-	var possible_turns : Array[Array]
+	var possible_turns : Array[Array] = [t_arr]
 	
 	var skill_count = unit.skills.get_child_count() + 1
 	
 	for i in ap:
-		
-		if i == 0:
-			possible_turns = [t_arr]
 		
 		var new_possible_turns : Array[Array] = []
 		
@@ -198,16 +195,10 @@ func calculate_turn(unit):
 		#print(arr)
 	
 	#---------ASSIGN VALUES TO POSSIBLE TURNS-----------
+	
 	var unsorted_indexes = []
 	for i in possible_turns.size():
-		var value = 0
-		var asd = []
-		for action in possible_turns[i]:
-			calculate_value(unit,action)
-			value += action.value
-			asd.append(action.position)
-			#print("un "+str(i) + " " + str(action.value) + str(action.global_position))
-		print("end value - " + str(value) + " - " + str(asd) + " - " + str(i))
+		var value = calculate_value(possible_turns[i])
 		unsorted_indexes.append([i,value])
 	
 	
@@ -230,7 +221,7 @@ func calculate_turn(unit):
 	var factor = 0.01
 	var move_rating = round((sorted_indexes.size()-1) * factor)
 	var rand = randi_range(0,move_rating)
-	var index = sorted_indexes[0][0]
+	var index = sorted_indexes[rand][0]
 	print(str(rand) + "/" + str(move_rating) + " - " + str(rand/move_rating * 100) + "%")
 	
 	var arr = []
@@ -255,66 +246,23 @@ func calculate_turn(unit):
 	return
 
 
-func choose_turn(unit,possible_turns):
-	for turn in possible_turns:
-		for action in turn:
-			action = calculate_value(unit,action)
 
-func calculate_value(unit,action : Action):
-	var values = Values.new()
+func calculate_value(collection : Array[Action]):
+	var value = 0
 	var enemies = get_tree().get_nodes_in_group("Hunters")
-	var friendlies = get_tree().get_nodes_in_group("Guards")
 	match state:
 		ADVANCE:
-			if action.type == ACTION.MOVE:
-				calculate_move_value(unit,action,enemies)
-			else:
-				action.value += values.invalid_action
-		
-		
-		ENGAGE:
-			if action.type == ACTION.MOVE:
-				calculate_move_value(unit,action,enemies)
-			elif action.type == ACTION.SKILL:
-				var skill = action.skill
-				var position = Vector3i(unit.global_position + (action.position * Vector3(2,0,2)))
-				
-				for i in skill.targets.size():
-					var target = skill.targets[i]
-					var prec = (i+1) / skill.targets.size()
-					var targeted_units = enemies
-					#match target:
-						#skill.TARGETS.ENEMY, skill.TARGETS.ENEMY_LOW, skill.TARGETS.ENEMY_HIGH:
-							#targeted_units = enemies
-						#skill.TARGETS.FRIENDLY:
-							#targeted_units = friendlies
-					
-					if map.is_cell_occupied(action.position * Vector3(2,0,2),unit.global_position) and map:
-						var detected_unit = map.get_unit(action.position * Vector3(2,0,2),unit.global_position)
-						
-						if targeted_units.has(detected_unit):
-							print(detected_unit)
-							action.value += values.valid_target * prec
-						else:
-							action.value += values.invalid_target
-						
-					else:
-						action.value += values.invalid_action
-					
-				
-		
-
-func calculate_move_value(unit,action : Action, enemies):
-	var values = Values.new()
+			var end_position = collection[collection.size()-1].global_position
+			var closest = enemies[0].global_position.distance_to(end_position)
+			
+			print("jjj" + str(enemies[0].global_position) + " " + str(end_position))
+			
+			#for enemy in enemies:
+				#var new_position = enemy.global_position.distance_to(end_position)
+				#if closest > new_position:
+					#closest = new_position
+			
+			value -= closest * collection.size()
+			print("jjj " + str(value))
 	
-	var position = action.global_position
-	var shortest_distance : float = enemies[0].global_position.distance_to(position)
-	
-	for enemy in enemies:
-		var new_distance : float = enemy.global_position.distance_to(position)
-		print("dist" + str(shortest_distance) + " " + str(new_distance))
-
-		if shortest_distance > new_distance:
-			shortest_distance = new_distance
-	
-	action.value -= shortest_distance# * values.distance_to_enemy
+	return value

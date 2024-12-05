@@ -4,12 +4,12 @@ extends Node3D
 @onready var skills = $Skills
 @onready var anim = $AnimationPlayer
 
-@export var move_range : int = 2
+@export var move_range : int = 4
 
 @export var max_hit_points : int = 2
 var hit_points = max_hit_points
 
-@export var max_action_points : int = 3
+@export var max_action_points : int = 2
 var action_points = max_action_points
 
 var turn_order : int = 100
