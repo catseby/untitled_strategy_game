@@ -4,12 +4,12 @@ extends Node3D
 @onready var skills = $Skills
 @onready var anim = $AnimationPlayer
 
-@export var move_range : int = 5
+@export var move_range : int = 2
 
 @export var max_hit_points : int = 2
 var hit_points = max_hit_points
 
-@export var max_action_points : int = 2 
+@export var max_action_points : int = 3
 var action_points = max_action_points
 
 var turn_order : int = 100
@@ -65,7 +65,7 @@ func _physics_process(delta: float) -> void:
 			time = 0
 			if path.is_empty():
 				state = IDLE
-				await_command.emit(self)
+				act()
 
 func hit(attack):
 	hit_points -= attack.damage

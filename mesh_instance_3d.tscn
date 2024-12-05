@@ -1,0 +1,19 @@
+[gd_scene load_steps=4 format=3 uid="uid://58rexyw1xn02"]
+
+[ext_resource type="Script" path="res://mesh_instance_3d.gd" id="1_drh8x"]
+
+[sub_resource type="PrismMesh" id="PrismMesh_r7rkj"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_8cts1"]
+albedo_color = Color(1, 0, 0, 1)
+
+[node name="MeshInstance3D" type="MeshInstance3D"]
+mesh = SubResource("PrismMesh_r7rkj")
+surface_material_override/0 = SubResource("StandardMaterial3D_8cts1")
+script = ExtResource("1_drh8x")
+
+[node name="Timer" type="Timer" parent="."]
+one_shot = true
+autostart = true
+
+[connection signal="timeout" from="Timer" to="." method="_on_timer_timeout"]
