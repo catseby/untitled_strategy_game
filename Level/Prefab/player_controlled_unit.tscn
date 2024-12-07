@@ -100,7 +100,7 @@ mesh = SubResource("CylinderMesh_adwiy")
 [node name="Skills" type="Node" parent="."]
 
 [node name="Attack" parent="Skills" instance=ExtResource("2_wi0kb")]
-range = 4
+range = 2
 
 [node name="onfield_unit_status" type="Sprite3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 0)
