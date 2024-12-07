@@ -28,6 +28,8 @@ func _init(new_global_position : Vector3 = Vector3.ZERO, new_map : GridMap = nul
 func apply_skill(skill,aoe):
 	for area in aoe:
 		if map.is_cell_occupied(area * Vector3i(2,0,2), global_position):
+			print("asdf")
+			print(area * Vector3i(2,0,2))
 			skill.apply_effect(map.get_unit(area * Vector3i(2,0,2), global_position))
 
 func get_rotated_cells(cells,deg) -> Array[Vector3i]:

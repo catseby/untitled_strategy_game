@@ -50,7 +50,7 @@ func asses_situation():
 			for unit in units:
 				for enemy in enemies:
 					if round(enemy.global_position.distance_to(unit.global_position)) < unit.move_range * 1.5:
-						#state = ENGAGE
+						state = ENGAGE
 						print("state = ENGAGE")
 						break
 		ENGAGE:
@@ -92,10 +92,12 @@ func fetch_action(unit):
 				print(str(path) + " path")
 				unit.move(pathV3)
 		ACTION.SKILL:
+			#gc.global_position = action.global_position
 			print("SKILL")
 			var new_aoe = []
+			print("ddd" + str(action.cells.size()))
 			for cell in action.cells:
-				#print(action.position)
+				print("ddd " + str(action.position))
 				cell = Vector3i(action.position) + cell
 				new_aoe.append(cell)
 			#print(new_aoe)
@@ -119,46 +121,69 @@ func calculate_turn(unit):
 		var new_possible_turns : Array[Array] = []
 		
 		for j in skill_count:
-			if j == 0:
-				
+			
+			if j == 0: #-----------MOVE ACTION---------------------
+				#--------------------------------------------------
 				for turn : Array[Action] in possible_turns:
-					print("av turn - " + str(i) + str(turn))
+					
 					var last_action = turn[turn.size()-1]
+					
+					if last_action.type == ACTION.SKILL:
+						continue
 					
 					var gc = GridCalculator.new(last_action.global_position,map)
 					var available_cells = gc.get_available_cells(unit.move_range)
-					print("av - " + str(available_cells))
-					print("av AAAAAAA - " + str(gc.global_position))
 					
 					for l in available_cells.size():
-						#if available_cells[l] == Vector3i.ZERO:
-							#continue
 						var action = Action.new(available_cells[l],last_action.global_position + Vector3(available_cells[l] * Vector3i(2,0,2)),available_cells)
 						var t_arr2 : Array[Action] = [action] 
 						if i == 0:
 							new_possible_turns.append(t_arr2)
 						else:
 							var arr : Array[Action] = turn + t_arr2
-							#arr.append_array(turn)
-							#arr.append(action)
 							new_possible_turns.append(arr)
 				
-			#elif j != skill_count:
-				#
-				#var skill = unit.skills.get_child(j-1)
-				#
-				#for k in possible_turns.size():
-					#
+			elif j != skill_count and state != ADVANCE:
+				
+				var skill = unit.skills.get_child(j-1)
+				
+				for turn : Array[Action] in possible_turns:
+					
+					var last_action = turn[turn.size()-1]
+					
+					if last_action.type == ACTION.SKILL:
+						continue
+					
+					var gc = GridCalculator.new(last_action.global_position,map)
+					var available_cells
+					
+					if skill.require_target:
+						available_cells = gc.get_available_visible_cells(skill.range)
+					else:
+						available_cells = gc.get_aoe_cells(skill.range)[1]
+					
+					if not skill.include_self:
+						available_cells.remove_at(available_cells.find(Vector3i.ZERO))
+					
+					for l in available_cells.size():
+						var action = Action.new(available_cells[l],last_action.global_position + Vector3(available_cells[l] * Vector3i(2,0,2)),skill.AOE,ACTION.SKILL,skill)
+						var t_arr2 : Array[Action] = [action] 
+						if i == 0:
+							new_possible_turns.append(t_arr2)
+						else:
+							var arr : Array[Action] = turn + t_arr2
+							new_possible_turns.append(arr)
+					
 					#if possible_turns[k][i-1].type == ACTION.SKILL:
 						#continue
 					#var current_position = (possible_turns[k][i-1].position * Vector3(2,0,2)) + position
-					##var current_position : Vector3 = position
-					##for l in possible_turns[k].size():
-						##var index = possible_turns[k].size() - 1 - l
-						##if possible_turns[k][index].type == ACTION.MOVE:
-							##print(possible_turns[k][index].type)
-							##current_position = (possible_turns[k][index].position * Vector3(2,0,2)) + position
-							##break
+					#var current_position : Vector3 = position
+					#for l in possible_turns[k].size():
+						#var index = possible_turns[k].size() - 1 - l
+						#if possible_turns[k][index].type == ACTION.MOVE:
+							#print(possible_turns[k][index].type)
+							#current_position = (possible_turns[k][index].position * Vector3(2,0,2)) + position
+							#break
 					#
 					#var gc = GridCalculator.new(current_position,map)
 					#var available_cells
@@ -184,9 +209,9 @@ func calculate_turn(unit):
 						#available_cells = gc.get_aoe_cells(skill.range)
 					
 		
-		possible_turns = new_possible_turns
-	
-	#print(possible_turns)
+		
+		possible_turns += new_possible_turns
+		print("stage " + str(i) + " - " + str(possible_turns.size()))
 	
 	#for turn in possible_turns:
 		#var arr = []
@@ -221,8 +246,8 @@ func calculate_turn(unit):
 	var factor = 0.01
 	var move_rating = round((sorted_indexes.size()-1) * factor)
 	var rand = randi_range(0,move_rating)
-	var index = sorted_indexes[rand][0]
-	print(str(rand) + "/" + str(move_rating) + " - " + str(rand/move_rating * 100) + "%")
+	var index = sorted_indexes[0][0] #------------------[rand][] for random factor!!!!
+	print("turn rating: " + str(rand) + "/" + str(move_rating) + " - " + str(rand/move_rating * 100) + "%")
 	
 	var arr = []
 	for i in rand + 1:
@@ -249,20 +274,46 @@ func calculate_turn(unit):
 
 func calculate_value(collection : Array[Action]):
 	var value = 0
+	var allies = get_tree().get_nodes_in_group("Guards")
 	var enemies = get_tree().get_nodes_in_group("Hunters")
+	var values = Values.new()
 	match state:
 		ADVANCE:
-			var end_position = collection[collection.size()-1].global_position
-			var closest = enemies[0].global_position.distance_to(end_position)
+			var last_action = collection[collection.size()-1]
+			if last_action.type == ACTION.MOVE:
+				var end_position = last_action.global_position
+				var closest = enemies[0].global_position.distance_to(end_position)
+				
+				#print("jjj" + str(enemies[0].global_position) + " " + str(end_position))
+				
+				for enemy in enemies:
+					var new_position = enemy.global_position.distance_to(end_position)
+					if closest > new_position:
+						closest = new_position
+				
+				value -= closest * collection.size() * values.distance_to_enemy
+			else:
+				value += values.invalid_action
+			#print("jjj " + str(value))
+		
+		ENGAGE:
 			
-			print("jjj" + str(enemies[0].global_position) + " " + str(end_position))
-			
-			#for enemy in enemies:
-				#var new_position = enemy.global_position.distance_to(end_position)
-				#if closest > new_position:
-					#closest = new_position
-			
-			value -= closest * collection.size()
-			print("jjj " + str(value))
+			var last_action = collection[collection.size()-1]
+			if last_action.type == ACTION.SKILL:
+				var position = last_action.global_position
+				
+				for enemy in enemies:
+					for cell in last_action.skill.AOE:
+						if position + Vector3(Vector3i(2,0,2) * cell) == enemy.global_position:
+							print("valid targets")
+							value += values.valid_target
+				
+				for ally in allies:
+					if position == ally.global_position:
+						value += values.invalid_target
+				
+				value = value / collection.size()
+			else:
+				value += values.invalid_action
 	
 	return value

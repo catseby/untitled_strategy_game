@@ -29,7 +29,7 @@ func _ready() -> void:
 	pcu3.name = "Bot"
 	
 	
-	queue_units([pcu,pcu2,pcu3])
+	queue_units([pcu])
 
 func add_units() -> void:
 	#combat_ui.move.connect(action_indicator.movement_indicators)

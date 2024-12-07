@@ -6,18 +6,18 @@
 [ext_resource type="PackedScene" uid="uid://dxspgwhxw6hp0" path="res://Level/Prefab/skill.tscn" id="2_wi0kb"]
 [ext_resource type="PackedScene" uid="uid://j7xt0cdh13f5" path="res://Level/UI/unit_hover_ui.tscn" id="4_rc3kq"]
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_r46s0"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_ihsw2"]
 render_priority = 0
 shader = ExtResource("2_2yai8")
 shader_parameter/flash_color = Color(1, 1, 1, 1)
 shader_parameter/flash_speed = 40.0
 shader_parameter/flash_duration = 1.0
 
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_f6gsy"]
-next_pass = SubResource("ShaderMaterial_r46s0")
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_qvhrf"]
+next_pass = SubResource("ShaderMaterial_ihsw2")
 
 [sub_resource type="CylinderMesh" id="CylinderMesh_adwiy"]
-material = SubResource("StandardMaterial3D_f6gsy")
+material = SubResource("StandardMaterial3D_qvhrf")
 
 [sub_resource type="ViewportTexture" id="ViewportTexture_mhmme"]
 viewport_path = NodePath("onfield_unit_status/Unit_Hover_UI")
@@ -100,7 +100,7 @@ mesh = SubResource("CylinderMesh_adwiy")
 [node name="Skills" type="Node" parent="."]
 
 [node name="Attack" parent="Skills" instance=ExtResource("2_wi0kb")]
-range = 2
+range = 4
 
 [node name="onfield_unit_status" type="Sprite3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 0)
@@ -122,12 +122,12 @@ render_target_update_mode = 3
 
 [node name="Unit_Hover_UI" parent="onfield_unit_status/Unit_Hover_UI" instance=ExtResource("4_rc3kq")]
 
-[node name="Heal" parent="." instance=ExtResource("2_wi0kb")]
-include_self = true
-require_target = false
-color = 3
-
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 libraries = {
 "": SubResource("AnimationLibrary_8hbj7")
 }
+
+[node name="Heal" parent="." instance=ExtResource("2_wi0kb")]
+include_self = true
+require_target = false
+color = 3

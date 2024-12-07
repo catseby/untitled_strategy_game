@@ -33,3 +33,9 @@ func next():
 	
 	
 	ui.update_turn_order(turn_order.get_children())
+
+#func _input(event: InputEvent) -> void:
+	#if event is InputEventKey:
+		#if event.is_pressed():
+			#if event.keycode == KEY_ESCAPE:
+				#get_tree().quit()

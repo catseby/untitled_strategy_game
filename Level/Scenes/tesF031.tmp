@@ -49,4 +49,4 @@ light_energy = 2.0
 [node name="Turn_Order" type="Node" parent="."]
 
 [node name="Enemy_Spawn" parent="." instance=ExtResource("8_j2dgj")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5, 0, -1)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7, 0, -1)
