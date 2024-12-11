@@ -99,7 +99,13 @@ mesh = SubResource("CylinderMesh_adwiy")
 
 [node name="Skills" type="Node" parent="."]
 
-[node name="Attack" parent="Skills" instance=ExtResource("2_wi0kb")]
+[node name="Attack3" parent="Skills" instance=ExtResource("2_wi0kb")]
+range = 2
+value = 1.0
+targets = 1
+conditions = Array[int]([1])
+
+[node name="Attack2" parent="Skills" instance=ExtResource("2_wi0kb")]
 range = 2
 
 [node name="onfield_unit_status" type="Sprite3D" parent="."]

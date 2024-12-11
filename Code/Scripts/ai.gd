@@ -34,7 +34,7 @@ class Action:
 
 class Values:
 	var distance_to_enemy = 0.01
-	var valid_target = 10
+	var valid_target = 100
 	var invalid_target = -4
 	var invalid_action = -9999
 
@@ -176,6 +176,8 @@ func calculate_turn(unit):
 					else:
 						available_cells = gc.get_aoe_cells(skill.range)[1]
 					
+					print("avvv" + str(available_cells[0]))
+					
 					if not skill.include_self:
 						available_cells.remove_at(available_cells.find(Vector3i.ZERO))
 					
@@ -208,7 +210,7 @@ func calculate_turn(unit):
 	
 	var unsorted_indexes = []
 	for i in possible_turns.size():
-		var value = calculate_value(possible_turns[i])
+		var value = calculate_value(possible_turns[i],unit)
 		unsorted_indexes.append([i,value])
 	
 	
@@ -227,6 +229,11 @@ func calculate_turn(unit):
 			elif index[1] > sorted_indexes[j][1]:
 				sorted_indexes.insert(j,index)
 				break
+	
+	for i in sorted_indexes.size():
+		print("Nr." + str(i) + " " + str(sorted_indexes[i][1]))
+		if i == 10:
+			break
 	
 	var factor = 0.01
 	var move_rating = round((sorted_indexes.size()-1) * factor)
@@ -250,6 +257,7 @@ func calculate_turn(unit):
 		final_arr.append(action.position)
 	#print("final pre " + str(final_arr))
 	
+	
 	#print("end value id - " + str(index)) 
 
 	
@@ -257,8 +265,8 @@ func calculate_turn(unit):
 
 
 
-func calculate_value(collection : Array[Action]):
-	var value = 0
+func calculate_value(collection : Array[Action],unit):
+	var value : float = 0.0
 	var allies = get_tree().get_nodes_in_group("Guards")
 	var enemies = get_tree().get_nodes_in_group("Hunters")
 	var values = Values.new()
@@ -268,28 +276,60 @@ func calculate_value(collection : Array[Action]):
 			if last_action.type == ACTION.MOVE:
 				value = calculate_value_move(last_action,enemies,collection.size())
 			else:
-				value += values.invalid_action
+				value += values.invalid_action * collection.size()
 		
 		ENGAGE:
 			
 			var last_action = collection[collection.size()-1]
 			if last_action.type == ACTION.SKILL:
+				
+				var skill = last_action.skill
 				var position = last_action.global_position
+				var CONDITIONS = skill.CONDITIONS
 				
-				var not_valid = true
-				for enemy in enemies:
+				var targets : Array[Node]
+				if skill.targets == skill.TARGETS.ENEMY:
+					targets = enemies
+				else:
+					targets = allies
+				
+				var condition_size = skill.conditions.size()
+				
+				var valid = false
+				for target in targets:
 					for cell in last_action.skill.AOE:
-						if position + Vector3(Vector3i(2,0,2) * cell) == enemy.global_position:
-							not_valid = false
-							value += values.valid_target
+						
+						var target_position = target.global_position
+						if target == unit and collection.size() >= 2:
+							target_position = collection[collection.size()-2].global_position
+						
+						if position + Vector3(Vector3i(2,0,2) * cell) == target_position:
+							#print(Vector3(Vector3i(2,0,2) * cell))
+							var multiplier : float = 0.0
+							#print(target)
+							if skill.conditions.has(CONDITIONS.HIGH_HP) and target.hit_points / target.max_hit_points > 0.5:
+								print("high hp")
+								multiplier += 1.0 / condition_size
+							if skill.conditions.has(CONDITIONS.LOW_HP) and target.hit_points / target.max_hit_points < 0.5:
+								print("low hp")
+								multiplier += 1.0 / condition_size
+							if skill.conditions.has(CONDITIONS.ANYONE):
+								print("anyone")
+								multiplier += 1.0 / condition_size
+							
+							if multiplier != 0.0:
+								print("aaaaaaaaa")
+								valid = true
+							
+							value += values.valid_target * multiplier# / collection.size()
+				#
+				if valid:
+					value = (value * (1+skill.value)) / collection.size()
+				else:
+					value = values.invalid_action * collection.size()
 				
-				value += values.invalid_action * int(not_valid)
+				#print("ALLY " + str(value) + " " + str(collection.size()))
 				
-				for ally in allies:
-					if position == ally.global_position:
-						value += values.invalid_target
-				
-				value = value / collection.size()
 			else:
 				value = calculate_value_move(last_action,enemies,collection.size())
 

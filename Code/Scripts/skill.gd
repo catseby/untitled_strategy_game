@@ -9,17 +9,21 @@ extends Node
 @export var end_turn : bool = false
 @export var color = COLORS.RED
 
-
 enum TARGETS {
 	ENEMY,
-	ENEMY_HIGH,
-	ENEMY_LOW,
-	FRIENDLY,
-	FRIENDLY_HIGH,
-	FRIENDLY_LOW
+	FRIENDLY
 }
 
-@export var targets : Array[TARGETS] = [0]
+enum CONDITIONS {
+	ANYONE,
+	LOW_HP,
+	HIGH_HP
+}
+
+
+@export_range(0.1, 1, 0.1) var value : float = 0.5
+@export var targets : TARGETS
+@export var conditions : Array[CONDITIONS] = [0]
 
 enum COLORS {
 	WHITE = 1,

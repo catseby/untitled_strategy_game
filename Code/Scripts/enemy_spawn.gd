@@ -9,7 +9,7 @@ const AI = preload("res://Level/Prefab/ai.tscn")
 @onready var map = get_parent().get_node("Map")
 
 @export var units : Array[Node] = []
-@export var team : String = "Guard"
+@export var team : String = "Guards"
 
 func queue_units(queue : Array[Node]) -> void:
 	units.append_array(queue)
