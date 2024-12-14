@@ -1,23 +1,9 @@
-extends Node3D
+extends "res://code/scripts/spawns/spawn.gd"
 
-const GridCalculator = preload("res://code/scripts/grid_calculator.gd")
 
-const UNIT = preload("res://level/prefab/units/human.tscn")
 const AI = preload("res://level/prefab/controllers/ai.tscn")
 
 @onready var ai = AI.instantiate()
-@onready var map = get_parent().get_parent().get_node("Map")
-
-@export var units : Array[Node] = []
-@export var team : String = "Guards"
-
-func queue_units(queue : Array[Node]) -> void:
-	units.append_array(queue)
-	return
-
-func _init() -> void:
-	visible = false
-
 
 func _ready() -> void:
 	var pcu = UNIT.instantiate()
@@ -32,11 +18,6 @@ func _ready() -> void:
 	queue_units([pcu,pcu2])
 
 func add_units() -> void:
-	#combat_ui.move.connect(action_indicator.movement_indicators)
-	#combat_ui.skill.connect(action_indicator.skill_indicators)
-	#action_indicator.action_made.connect(combat_ui._on_confirm_pressed)
-	#combat_ui.cancel_action.connect(action_indicator.cancel)
-	
 	var group : String
 	while true:
 		group = ""
@@ -64,7 +45,6 @@ func add_units() -> void:
 		
 		units[i].add_to_group(group)
 		units[i].add_to_group(team)
-
 		
 		units[i].await_command.connect(ai.fetch_action)
 		units[i].next.connect(get_parent().get_parent().next)

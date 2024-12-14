@@ -1,10 +1,10 @@
 [gd_scene load_steps=3 format=3 uid="uid://djvedkfnhl6pm"]
 
-[ext_resource type="Script" path="res://code/scripts/spawns/enemy_spawn.gd" id="1_2kyyb"]
+[ext_resource type="Script" path="res://code/scripts/spawns/ai_spawn.gd" id="1_2kyyb"]
 
 [sub_resource type="SphereMesh" id="SphereMesh_18ltc"]
 
-[node name="Enemy_Spawn" type="Node3D"]
+[node name="AI_Spawn" type="Node3D"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1, 0, 2)
 script = ExtResource("1_2kyyb")
 
