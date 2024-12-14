@@ -4,7 +4,7 @@ extends Node3D
 #----------------------------------------------------------------------------
 #------------------------------@ONREADY_NODES-----------------------------------
 
-@onready var status = $onfield_unit_status
+@onready var status = $onfield_unit_status/Unit_Hover_UI/Unit_Hover_UI
 @onready var skills = $Skills
 @onready var anim = $AnimationPlayer
 
@@ -19,10 +19,10 @@ var last_name : String = ""
 @export var move_range : int = 4
 
 @export var max_hit_points : int = 2
-var hit_points = max_hit_points
+@onready var hit_points = max_hit_points
 
 @export var max_action_points : int = 2
-var action_points = max_action_points
+@onready var action_points = max_action_points
 
 var turn_order : int = 100
 
@@ -47,7 +47,8 @@ enum {
 }
 
 func _ready() -> void:
-	$onfield_unit_status/Unit_Hover_UI/Unit_Hover_UI/Label2.text = name
+	status.update(self)
+	
 
 func act():
 	await get_tree().create_timer(1).timeout
@@ -55,13 +56,13 @@ func act():
 
 func move(new_path):
 	action_points -= 1
-	status.set_action_points(action_points)
+	status.update(self)
 	path = new_path
 	state = MOVING
 
 func skill():
 	action_points -= 1
-	status.set_action_points(action_points)
+	status.update(self)
 	anim.play("attack")
 	await anim.animation_finished
 	act()
@@ -72,7 +73,7 @@ func rest():
 	turn_order = action_points * pr + pr
 	
 	action_points = max_action_points
-	status.set_action_points(action_points)
+	status.update(self)
 	next.emit()
 
 var time = 0.0
@@ -91,6 +92,6 @@ func hit(attack):
 	hit_points -= attack.damage
 	$AnimationPlayer.play("hit")
 	await $AnimationPlayer.animation_finished
-	status.set_health_points(hit_points)
+	status.update(self)
 	if hit_points <= 0:
 		queue_free()

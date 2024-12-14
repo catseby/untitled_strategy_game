@@ -1,0 +1,15 @@
+[gd_scene load_steps=2 format=3 uid="uid://vs8bjt0nr4sq"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_f8mco"]
+bg_color = Color(1, 0.501961, 0.501961, 1)
+skew = Vector2(0.5, 0)
+corner_radius_top_left = 4
+corner_radius_bottom_right = 4
+shadow_color = Color(0, 0, 0, 0.321569)
+shadow_size = 1
+shadow_offset = Vector2(4, 4)
+anti_aliasing = false
+
+[node name="Hp_Bar" type="Panel"]
+custom_minimum_size = Vector2(32, 16)
+theme_override_styles/panel = SubResource("StyleBoxFlat_f8mco")

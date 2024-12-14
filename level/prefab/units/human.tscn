@@ -1,139 +1,18 @@
-[gd_scene load_steps=14 format=3 uid="uid://dtnub07jwdhiu"]
+[gd_scene load_steps=5 format=3 uid="uid://dtnub07jwdhiu"]
 
-[ext_resource type="Script" path="res://code/scripts/units/human.gd" id="1_w1qb4"]
-[ext_resource type="Shader" path="res://code/shaders/flash.gdshader" id="2_ak8sp"]
+[ext_resource type="PackedScene" uid="uid://cjmj3ublgdrr6" path="res://level/prefab/units/unit.tscn" id="1_hp7kl"]
+[ext_resource type="Script" path="res://Code/Scripts/units/human.gd" id="2_6ucc2"]
 [ext_resource type="PackedScene" uid="uid://dxspgwhxw6hp0" path="res://level/prefab/skills/skill.tscn" id="3_qa660"]
-[ext_resource type="Script" path="res://code/scripts/onfield_unit_status.gd" id="4_g8hq8"]
-[ext_resource type="PackedScene" uid="uid://j7xt0cdh13f5" path="res://level/ui/unit_hover_ui.tscn" id="5_ccteg"]
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_ihsw2"]
-render_priority = 0
-shader = ExtResource("2_ak8sp")
-shader_parameter/flash_color = Color(1, 1, 1, 1)
-shader_parameter/flash_speed = 40.0
-shader_parameter/flash_duration = 1.0
-
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_qvhrf"]
-next_pass = SubResource("ShaderMaterial_ihsw2")
-
-[sub_resource type="CylinderMesh" id="CylinderMesh_adwiy"]
-material = SubResource("StandardMaterial3D_qvhrf")
-
-[sub_resource type="ViewportTexture" id="ViewportTexture_mhmme"]
+[sub_resource type="ViewportTexture" id="ViewportTexture_85nlh"]
 viewport_path = NodePath("onfield_unit_status/Unit_Hover_UI")
 
-[sub_resource type="Animation" id="Animation_u0m6o"]
-length = 0.001
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("MeshInstance3D:instance_shader_parameters/active")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 1,
-"values": [false]
-}
-tracks/1/type = "value"
-tracks/1/imported = false
-tracks/1/enabled = true
-tracks/1/path = NodePath("MeshInstance3D:position")
-tracks/1/interp = 1
-tracks/1/loop_wrap = true
-tracks/1/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [Vector3(0, 1, 0)]
-}
+[node name="Human" instance=ExtResource("1_hp7kl")]
+script = ExtResource("2_6ucc2")
 
-[sub_resource type="Animation" id="Animation_n4llc"]
-resource_name = "attack"
-length = 0.3
-step = 0.05
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("MeshInstance3D:position")
-tracks/0/interp = 2
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.1),
-"transitions": PackedFloat32Array(1, 1),
-"update": 1,
-"values": [Vector3(0, 1.5, 0), Vector3(0, 1, 0)]
-}
+[node name="Skill" parent="Skills" index="0" instance=ExtResource("3_qa660")]
 
-[sub_resource type="Animation" id="Animation_jwlsi"]
-resource_name = "hit"
-length = 0.3
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("MeshInstance3D:instance_shader_parameters/active")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.3),
-"transitions": PackedFloat32Array(1, 1),
-"update": 1,
-"values": [true, false]
-}
+[node name="onfield_unit_status" parent="." index="1"]
+texture = SubResource("ViewportTexture_85nlh")
 
-[sub_resource type="AnimationLibrary" id="AnimationLibrary_8hbj7"]
-_data = {
-"RESET": SubResource("Animation_u0m6o"),
-"attack": SubResource("Animation_n4llc"),
-"hit": SubResource("Animation_jwlsi")
-}
-
-[node name="Human" type="Node3D"]
-script = ExtResource("1_w1qb4")
-
-[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
-instance_shader_parameters/active = false
-mesh = SubResource("CylinderMesh_adwiy")
-
-[node name="Skills" type="Node" parent="."]
-
-[node name="Attack3" parent="Skills" instance=ExtResource("3_qa660")]
-range = 2
-value = 1.0
-targets = 1
-conditions = Array[int]([1])
-
-[node name="Attack2" parent="Skills" instance=ExtResource("3_qa660")]
-range = 2
-
-[node name="onfield_unit_status" type="Sprite3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 0)
-sorting_offset = 1.0
-offset = Vector2(50, 0)
-pixel_size = 0.02
-billboard = 1
-texture = SubResource("ViewportTexture_mhmme")
-script = ExtResource("4_g8hq8")
-
-[node name="Unit_Hover_UI" type="SubViewport" parent="onfield_unit_status"]
-disable_3d = true
-transparent_bg = true
-snap_2d_transforms_to_pixel = true
-snap_2d_vertices_to_pixel = true
-canvas_item_default_texture_filter = 0
-size = Vector2i(42, 38)
-render_target_update_mode = 3
-
-[node name="Unit_Hover_UI" parent="onfield_unit_status/Unit_Hover_UI" instance=ExtResource("5_ccteg")]
-
-[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
-libraries = {
-"": SubResource("AnimationLibrary_8hbj7")
-}
-
-[node name="Heal" parent="." instance=ExtResource("3_qa660")]
-include_self = true
-require_target = false
-color = 3
+[editable path="onfield_unit_status/Unit_Hover_UI/Unit_Hover_UI"]

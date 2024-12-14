@@ -1,0 +1,15 @@
+[gd_scene load_steps=2 format=3 uid="uid://dst7pmbea7cfs"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_2n7yy"]
+bg_color = Color(1, 1, 0.501961, 1)
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_detail = 1
+shadow_color = Color(0, 0, 0, 0.321569)
+shadow_size = 1
+shadow_offset = Vector2(4, 4)
+anti_aliasing = false
+
+[node name="ApBar" type="Panel"]
+custom_minimum_size = Vector2(32, 16)
+theme_override_styles/panel = SubResource("StyleBoxFlat_2n7yy")

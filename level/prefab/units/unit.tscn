@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" path="res://code/scripts/units/unit.gd" id="1_jxsjj"]
 [ext_resource type="Script" path="res://code/scripts/onfield_unit_status.gd" id="2_pksn5"]
-[ext_resource type="PackedScene" uid="uid://j7xt0cdh13f5" path="res://level/ui/unit_hover_ui.tscn" id="3_l8jd5"]
+[ext_resource type="PackedScene" uid="uid://j7xt0cdh13f5" path="res://level/ui/unit_info.tscn" id="3_l8jd5"]
 [ext_resource type="Shader" path="res://code/shaders/flash.gdshader" id="4_yj8cv"]
 
 [sub_resource type="ViewportTexture" id="ViewportTexture_tl6pe"]
@@ -107,15 +107,19 @@ _data = {
 
 [node name="Unit" type="Node3D"]
 script = ExtResource("1_jxsjj")
+max_hit_points = 3
 
 [node name="Skills" type="Node" parent="."]
 
 [node name="onfield_unit_status" type="Sprite3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 0)
 sorting_offset = 1.0
-offset = Vector2(50, 0)
-pixel_size = 0.02
+centered = false
+offset = Vector2(64, -64)
+pixel_size = 0.008
 billboard = 1
+no_depth_test = true
+render_priority = 1
 texture = SubResource("ViewportTexture_tl6pe")
 script = ExtResource("2_pksn5")
 
@@ -125,8 +129,7 @@ transparent_bg = true
 snap_2d_transforms_to_pixel = true
 snap_2d_vertices_to_pixel = true
 canvas_item_default_texture_filter = 0
-size = Vector2i(42, 38)
-render_target_update_mode = 3
+size = Vector2i(320, 128)
 
 [node name="Unit_Hover_UI" parent="onfield_unit_status/Unit_Hover_UI" instance=ExtResource("3_l8jd5")]
 
@@ -139,3 +142,5 @@ mesh = SubResource("CylinderMesh_ac5tf")
 libraries = {
 "": SubResource("AnimationLibrary_8hbj7")
 }
+
+[editable path="onfield_unit_status/Unit_Hover_UI/Unit_Hover_UI"]

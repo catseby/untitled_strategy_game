@@ -1,0 +1,25 @@
+[gd_scene load_steps=2 format=3 uid="uid://j7xt0cdh13f5"]
+
+[ext_resource type="Script" path="res://Code/Scripts/unit_info.gd" id="1_jy55r"]
+
+[node name="Unit_Info" type="Control"]
+layout_mode = 3
+anchors_preset = 0
+offset_left = 32.0
+offset_top = 16.0
+offset_right = 288.0
+offset_bottom = 80.0
+mouse_filter = 2
+script = ExtResource("1_jy55r")
+
+[node name="VBox" type="VBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_bottom = 106.0
+grow_horizontal = 2
+
+[node name="AP" type="Label" parent="VBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 0.5, 1)
+text = "2"
