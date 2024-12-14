@@ -1,7 +1,7 @@
 extends Control
 
-const SKILL_BUTTON = preload("res://Level/UI/skill_button.tscn")
-const TURN_INDICATOR = preload("res://Level/UI/turn_indicator.tscn")
+const SKILL_BUTTON = preload("res://level/ui/skill_button.tscn")
+const TURN_INDICATOR = preload("res://level/ui/turn_indicator.tscn")
 
 @onready var skills = $Center/Actions
 @onready var turn_order = $Right/Turn_Order

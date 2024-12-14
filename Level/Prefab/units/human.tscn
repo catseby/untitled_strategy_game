@@ -1,14 +1,14 @@
 [gd_scene load_steps=14 format=3 uid="uid://dtnub07jwdhiu"]
 
-[ext_resource type="Script" path="res://Code/Scripts/player_controlled_unit.gd" id="1_wm6lu"]
-[ext_resource type="Shader" path="res://Code/Shaders/flash.gdshader" id="2_2yai8"]
-[ext_resource type="Script" path="res://Code/Scripts/onfield_unit_status.gd" id="2_e8ouy"]
-[ext_resource type="PackedScene" uid="uid://dxspgwhxw6hp0" path="res://Level/Prefab/skill.tscn" id="2_wi0kb"]
-[ext_resource type="PackedScene" uid="uid://j7xt0cdh13f5" path="res://Level/UI/unit_hover_ui.tscn" id="4_rc3kq"]
+[ext_resource type="Script" path="res://code/scripts/units/human.gd" id="1_w1qb4"]
+[ext_resource type="Shader" path="res://code/shaders/flash.gdshader" id="2_ak8sp"]
+[ext_resource type="PackedScene" uid="uid://dxspgwhxw6hp0" path="res://level/prefab/skills/skill.tscn" id="3_qa660"]
+[ext_resource type="Script" path="res://code/scripts/onfield_unit_status.gd" id="4_g8hq8"]
+[ext_resource type="PackedScene" uid="uid://j7xt0cdh13f5" path="res://level/ui/unit_hover_ui.tscn" id="5_ccteg"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_ihsw2"]
 render_priority = 0
-shader = ExtResource("2_2yai8")
+shader = ExtResource("2_ak8sp")
 shader_parameter/flash_color = Color(1, 1, 1, 1)
 shader_parameter/flash_speed = 40.0
 shader_parameter/flash_duration = 1.0
@@ -89,8 +89,8 @@ _data = {
 "hit": SubResource("Animation_jwlsi")
 }
 
-[node name="Player_Controlled_Unit" type="Node3D"]
-script = ExtResource("1_wm6lu")
+[node name="Human" type="Node3D"]
+script = ExtResource("1_w1qb4")
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
@@ -99,13 +99,13 @@ mesh = SubResource("CylinderMesh_adwiy")
 
 [node name="Skills" type="Node" parent="."]
 
-[node name="Attack3" parent="Skills" instance=ExtResource("2_wi0kb")]
+[node name="Attack3" parent="Skills" instance=ExtResource("3_qa660")]
 range = 2
 value = 1.0
 targets = 1
 conditions = Array[int]([1])
 
-[node name="Attack2" parent="Skills" instance=ExtResource("2_wi0kb")]
+[node name="Attack2" parent="Skills" instance=ExtResource("3_qa660")]
 range = 2
 
 [node name="onfield_unit_status" type="Sprite3D" parent="."]
@@ -115,7 +115,7 @@ offset = Vector2(50, 0)
 pixel_size = 0.02
 billboard = 1
 texture = SubResource("ViewportTexture_mhmme")
-script = ExtResource("2_e8ouy")
+script = ExtResource("4_g8hq8")
 
 [node name="Unit_Hover_UI" type="SubViewport" parent="onfield_unit_status"]
 disable_3d = true
@@ -126,14 +126,14 @@ canvas_item_default_texture_filter = 0
 size = Vector2i(42, 38)
 render_target_update_mode = 3
 
-[node name="Unit_Hover_UI" parent="onfield_unit_status/Unit_Hover_UI" instance=ExtResource("4_rc3kq")]
+[node name="Unit_Hover_UI" parent="onfield_unit_status/Unit_Hover_UI" instance=ExtResource("5_ccteg")]
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 libraries = {
 "": SubResource("AnimationLibrary_8hbj7")
 }
 
-[node name="Heal" parent="." instance=ExtResource("2_wi0kb")]
+[node name="Heal" parent="." instance=ExtResource("3_qa660")]
 include_self = true
 require_target = false
 color = 3

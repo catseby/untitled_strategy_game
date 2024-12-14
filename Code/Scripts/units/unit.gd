@@ -1,8 +1,20 @@
 extends Node3D
 
+
+#----------------------------------------------------------------------------
+#------------------------------@ONREADY_NODES-----------------------------------
+
 @onready var status = $onfield_unit_status
 @onready var skills = $Skills
 @onready var anim = $AnimationPlayer
+
+
+
+#-----------------------------------------------------------------------------
+#---------------------------------UNIQUE VARIABLES----------------------------
+
+var first_name : String = "Unkown"
+var last_name : String = ""
 
 @export var move_range : int = 4
 
@@ -14,9 +26,17 @@ var action_points = max_action_points
 
 var turn_order : int = 100
 
+
+#-----------------------------------------------------------------
+#--------------------------SIGNALS--------------------------------
+
 signal await_command(unit)
 signal action_fufilled
 signal next
+
+
+#------------------------------------------------------------------
+#----------------------------VARIABLES-----------------------------
 
 var path : Array[Vector3] = []
 

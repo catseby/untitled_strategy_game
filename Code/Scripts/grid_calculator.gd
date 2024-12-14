@@ -1,6 +1,6 @@
 extends Node
 
-const SymetricShadowcasting = preload("res://Code/Scripts/symmetric_shadowcasting.gd")
+const SymetricShadowcasting = preload("res://code/scripts/symmetric_shadowcasting.gd")
 
 var map : GridMap
 var global_position : Vector3

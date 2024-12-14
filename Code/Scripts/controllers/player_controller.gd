@@ -1,6 +1,6 @@
 extends GridMap
 
-var GridCalculator = preload("res://Code/Scripts/grid_calculator.gd")
+var GridCalculator = preload("res://code/scripts/grid_calculator.gd")
 
 @onready var axis = $Axis
 @onready var indicator = $Indicator

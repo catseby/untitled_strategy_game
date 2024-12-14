@@ -1,13 +1,13 @@
 extends Node3D
 
-@onready var player_spawn = $Player_Spawn
-@onready var turn_order = $Turn_Order
+@onready var spawns = $Spawns
+@onready var turn_order = $Units
 @onready var ui = $Combat_UI
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
-	player_spawn.add_units()
-	$Enemy_Spawn.add_units()
+	for spawn in spawns.get_children():
+		spawn.add_units()
 	next()
 
 func next():

@@ -1,43 +1,34 @@
 [gd_scene load_steps=10 format=3 uid="uid://cjgp38vxsy2j0"]
 
-[ext_resource type="Script" path="res://Code/Scripts/level.gd" id="1_8nem6"]
-[ext_resource type="MeshLibrary" uid="uid://c2w55vytcwik" path="res://Art/Mesh-Libraries/prototype_meshlib.tres" id="1_ntgl0"]
-[ext_resource type="PackedScene" uid="uid://c644vfd66ieux" path="res://Level/Prefab/combat_camera.tscn" id="2_drpwp"]
-[ext_resource type="Script" path="res://Code/Scripts/map.gd" id="3_80y2h"]
-[ext_resource type="PackedScene" uid="uid://dmv0ghqasdrsj" path="res://Level/Prefab/player_spawn.tscn" id="5_p1hy0"]
-[ext_resource type="PackedScene" uid="uid://duvwnynqo85h1" path="res://Level/Prefab/action_indicator.tscn" id="6_4wwu7"]
-[ext_resource type="PackedScene" uid="uid://djvedkfnhl6pm" path="res://Level/Prefab/enemy_spawn.tscn" id="8_j2dgj"]
-[ext_resource type="PackedScene" uid="uid://dtoh1am0ml7nc" path="res://Level/UI/combat_ui.tscn" id="9_uepik"]
+[ext_resource type="Script" path="res://code/scripts/level.gd" id="1_n3cts"]
+[ext_resource type="MeshLibrary" uid="uid://c2w55vytcwik" path="res://art/mesh_libraries/prototype_meshlib.tres" id="2_0i2ja"]
+[ext_resource type="Script" path="res://code/scripts/map.gd" id="3_rm5a7"]
+[ext_resource type="PackedScene" uid="uid://c644vfd66ieux" path="res://level/prefab/combat_camera.tscn" id="4_1inf7"]
+[ext_resource type="PackedScene" uid="uid://dtoh1am0ml7nc" path="res://level/ui/combat_ui.tscn" id="5_xwk4b"]
+[ext_resource type="PackedScene" uid="uid://duvwnynqo85h1" path="res://level/prefab/controllers/player_controller.tscn" id="6_3d21r"]
+[ext_resource type="PackedScene" uid="uid://dmv0ghqasdrsj" path="res://level/prefab/spawns/player_spawn.tscn" id="7_bvglp"]
+[ext_resource type="PackedScene" uid="uid://djvedkfnhl6pm" path="res://level/prefab/spawns/enemy_spawn.tscn" id="8_aw6rt"]
 
 [sub_resource type="Environment" id="Environment_kd1qp"]
 background_mode = 1
 
 [node name="Test_Level" type="Node3D"]
-script = ExtResource("1_8nem6")
+script = ExtResource("1_n3cts")
 
 [node name="Map" type="GridMap" parent="." node_paths=PackedStringArray("turn_order")]
-mesh_library = ExtResource("1_ntgl0")
+mesh_library = ExtResource("2_0i2ja")
 cell_center_y = false
 data = {
 "cells": PackedInt32Array(65535, 0, 0, 65535, 65535, 0, 0, 0, 0, 1, 65535, 0, 1, 0, 0, 1, 1, 0, 0, 1, 0, 65535, 1, 0, 65534, 1, 0, 65534, 0, 0, 65534, 65535, 0, 65534, 65534, 0, 65535, 65534, 0, 0, 65534, 0, 1, 65534, 0, 65535, 2, 0, 0, 3, 0, 0, 2, 0, 0, 4, 0, 65534, 2, 0, 65534, 3, 0, 65534, 4, 0, 2, 1, 0, 2, 65535, 0, 2, 65534, 0, 3, 65534, 0, 3, 65535, 0, 3, 1, 0, 2, 2, 0, 1, 2, 0, 3, 2, 0, 4, 1, 0, 4, 0, 0, 4, 65535, 0, 4, 65534, 0, 1, 65533, 0, 0, 65533, 0, 65535, 3, 0, 65533, 2, 0, 65532, 2, 0, 65532, 1, 0, 65533, 1, 0, 65533, 0, 0, 65532, 0, 0, 65532, 65535, 0, 65533, 65535, 0, 65533, 3, 0, 65531, 2, 0, 65531, 1, 0, 65530, 1, 0, 65530, 0, 0, 65531, 0, 0, 2, 3, 0, 2, 4, 0, 1, 4, 0, 1, 5, 0, 1, 6, 0, 0, 6, 0, 65535, 6, 0, 65534, 6, 0, 65534, 5, 0)
 }
-script = ExtResource("3_80y2h")
-turn_order = NodePath("../Turn_Order")
+script = ExtResource("3_rm5a7")
+turn_order = NodePath("../Units")
 metadata/_editor_floor_ = Vector3(0, 0, 0)
 
-[node name="Combat_Camera" parent="." node_paths=PackedStringArray("action_indicator") instance=ExtResource("2_drpwp")]
-action_indicator = NodePath("../Action_Indicator")
+[node name="Combat_Camera" parent="." node_paths=PackedStringArray("action_indicator") instance=ExtResource("4_1inf7")]
+action_indicator = NodePath("../Controllers/Action_Indicator")
 
-[node name="Player_Spawn" parent="." node_paths=PackedStringArray("map", "action_indicator", "combat_ui") instance=ExtResource("5_p1hy0")]
-map = NodePath("../Map")
-action_indicator = NodePath("../Action_Indicator")
-combat_ui = NodePath("../Combat_UI")
-
-[node name="Action_Indicator" parent="." node_paths=PackedStringArray("map", "ui") instance=ExtResource("6_4wwu7")]
-map = NodePath("../Map")
-ui = NodePath("../Combat_UI")
-
-[node name="Combat_UI" parent="." instance=ExtResource("9_uepik")]
+[node name="Combat_UI" parent="." instance=ExtResource("5_xwk4b")]
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
 environment = SubResource("Environment_kd1qp")
@@ -46,7 +37,20 @@ environment = SubResource("Environment_kd1qp")
 transform = Transform3D(0.707107, 0.5, -0.5, 0, 0.707107, 0.707107, 0.707107, -0.5, 0.5, 0, 0, 0)
 light_energy = 2.0
 
-[node name="Turn_Order" type="Node" parent="."]
+[node name="Units" type="Node" parent="."]
 
-[node name="Enemy_Spawn" parent="." instance=ExtResource("8_j2dgj")]
+[node name="Controllers" type="Node" parent="."]
+
+[node name="Action_Indicator" parent="Controllers" node_paths=PackedStringArray("map", "ui") instance=ExtResource("6_3d21r")]
+map = NodePath("../../Map")
+ui = NodePath("../../Combat_UI")
+
+[node name="Spawns" type="Node" parent="."]
+
+[node name="Player_Spawn" parent="Spawns" node_paths=PackedStringArray("map", "action_indicator", "combat_ui") instance=ExtResource("7_bvglp")]
+map = NodePath("../../Map")
+action_indicator = NodePath("../../Controllers/Action_Indicator")
+combat_ui = NodePath("../../Combat_UI")
+
+[node name="Enemy_Spawn" parent="Spawns" instance=ExtResource("8_aw6rt")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5, 0, -1)

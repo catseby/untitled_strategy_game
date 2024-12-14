@@ -1,9 +1,9 @@
 [gd_scene load_steps=16 format=3 uid="uid://cjmj3ublgdrr6"]
 
-[ext_resource type="Script" path="res://Code/Scripts/unit.gd" id="1_f05gt"]
-[ext_resource type="Script" path="res://Code/Scripts/onfield_unit_status.gd" id="2_e3vt1"]
-[ext_resource type="PackedScene" uid="uid://j7xt0cdh13f5" path="res://Level/UI/unit_hover_ui.tscn" id="3_xemgq"]
-[ext_resource type="Shader" path="res://Code/Shaders/flash.gdshader" id="4_nhlql"]
+[ext_resource type="Script" path="res://code/scripts/units/unit.gd" id="1_jxsjj"]
+[ext_resource type="Script" path="res://code/scripts/onfield_unit_status.gd" id="2_pksn5"]
+[ext_resource type="PackedScene" uid="uid://j7xt0cdh13f5" path="res://level/ui/unit_hover_ui.tscn" id="3_l8jd5"]
+[ext_resource type="Shader" path="res://code/shaders/flash.gdshader" id="4_yj8cv"]
 
 [sub_resource type="ViewportTexture" id="ViewportTexture_tl6pe"]
 viewport_path = NodePath("onfield_unit_status/Unit_Hover_UI")
@@ -25,7 +25,7 @@ noise = SubResource("FastNoiseLite_5t3aj")
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_ihsw2"]
 render_priority = 0
-shader = ExtResource("4_nhlql")
+shader = ExtResource("4_yj8cv")
 shader_parameter/flash_color = Color(1, 1, 1, 1)
 shader_parameter/flash_speed = 40.0
 shader_parameter/flash_duration = 1.0
@@ -106,7 +106,7 @@ _data = {
 }
 
 [node name="Unit" type="Node3D"]
-script = ExtResource("1_f05gt")
+script = ExtResource("1_jxsjj")
 
 [node name="Skills" type="Node" parent="."]
 
@@ -117,7 +117,7 @@ offset = Vector2(50, 0)
 pixel_size = 0.02
 billboard = 1
 texture = SubResource("ViewportTexture_tl6pe")
-script = ExtResource("2_e3vt1")
+script = ExtResource("2_pksn5")
 
 [node name="Unit_Hover_UI" type="SubViewport" parent="onfield_unit_status"]
 disable_3d = true
@@ -128,7 +128,7 @@ canvas_item_default_texture_filter = 0
 size = Vector2i(42, 38)
 render_target_update_mode = 3
 
-[node name="Unit_Hover_UI" parent="onfield_unit_status/Unit_Hover_UI" instance=ExtResource("3_xemgq")]
+[node name="Unit_Hover_UI" parent="onfield_unit_status/Unit_Hover_UI" instance=ExtResource("3_l8jd5")]
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)

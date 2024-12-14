@@ -1,6 +1,6 @@
 extends Node3D
 
-const PCU = preload("res://Level/Prefab/player_controlled_unit.tscn")
+const PCU = preload("res://level/prefab/units/human.tscn")
 
 @export var units : Array[Node] = []
 @export var map : GridMap
@@ -37,12 +37,12 @@ func add_units() -> void:
 	
 	for i in units.size():
 		
-		get_parent().turn_order.add_child(units[i])
+		get_parent().get_parent().turn_order.add_child(units[i])
 		units[i].global_position = get_child(i).global_position
 		
 		units[i].await_command.connect(combat_ui.display_actions)
 		units[i].await_command.connect(action_indicator.highlight_indicators)
-		units[i].next.connect(get_parent().next)
+		units[i].next.connect(get_parent().get_parent().next)
 		
 		units[i].add_to_group("Hunters")
 		

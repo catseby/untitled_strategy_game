@@ -1,12 +1,12 @@
 extends Node3D
 
-const GridCalculator = preload("res://Code/Scripts/grid_calculator.gd")
+const GridCalculator = preload("res://code/scripts/grid_calculator.gd")
 
-const PCU = preload("res://Level/Prefab/player_controlled_unit.tscn")
-const AI = preload("res://Level/Prefab/ai.tscn")
+const UNIT = preload("res://level/prefab/units/human.tscn")
+const AI = preload("res://level/prefab/controllers/ai.tscn")
 
 @onready var ai = AI.instantiate()
-@onready var map = get_parent().get_node("Map")
+@onready var map = get_parent().get_parent().get_node("Map")
 
 @export var units : Array[Node] = []
 @export var team : String = "Guards"
@@ -20,9 +20,9 @@ func _init() -> void:
 
 
 func _ready() -> void:
-	var pcu = PCU.instantiate()
-	var pcu2 = PCU.instantiate()
-	var pcu3 = PCU.instantiate()
+	var pcu = UNIT.instantiate()
+	var pcu2 = UNIT.instantiate()
+	var pcu3 = UNIT.instantiate()
 	
 	pcu.name = "asd"
 	pcu2.name = "Carl"
@@ -58,7 +58,7 @@ func add_units() -> void:
 	
 	for i in units.size():
 		
-		get_parent().turn_order.add_child(units[i])
+		get_parent().get_parent().turn_order.add_child(units[i])
 		print(available_spots[i])
 		units[i].global_position = to_global(available_spots[i] * Vector3i(2,0,2))
 		
@@ -67,6 +67,6 @@ func add_units() -> void:
 
 		
 		units[i].await_command.connect(ai.fetch_action)
-		units[i].next.connect(get_parent().next)
+		units[i].next.connect(get_parent().get_parent().next)
 	
 	queue_free()
