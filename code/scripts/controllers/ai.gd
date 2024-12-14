@@ -40,11 +40,18 @@ class Values:
 
 var action_array : Array[Action] = []
 var group : String
+var friendly_team : String
+var enemy_teams : Array[String]
 
+func get_enemies():
+	var enemies : Array[Node] = []
+	for team in enemy_teams:
+		enemies.append_array(get_tree().get_nodes_in_group(team))
+	return enemies
 
 func asses_situation():
 	var units = get_tree().get_nodes_in_group(group)
-	var enemies = get_tree().get_nodes_in_group("Hunters")
+	var enemies = get_enemies()
 	
 	match state:
 		ADVANCE,ENGAGE:
@@ -267,8 +274,8 @@ func calculate_turn(unit):
 
 func calculate_value(collection : Array[Action],unit):
 	var value : float = 0.0
-	var allies = get_tree().get_nodes_in_group("Guards")
-	var enemies = get_tree().get_nodes_in_group("Hunters")
+	var allies = get_tree().get_nodes_in_group(friendly_team)
+	var enemies = get_enemies()
 	var values = Values.new()
 	match state:
 		ADVANCE:

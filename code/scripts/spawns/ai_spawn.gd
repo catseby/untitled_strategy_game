@@ -3,6 +3,7 @@ extends "res://code/scripts/spawns/spawn.gd"
 
 const AI = preload("res://level/prefab/controllers/ai.tscn")
 
+@export var enemy_teams : Array[TEAMS]
 @onready var ai = AI.instantiate()
 
 func _ready() -> void:
@@ -31,6 +32,9 @@ func add_units() -> void:
 	
 	get_parent().add_child(ai)
 	ai.group = group
+	ai.friendly_team = team
+	for hostile in enemy_teams:
+		ai.enemy_teams.append(TEAMS.keys()[hostile])
 	print(group)
 	
 	var gc = GridCalculator.new(global_position,map)

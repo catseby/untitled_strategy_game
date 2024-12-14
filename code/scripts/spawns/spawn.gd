@@ -6,8 +6,13 @@ const UNIT = preload("res://Level/Prefab/Units/human.tscn")
 
 @onready var map = get_parent().get_parent().get_node("Map")
 
+enum TEAMS{
+	Hunters,
+	Guards
+}
 @export var units : Array[Node] = []
-@export_enum("Hunters", "Guards") var team : String = "Hunters"
+@export var friendly_team : TEAMS = 0
+@onready var team : String = TEAMS.keys()[friendly_team]
 
 func queue_units(queue : Array[Node]) -> void:
 	units.append_array(queue)

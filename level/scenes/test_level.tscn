@@ -47,11 +47,14 @@ ui = NodePath("../../Combat_UI")
 
 [node name="Spawns" type="Node" parent="."]
 
-[node name="Player_Spawn" parent="Spawns" node_paths=PackedStringArray("action_indicator", "combat_ui") instance=ExtResource("7_bvglp")]
+[node name="Player_Spawn" parent="Spawns" instance=ExtResource("7_bvglp")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3, 0, 11)
-action_indicator = NodePath("../../Controllers/Action_Indicator")
-combat_ui = NodePath("../../Combat_UI")
 
 [node name="Enemy_Spawn" parent="Spawns" instance=ExtResource("8_aw6rt")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5, 0, -1)
-team = "Guards"
+enemy_teams = Array[int]([0])
+friendly_team = 1
+
+[node name="Enemy_Spawn2" parent="Spawns" instance=ExtResource("8_aw6rt")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3, 0, -1)
+enemy_teams = Array[int]([1])
