@@ -1,14 +1,15 @@
 [gd_scene load_steps=5 format=3 uid="uid://dtnub07jwdhiu"]
 
 [ext_resource type="PackedScene" uid="uid://cjmj3ublgdrr6" path="res://level/prefab/units/unit.tscn" id="1_hp7kl"]
-[ext_resource type="Script" path="res://Code/Scripts/units/human.gd" id="2_6ucc2"]
+[ext_resource type="Script" path="res://code/scripts/units/human.gd" id="2_ec6ud"]
 [ext_resource type="PackedScene" uid="uid://dxspgwhxw6hp0" path="res://level/prefab/skills/skill.tscn" id="3_qa660"]
 
 [sub_resource type="ViewportTexture" id="ViewportTexture_85nlh"]
 viewport_path = NodePath("onfield_unit_status/Unit_Hover_UI")
 
 [node name="Human" instance=ExtResource("1_hp7kl")]
-script = ExtResource("2_6ucc2")
+script = ExtResource("2_ec6ud")
+max_hit_points = 2
 
 [node name="Skill" parent="Skills" index="0" instance=ExtResource("3_qa660")]
 

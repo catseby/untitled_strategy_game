@@ -9,6 +9,7 @@ extends Node3D
 func _ready() -> void:
 	for spawn in spawns.get_children():
 		spawn.add_units()
+	#await get_tree().create_timer(1).timeout
 	update_objectives()
 	next()
 
@@ -37,6 +38,7 @@ func next():
 	ui.update_turn_order(turn_order.get_children())
 
 func update_objectives():
+	print("UPDATE_OBJECTIVES")
 	var messages = []
 	for objective in $Objectives.get_children():
 		messages.append(objective.get_objective())

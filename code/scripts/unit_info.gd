@@ -41,7 +41,7 @@ func set_hp(hp,max_hp):
 			if first_pass:
 				bar.size_flags_horizontal = bar.SIZE_EXPAND_FILL
 			if hp < 0:
-				bar.self_modulate = Color(0.4,0.4,0.4,0.5)
+				bar.modulate = Color(0.4,0.4,0.4,0.5)
 			hbox.add_child(bar)
 			
 			if i >= column_size:
@@ -63,7 +63,7 @@ func set_ap(ap,max_ap):
 			if first_pass:
 				bar.size_flags_horizontal = bar.SIZE_EXPAND_FILL
 			if ap < 0:
-				bar.self_modulate = Color(0.4,0.4,0.4,0.5)
+				bar.modulate = Color(0.4,0.4,0.4,0.5)
 			hbox.add_child(bar)
 			
 			if i >= column_size:

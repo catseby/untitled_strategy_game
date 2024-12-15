@@ -8,7 +8,7 @@
 [ext_resource type="PackedScene" uid="uid://duvwnynqo85h1" path="res://level/prefab/controllers/player_controller.tscn" id="6_3d21r"]
 [ext_resource type="PackedScene" uid="uid://dmv0ghqasdrsj" path="res://level/prefab/spawns/player_spawn.tscn" id="7_bvglp"]
 [ext_resource type="PackedScene" uid="uid://djvedkfnhl6pm" path="res://level/prefab/spawns/ai_spawn.tscn" id="8_aw6rt"]
-[ext_resource type="PackedScene" uid="uid://dv0ndo77g7a8h" path="res://level/prefab/objectives/objective.tscn" id="9_yl8yo"]
+[ext_resource type="PackedScene" uid="uid://cdtbnryup3hvv" path="res://level/prefab/objectives/eliminate_objective.tscn" id="9_y6a20"]
 
 [sub_resource type="Environment" id="Environment_kd1qp"]
 background_mode = 1
@@ -65,4 +65,5 @@ enemy_teams = Array[int]([1])
 
 [node name="Objectives" type="Node" parent="."]
 
-[node name="Objective" parent="Objectives" instance=ExtResource("9_yl8yo")]
+[node name="EliminateObjective" parent="Objectives" instance=ExtResource("9_y6a20")]
+eliminate = "Guards"

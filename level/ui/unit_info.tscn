@@ -1,6 +1,6 @@
 [gd_scene load_steps=2 format=3 uid="uid://j7xt0cdh13f5"]
 
-[ext_resource type="Script" path="res://Code/Scripts/unit_info.gd" id="1_jy55r"]
+[ext_resource type="Script" path="res://code/scripts/unit_info.gd" id="1_s7j1q"]
 
 [node name="Unit_Info" type="Control"]
 layout_mode = 3
@@ -10,7 +10,7 @@ offset_top = 16.0
 offset_right = 288.0
 offset_bottom = 80.0
 mouse_filter = 2
-script = ExtResource("1_jy55r")
+script = ExtResource("1_s7j1q")
 
 [node name="VBox" type="VBoxContainer" parent="."]
 layout_mode = 1
