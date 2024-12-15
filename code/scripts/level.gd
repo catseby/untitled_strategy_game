@@ -45,6 +45,9 @@ func update_objectives():
 		if !objective.complete:
 			break
 	$Combat_UI.update_objectives(messages)
+	
+	if $Objectives.get_child($Objectives.get_child_count()-1).complete:
+		get_tree().change_scene_to_file("res://level/scenes/test_win_screen.tscn")
 
 
 #func _input(event: InputEvent) -> void:

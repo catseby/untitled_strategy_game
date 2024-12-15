@@ -8,10 +8,6 @@ func _ready() -> void:
 	get_parent().get_parent().get_node("Units").child_exiting_tree.connect(update_objective)
 	update.connect(get_parent().get_parent().update_objectives)
 
-func update_objective(node):
-	print("PAIN")
-	update.emit()
-
 func get_objective():
 	if target_count == -1:
 		target_count = get_tree().get_node_count_in_group(eliminate)

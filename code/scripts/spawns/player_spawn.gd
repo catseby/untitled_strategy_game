@@ -29,6 +29,7 @@ func add_units() -> void:
 		
 		get_parent().get_parent().turn_order.add_child(units[i])
 		units[i].global_position = to_global(available_spots[i] * Vector3i(2,0,2))
+		units[i].group = team
 		
 		units[i].await_command.connect(combat_ui.display_actions)
 		units[i].await_command.connect(action_indicator.highlight_indicators)

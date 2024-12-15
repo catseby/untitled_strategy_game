@@ -16,6 +16,8 @@ extends Node3D
 var first_name : String = "Unkown"
 var last_name : String = ""
 
+var group : String
+
 @export var move_range : int = 4
 
 @export var max_hit_points : int = 2
@@ -94,4 +96,5 @@ func hit(attack):
 	await $AnimationPlayer.animation_finished
 	status.update(self)
 	if hit_points <= 0:
+		remove_from_group(group)
 		queue_free()

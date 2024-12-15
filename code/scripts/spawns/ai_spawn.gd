@@ -35,7 +35,6 @@ func add_units() -> void:
 	ai.friendly_team = team
 	for hostile in enemy_teams:
 		ai.enemy_teams.append(TEAMS.keys()[hostile])
-	print(group)
 	
 	var gc = GridCalculator.new(global_position,map)
 	var available_spots = gc.get_available_cells(units.size())
@@ -46,6 +45,8 @@ func add_units() -> void:
 		get_parent().get_parent().turn_order.add_child(units[i])
 		print(available_spots[i])
 		units[i].global_position = to_global(available_spots[i] * Vector3i(2,0,2))
+		units[i].group = team
+
 		
 		units[i].add_to_group(group)
 		units[i].add_to_group(team)

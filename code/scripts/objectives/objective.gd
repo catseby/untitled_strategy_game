@@ -1,7 +1,7 @@
 extends Node
 
 @export_multiline var message : String = "Objective Message"
-var complete : bool = false
+var complete : bool = true
 @onready var level = get_parent().get_parent()
 
 signal update
