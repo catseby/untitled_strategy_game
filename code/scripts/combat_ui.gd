@@ -2,9 +2,11 @@ extends Control
 
 const SKILL_BUTTON = preload("res://level/ui/skill_button.tscn")
 const TURN_INDICATOR = preload("res://level/ui/turn_indicator.tscn")
+const OBJECTIVE_LABEL = preload("res://level/ui/objective_label.tscn")
 
 @onready var skills = $Center/Actions
 @onready var turn_order = $Right/Turn_Order
+@onready var objectives = $TopLeft/VBox
 
 @onready var cancel = $Center/Cancel
 @onready var cancel_text = $Center/Cancel/Vbox/Title
@@ -145,3 +147,12 @@ func update_turn_order(array):
 		var ti = TURN_INDICATOR.instantiate()
 		turn_order.add_child(ti)
 		ti.text = str(unit.turn_order) + " " + str(unit.name)
+
+func update_objectives(array):
+	for child in objectives.get_children():
+		child.queue_free()
+	
+	for message in array:
+		var label = OBJECTIVE_LABEL.instantiate()
+		label.text = message
+		objectives.add_child(label)

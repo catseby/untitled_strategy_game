@@ -3,11 +3,13 @@ extends Node3D
 @onready var spawns = $Spawns
 @onready var turn_order = $Units
 @onready var ui = $Combat_UI
+@onready var objectives = $Objectives
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	for spawn in spawns.get_children():
 		spawn.add_units()
+	update_objectives()
 	next()
 
 func next():
@@ -33,6 +35,15 @@ func next():
 	
 	
 	ui.update_turn_order(turn_order.get_children())
+
+func update_objectives():
+	var messages = []
+	for objective in $Objectives.get_children():
+		messages.append(objective.get_objective())
+		if !objective.complete:
+			break
+	$Combat_UI.update_objectives(messages)
+
 
 #func _input(event: InputEvent) -> void:
 	#if event is InputEventKey:

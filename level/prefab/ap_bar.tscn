@@ -1,6 +1,6 @@
-[gd_scene load_steps=2 format=3 uid="uid://dst7pmbea7cfs"]
+[gd_scene load_steps=4 format=3 uid="uid://dst7pmbea7cfs"]
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_2n7yy"]
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_8bf7n"]
 bg_color = Color(1, 1, 0.501961, 1)
 corner_radius_top_right = 8
 corner_radius_bottom_right = 8
@@ -10,6 +10,45 @@ shadow_size = 1
 shadow_offset = Vector2(4, 4)
 anti_aliasing = false
 
-[node name="ApBar" type="Panel"]
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_83b7f"]
+bg_color = Color(1, 1, 0.501961, 1)
+corner_radius_top_right = 8
+corner_radius_bottom_left = 8
+corner_detail = 1
+shadow_color = Color(0, 0, 0, 0.321569)
+shadow_size = 1
+shadow_offset = Vector2(4, 3)
+anti_aliasing = false
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_8ruf2"]
+bg_color = Color(1, 1, 0.501961, 1)
+corner_radius_top_left = 8
+corner_radius_bottom_right = 8
+corner_detail = 1
+shadow_color = Color(0, 0, 0, 0.321569)
+shadow_size = 1
+shadow_offset = Vector2(4, 4)
+anti_aliasing = false
+
+[node name="ApBar" type="VBoxContainer"]
 custom_minimum_size = Vector2(32, 16)
-theme_override_styles/panel = SubResource("StyleBoxFlat_2n7yy")
+offset_right = 32.0
+offset_bottom = 16.0
+size_flags_horizontal = 3
+theme_override_constants/separation = 0
+
+[node name="ApBar" type="Panel" parent="."]
+visible = false
+custom_minimum_size = Vector2(32, 16)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_8bf7n")
+
+[node name="ApBar2" type="Panel" parent="."]
+custom_minimum_size = Vector2(32, 8)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_83b7f")
+
+[node name="ApBar3" type="Panel" parent="."]
+custom_minimum_size = Vector2(32, 8)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_8ruf2")
