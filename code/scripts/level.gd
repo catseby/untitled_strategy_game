@@ -47,6 +47,7 @@ func update_objectives():
 	$Combat_UI.update_objectives(messages)
 	
 	if $Objectives.get_child($Objectives.get_child_count()-1).complete:
+		await get_tree().create_timer(2).timeout
 		get_tree().change_scene_to_file("res://level/scenes/test_win_screen.tscn")
 
 
