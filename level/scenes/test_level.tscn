@@ -40,6 +40,8 @@ light_energy = 2.0
 
 [node name="Units" type="Node" parent="."]
 
+[node name="LoseConditions" type="Node" parent="."]
+
 [node name="Controllers" type="Node" parent="."]
 
 [node name="Action_Indicator" parent="Controllers" node_paths=PackedStringArray("map", "ui") instance=ExtResource("6_3d21r")]

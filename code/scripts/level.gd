@@ -34,7 +34,6 @@ func next():
 	
 	turn_order.get_child(0).act()
 	
-	
 	ui.update_turn_order(turn_order.get_children())
 
 func update_objectives():

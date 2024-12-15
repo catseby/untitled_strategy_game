@@ -60,7 +60,7 @@ func asses_situation():
 				
 				for enemy in enemies:
 					
-					if round(enemy.global_position.distance_to(unit.global_position)) < unit.move_range * 1.5:
+					if round(enemy.global_position.distance_to(unit.global_position)) < unit.visibility_range:
 							state = ENGAGE
 							print("state = ENGAGE")
 							exit_loop = true

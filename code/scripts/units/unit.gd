@@ -19,6 +19,7 @@ var last_name : String = ""
 var group : String
 
 @export var move_range : int = 4
+@export var visibility_range : int = 15
 
 @export var max_hit_points : int = 2
 @onready var hit_points = max_hit_points
