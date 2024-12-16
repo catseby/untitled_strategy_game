@@ -8,6 +8,6 @@ range = 3
 include_self = true
 require_target = false
 color = 3
-value = 0.7
+value = 0.8
 targets = 1
 conditions = Array[int]([1])

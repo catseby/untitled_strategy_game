@@ -3,6 +3,6 @@
 [ext_resource type="PackedScene" uid="uid://fbnku52hk1ou" path="res://level/prefab/skills/damage_skill.tscn" id="1_4q0q6"]
 
 [node name="Punch" instance=ExtResource("1_4q0q6")]
-damage = 3
+damage = 6
 range = 2
 value = 0.7
