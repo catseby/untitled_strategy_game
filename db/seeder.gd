@@ -13,6 +13,13 @@ func _ready() -> void:
 		"id" : {"data_type": "int", "primary_key": true, "auto_increment": true},
 		"first_name" : {"data_type":"text"},
 		"last_name" : {"data_type":"text"},
-		"vitality" : {"data_type":"int"}
+		"vitality" : {"data_type":"int"},
+		"strength" : {"data_type":"int"},
+		"agility" : {"data_type":"int"},
+		"dexterity" : {"data_type":"int"},
+		"intelligence" : {"data_type":"int"},
+		"perception" : {"data_type":"int"},
+		"willpower" : {"data_type":"int"},
+		"charisma" : {"data_type":"int"}
 	}
 	db.create_table("residents",residents)

@@ -12,7 +12,12 @@ func update(unit):
 		child.queue_free()
 	
 	var name_label = NAME_LABEL.instantiate()
-	name_label.text = unit.name
+	name_label.text = unit.full_name
+	print("group " + str(unit.group))
+	if unit.group == "Hunters":
+		name_label.modulate = Color("00b4ff")
+	else:
+		name_label.modulate = Color("ff0000")
 	vbox.add_child(name_label)
 	
 	

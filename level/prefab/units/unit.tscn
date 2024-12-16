@@ -9,6 +9,7 @@
 viewport_path = NodePath("onfield_unit_status/Unit_Hover_UI")
 
 [sub_resource type="Gradient" id="Gradient_8leae"]
+colors = PackedColorArray(0.381703, 0.381703, 0.381703, 1, 1, 1, 1, 1)
 
 [sub_resource type="FastNoiseLite" id="FastNoiseLite_5t3aj"]
 noise_type = 2
@@ -32,7 +33,6 @@ shader_parameter/flash_duration = 1.0
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_f6gsy"]
 next_pass = SubResource("ShaderMaterial_ihsw2")
-albedo_color = Color(0.754991, 0.564805, 0.410465, 1)
 albedo_texture = SubResource("NoiseTexture2D_hn023")
 
 [sub_resource type="CylinderMesh" id="CylinderMesh_ac5tf"]
@@ -139,6 +139,11 @@ instance_shader_parameters/active = false
 mesh = SubResource("CylinderMesh_ac5tf")
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+"": SubResource("AnimationLibrary_8hbj7")
+}
+
+[node name="AnimationPlayer2" type="AnimationPlayer" parent="."]
 libraries = {
 "": SubResource("AnimationLibrary_8hbj7")
 }

@@ -1,0 +1,13 @@
+[gd_scene load_steps=2 format=3 uid="uid://c8tebgubn5gpu"]
+
+[ext_resource type="PackedScene" uid="uid://fbnku52hk1ou" path="res://level/prefab/skills/damage_skill.tscn" id="1_e65ie"]
+
+[node name="Bandage" instance=ExtResource("1_e65ie")]
+damage = -3
+range = 1
+include_self = true
+require_target = false
+color = 3
+value = 0.8
+targets = 1
+conditions = Array[int]([1])

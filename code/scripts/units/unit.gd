@@ -15,6 +15,8 @@ extends Node3D
 
 var first_name : String = "Unkown"
 var last_name : String = ""
+@onready var full_name : String = first_name + " " + last_name
+
 
 var group : String
 
@@ -51,7 +53,6 @@ enum {
 
 func _ready() -> void:
 	status.update(self)
-	
 
 func act():
 	await get_tree().create_timer(1).timeout
@@ -93,8 +94,9 @@ func _physics_process(delta: float) -> void:
 
 func hit(attack):
 	hit_points -= attack.damage
-	$AnimationPlayer.play("hit")
-	await $AnimationPlayer.animation_finished
+	hit_points = clampi(hit_points,0,max_hit_points)
+	$AnimationPlayer2.play("hit")
+	await $AnimationPlayer2.animation_finished
 	status.update(self)
 	if hit_points <= 0:
 		remove_from_group(group)

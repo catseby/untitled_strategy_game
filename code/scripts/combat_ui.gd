@@ -146,7 +146,7 @@ func update_turn_order(array):
 		var unit = array[array.size() - 1 - i]
 		var ti = TURN_INDICATOR.instantiate()
 		turn_order.add_child(ti)
-		ti.text = str(unit.turn_order) + " " + str(unit.name)
+		ti.text = str(unit.turn_order) + " " + str(unit.full_name)
 
 func update_objectives(array):
 	for child in objectives.get_children():

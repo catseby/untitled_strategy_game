@@ -14,7 +14,7 @@ func get_objective():
 			target_count = get_tree().get_node_count_in_group(eliminate)
 		
 		var targets_left = target_count - get_tree().get_node_count_in_group(eliminate)
-		message = "Eliminate " + eliminate.to_lower() + ": " + str(targets_left) + " / " + str(target_count)
+		message = "Eliminate " + eliminate + ": " + str(targets_left) + " / " + str(target_count)
 		if targets_left >= target_count:
 			complete = true
 			message += " (Complete)"

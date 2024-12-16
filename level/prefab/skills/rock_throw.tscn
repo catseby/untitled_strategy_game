@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3 uid="uid://c4kddi601wni5"]
+
+[ext_resource type="PackedScene" uid="uid://fbnku52hk1ou" path="res://level/prefab/skills/damage_skill.tscn" id="1_0bkli"]
+
+[node name="RockThrow" instance=ExtResource("1_0bkli")]
+value = 0.4

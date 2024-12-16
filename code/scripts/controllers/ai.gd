@@ -181,7 +181,7 @@ func calculate_turn(unit):
 					if skill.require_target:
 						available_cells = gc.get_available_visible_cells(skill.range)
 					else:
-						available_cells = gc.get_aoe_cells(skill.range)[1]
+						available_cells = gc.get_aoe_cells(skill.range)[0]
 					
 					print("avvv" + str(available_cells[0]))
 					
@@ -245,7 +245,7 @@ func calculate_turn(unit):
 	var factor = 0.01
 	var move_rating = round((sorted_indexes.size()-1) * factor)
 	var rand = randi_range(0,move_rating)
-	var index = sorted_indexes[0][0] #------------------[rand][] for random factor!!!!
+	var index = sorted_indexes[rand][0] #------------------[rand][] for random factor!!!!
 	#print("turn rating: " + str(rand) + "/" + str(move_rating) + " - " + str(rand/move_rating * 100) + "%")
 	
 	var arr = []
