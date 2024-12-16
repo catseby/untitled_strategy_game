@@ -183,7 +183,7 @@ func calculate_turn(unit):
 					else:
 						available_cells = gc.get_aoe_cells(skill.range)[0]
 					
-					print("avvv" + str(available_cells[0]))
+					#print("avvv" + str(available_cells[0]))
 					
 					if not skill.include_self:
 						available_cells.remove_at(available_cells.find(Vector3i.ZERO))
@@ -218,7 +218,8 @@ func calculate_turn(unit):
 	var unsorted_indexes = []
 	for i in possible_turns.size():
 		var value = calculate_value(possible_turns[i],unit)
-		unsorted_indexes.append([i,value])
+		if value > -1000:
+			unsorted_indexes.append([i,value])
 	
 	
 	#---------SORT BEST TO WORST MOVES
@@ -238,13 +239,12 @@ func calculate_turn(unit):
 				break
 	
 	for i in sorted_indexes.size():
-		print("Nr." + str(i) + " " + str(sorted_indexes[i][1]))
+		#print("Nr." + str(i) + " " + str(sorted_indexes[i][1]))
 		if i == 10:
 			break
 	
-	var factor = 0.01
-	var move_rating = round((sorted_indexes.size()-1) * factor)
-	var rand = randi_range(0,move_rating)
+	var factor = 3
+	var rand = randi_range(0,factor)
 	var index = sorted_indexes[rand][0] #------------------[rand][] for random factor!!!!
 	#print("turn rating: " + str(rand) + "/" + str(move_rating) + " - " + str(rand/move_rating * 100) + "%")
 	
@@ -315,17 +315,17 @@ func calculate_value(collection : Array[Action],unit):
 							var multiplier : float = 0.0
 							#print(target)
 							if skill.conditions.has(CONDITIONS.HIGH_HP) and target.hit_points / target.max_hit_points > 0.5:
-								print("high hp")
+								#print("high hp")
 								multiplier += 1.0 / condition_size
 							if skill.conditions.has(CONDITIONS.LOW_HP) and target.hit_points / target.max_hit_points < 0.5:
-								print("low hp")
+								#print("low hp")
 								multiplier += 1.0 / condition_size
 							if skill.conditions.has(CONDITIONS.ANYONE):
-								print("anyone")
+								#print("anyone")
 								multiplier += 1.0 / condition_size
 							
 							if multiplier != 0.0:
-								print("aaaaaaaaa")
+								#print("aaaaaaaaa")
 								valid = true
 							
 							value += values.valid_target * multiplier# / collection.size()

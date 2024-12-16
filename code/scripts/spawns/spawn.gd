@@ -11,6 +11,7 @@ enum TEAMS{
 	Guards
 }
 @export var units : Array[Node] = []
+@export var unit_count : int = 3
 @export var friendly_team : TEAMS = 0
 @onready var team : String = TEAMS.keys()[friendly_team]
 

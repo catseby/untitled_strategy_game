@@ -5,7 +5,7 @@
 [ext_resource type="PackedScene" uid="uid://can3gonmfrh27" path="res://level/prefab/indicator.tscn" id="3_45jg7"]
 [ext_resource type="PackedScene" uid="uid://bbewjgskpwky" path="res://level/prefab/indicator_line.tscn" id="4_x78iq"]
 
-[node name="Player_Controller" type="GridMap"]
+[node name="PlayerController" type="GridMap"]
 mesh_library = ExtResource("1_httlo")
 cell_center_y = false
 script = ExtResource("2_l1ymw")

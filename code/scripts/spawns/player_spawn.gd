@@ -3,16 +3,16 @@ extends "res://code/scripts/spawns/spawn.gd"
 @export var action_indicator : Node3D
 @export var combat_ui : Control
 
-func _ready() -> void:
-	var pcu = UNIT.instantiate()
-	var pcu2 = UNIT.instantiate()
-	var pcu3 = UNIT.instantiate()
-	
-	pcu.name = "Bob"
-	pcu2.name = "Eve"
-	pcu3.name = "Brick"
-
-	queue_units([pcu,pcu2])
+#func _ready() -> void:
+	#var pcu = UNIT.instantiate()
+	#var pcu2 = UNIT.instantiate()
+	#var pcu3 = UNIT.instantiate()
+	#
+	#pcu.name = "Bob"
+	#pcu2.name = "Eve"
+	#pcu3.name = "Brick"
+#
+	#queue_units([pcu,pcu2])
 
 func add_units() -> void:
 	combat_ui.move.connect(action_indicator.movement_indicators)

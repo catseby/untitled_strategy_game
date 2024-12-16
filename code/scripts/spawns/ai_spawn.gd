@@ -6,17 +6,17 @@ const AI = preload("res://level/prefab/controllers/ai.tscn")
 @export var enemy_teams : Array[TEAMS]
 @onready var ai = AI.instantiate()
 
-func _ready() -> void:
-	var pcu = UNIT.instantiate()
-	var pcu2 = UNIT.instantiate()
-	var pcu3 = UNIT.instantiate()
-	
-	pcu.name = "asd"
-	pcu2.name = "Carl"
-	pcu3.name = "Bot"
-	
-	
-	queue_units([pcu,pcu2])
+#func _ready() -> void:
+	#var pcu = UNIT.instantiate()
+	#var pcu2 = UNIT.instantiate()
+	#var pcu3 = UNIT.instantiate()
+	#
+	#pcu.name = "asd"
+	#pcu2.name = "Carl"
+	#pcu3.name = "Bot"
+	#
+	#
+	#queue_units([pcu,pcu2])
 
 func add_units() -> void:
 	var group : String

@@ -1,5 +1,8 @@
 extends Node3D
 
+const UNIT = preload("res://level/prefab/units/human.tscn")
+
+
 @onready var spawns = $Spawns
 @onready var turn_order = $Units
 @onready var ui = $Combat_UI

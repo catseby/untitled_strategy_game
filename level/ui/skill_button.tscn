@@ -7,7 +7,7 @@ custom_minimum_size = Vector2(82, 82)
 size_flags_vertical = 4
 theme_override_font_sizes/font_size = 28
 text = "Move"
-clip_text = true
+autowrap_mode = 3
 script = ExtResource("1_eg4pw")
 
 [connection signal="pressed" from="." to="." method="_on_pressed"]

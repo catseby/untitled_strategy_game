@@ -1,11 +1,7 @@
-[gd_scene load_steps=8 format=3 uid="uid://dtnub07jwdhiu"]
+[gd_scene load_steps=4 format=3 uid="uid://dtnub07jwdhiu"]
 
 [ext_resource type="PackedScene" uid="uid://cjmj3ublgdrr6" path="res://level/prefab/units/unit.tscn" id="1_hp7kl"]
 [ext_resource type="Script" path="res://code/scripts/units/human.gd" id="2_ec6ud"]
-[ext_resource type="PackedScene" uid="uid://byomqh7odg1yj" path="res://level/prefab/skills/punch.tscn" id="3_qjhbh"]
-[ext_resource type="PackedScene" uid="uid://c8tebgubn5gpu" path="res://level/prefab/skills/bandage.tscn" id="4_55amq"]
-[ext_resource type="PackedScene" uid="uid://ctxjj3agrqqvg" path="res://level/prefab/skills/area_heal.tscn" id="5_54pk2"]
-[ext_resource type="PackedScene" uid="uid://c4kddi601wni5" path="res://level/prefab/skills/rock_throw.tscn" id="6_nubi1"]
 
 [sub_resource type="ViewportTexture" id="ViewportTexture_85nlh"]
 viewport_path = NodePath("onfield_unit_status/Unit_Hover_UI")
@@ -13,14 +9,6 @@ viewport_path = NodePath("onfield_unit_status/Unit_Hover_UI")
 [node name="Human" instance=ExtResource("1_hp7kl")]
 script = ExtResource("2_ec6ud")
 max_hit_points = 5
-
-[node name="Punch" parent="Skills" index="0" instance=ExtResource("3_qjhbh")]
-
-[node name="Bandage" parent="Skills" index="1" instance=ExtResource("4_55amq")]
-
-[node name="AreaHeal" parent="Skills" index="2" instance=ExtResource("5_54pk2")]
-
-[node name="RockThrow" parent="Skills" index="3" instance=ExtResource("6_nubi1")]
 
 [node name="onfield_unit_status" parent="." index="1"]
 texture = SubResource("ViewportTexture_85nlh")
