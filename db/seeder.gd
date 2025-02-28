@@ -21,13 +21,13 @@ var skill_count = 2
 func _ready() -> void:
 	randomize()
 	DirAccess.remove_absolute("res://db/sqlite.db")
-	
+
 	db = SQLite.new()
 	db.path = "res://db/sqlite.db"
 	db.open_db()
-	
+
 	db.drop_table("residents")
-	
+
 	var residents = {
 		"id" : {"data_type": "int", "primary_key": true, "auto_increment": true, "not_null": true},
 		"first_name" : {"data_type":"text"},
@@ -43,7 +43,7 @@ func _ready() -> void:
 		"skills" : {"data_type":"text"}
 	}
 	db.create_table("residents",residents)
-	
+
 	for i in entries:
 		var stats : Array[int] = [1,1,1,1,1,1,1,1]
 		for j in stat_points:
@@ -53,7 +53,7 @@ func _ready() -> void:
 				continue
 			else:
 				stats[index] += 1
-		
+
 		var skills : Array[int] = []
 		for j in skill_count:
 			var index = randi_range(0,SKILLS.size()-1)
@@ -62,7 +62,7 @@ func _ready() -> void:
 			else:
 				j -= 1
 				continue
-		
+
 		var resident = {
 			"first_name" : first_names.pick_random(),
 			"last_name" : last_names.pick_random(),
@@ -76,7 +76,7 @@ func _ready() -> void:
 			"charisma" : stats[7],
 			"skills" : JSON.stringify(skills)
 		}
-		
+
 		db.insert_row("residents",resident)
-	
+
 	db.close_db()

@@ -29,28 +29,28 @@ func add_units() -> void:
 			group += chars[randi()% n_char]
 		if get_tree().get_node_count_in_group(group) == 0:
 			break
-	
+
 	get_parent().add_child(ai)
 	ai.group = group
 	ai.friendly_team = team
 	for hostile in enemy_teams:
 		ai.enemy_teams.append(TEAMS.keys()[hostile])
-	
+
 	var gc = GridCalculator.new(global_position,map)
 	var available_spots = gc.get_available_cells(units.size())
 	available_spots.shuffle()
-	
+
 	for i in units.size():
-		
+
 		units[i].global_position = to_global(available_spots[i] * Vector3i(2,0,2))
 		units[i].group = team
-		
+
 		units[i].add_to_group(group)
 		units[i].add_to_group(team)
-		
+
 		get_parent().get_parent().turn_order.add_child(units[i])
-		
+
 		units[i].await_command.connect(ai.fetch_action)
 		units[i].next.connect(get_parent().get_parent().next)
-	
+
 	queue_free()

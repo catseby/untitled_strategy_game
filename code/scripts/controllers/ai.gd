@@ -1,7 +1,5 @@
 extends Node
 
-const GridCalculator = preload("res://code/scripts/grid_calculator.gd")
-
 @onready var map = get_parent().get_parent().get_node("Map")
 
 enum ACTION {

@@ -1,36 +1,39 @@
 extends Node
 
-var rows
-var blind_spots = []
-var visible_tiles : Array[Vector3i] = []
+class Tile:
+	var position: Vector2
+	var is_wall: bool
+	
+	func _init(pos: Vector2, wall: bool):
+		position = pos
+		is_wall = wall
 
-func _init(rows) -> void:
-	for row in rows:
-		for tile in row:
-			
-			if tile.type == tile.Wall and tile_visible(tile):
-				set_blind_spot(tile)
-			elif tile_visible(tile):
-				visible_tiles.append(tile.position)
-				if tile.type == tile.Unit:
-					set_blind_spot(tile)
-
-
-func get_visible_tiles():
+func get_visible_tiles(tiles: Array, light_source: Vector2) -> Array:
+	var visible_tiles = []
+	var walls = {} # Dictionary to store wall positions
+	var tile_positions = {} # Dictionary to store tile positions
+	
+	# Store tile positions and walls for quick lookup
+	for tile in tiles:
+		tile_positions[tile.position] = tile
+		if tile.is_wall:
+			walls[tile.position] = true
+	
+	# Define directions (8-way for better coverage)
+	var directions = [
+		Vector2(1, 0), Vector2(-1, 0), Vector2(0, 1), Vector2(0, -1),
+		Vector2(1, 1), Vector2(-1, -1), Vector2(1, -1), Vector2(-1, 1),
+		Vector2(2, 1), Vector2(2, -1), Vector2(-2, 1), Vector2(-2, -1),
+		Vector2(1, 2), Vector2(-1, 2), Vector2(1, -2), Vector2(-1, -2)
+	]
+	
+	# Perform raycasting from light source in each direction
+	for dir in directions:
+		var current_pos = light_source
+		while current_pos in tile_positions:
+			visible_tiles.append(current_pos)
+			if current_pos in walls:
+				break # Stop when hitting a wall
+			current_pos += dir
+	
 	return visible_tiles
-
-func set_blind_spot(tile):
-	var d1 = Vector2.ZERO.direction_to(Vector2(tile.position.x,tile.position.z) + tile.corner)
-	var d2 = Vector2.ZERO.direction_to(Vector2(tile.position.x,tile.position.z) - tile.corner)
-	
-	blind_spots.append([d1,d2])
-
-
-func tile_visible(tile):
-	for spot in blind_spots:
-		var deg = Vector2.ZERO.direction_to(Vector2(tile.position.x,tile.position.z))
-		
-		if spot[0].distance_to(deg) < spot[0].distance_to(spot[1]) and spot[1].distance_to(deg) < spot[1].distance_to(spot[0]):
-			return false
-	
-	return true

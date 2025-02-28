@@ -8,14 +8,26 @@
 [node name="RandomHumanLevel" instance=ExtResource("1_8myd2")]
 script = ExtResource("2_vycgv")
 
+[node name="VisibleLevel" parent="." index="0"]
+visible = true
+
+[node name="Preset" parent="VisibleLevel" index="2"]
+visible = false
+
+[node name="Map" parent="." index="1"]
+visible = false
+
 [node name="Player_Spawn" parent="Spawns" index="0" node_paths=PackedStringArray("action_indicator", "combat_ui") instance=ExtResource("3_qfx64")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1, 0, 7)
 action_indicator = NodePath("../../Controllers/PlayerController")
 combat_ui = NodePath("../../Combat_UI")
+unit_count = null
+friendly_team = null
 
 [node name="AI_Spawn" parent="Spawns" index="1" instance=ExtResource("4_3s66b")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3, 0, -9)
 enemy_teams = Array[int]([0])
+unit_count = null
 friendly_team = 1
 
 [node name="EliminateObjective" parent="Objectives" index="0"]
