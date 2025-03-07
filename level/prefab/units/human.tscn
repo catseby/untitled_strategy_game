@@ -1,7 +1,7 @@
 [gd_scene load_steps=4 format=3 uid="uid://dtnub07jwdhiu"]
 
 [ext_resource type="PackedScene" uid="uid://cjmj3ublgdrr6" path="res://level/prefab/units/unit.tscn" id="1_hp7kl"]
-[ext_resource type="Script" path="res://code/scripts/units/human.gd" id="2_ec6ud"]
+[ext_resource type="Script" uid="uid://d0imln4qto6yg" path="res://code/scripts/units/human.gd" id="2_ec6ud"]
 
 [sub_resource type="ViewportTexture" id="ViewportTexture_85nlh"]
 viewport_path = NodePath("onfield_unit_status/Unit_Hover_UI")

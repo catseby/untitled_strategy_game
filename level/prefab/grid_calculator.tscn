@@ -1,6 +1,6 @@
 [gd_scene load_steps=2 format=3 uid="uid://cl3ou6s0y3o2p"]
 
-[ext_resource type="Script" path="res://code/scripts/grid_calculator.gd" id="1_nlhbt"]
+[ext_resource type="Script" uid="uid://cewkfw4i82u2p" path="res://code/scripts/grid_calculator.gd" id="1_nlhbt"]
 
 [node name="Grid_Calculator" type="Node"]
 script = ExtResource("1_nlhbt")

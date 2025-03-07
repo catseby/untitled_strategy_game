@@ -1,6 +1,6 @@
 [gd_scene load_steps=3 format=3 uid="uid://bbewjgskpwky"]
 
-[ext_resource type="Script" path="res://code/scripts/indicator_line.gd" id="1_hrcqf"]
+[ext_resource type="Script" uid="uid://b26b0d7yv5equ" path="res://code/scripts/indicator_line.gd" id="1_hrcqf"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_cm8vn"]
 shading_mode = 0

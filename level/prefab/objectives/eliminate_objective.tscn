@@ -1,6 +1,6 @@
 [gd_scene load_steps=2 format=3 uid="uid://cdtbnryup3hvv"]
 
-[ext_resource type="Script" path="res://code/scripts/objectives/eliminate_objective.gd" id="1_iceor"]
+[ext_resource type="Script" uid="uid://dfvjahx0t2xss" path="res://code/scripts/objectives/eliminate_objective.gd" id="1_iceor"]
 
 [node name="EliminateObjective" type="Node"]
 script = ExtResource("1_iceor")

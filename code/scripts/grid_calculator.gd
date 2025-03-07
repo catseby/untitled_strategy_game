@@ -96,102 +96,120 @@ func get_available_cells(range,include_all : bool = false) -> Array[Vector3i]:
 ## Just like the get_available_cells() function, except it also calculates if the cell is, or isn't infront of a wall.
 func get_available_visible_cells(range : int):
 	
-	var coords : Array[Vector3i] = []
-	var quadrants : Array[Array] = [[],[],[],[]]
-	var tiles : Dictionary = {}
-	var range_size = range * 2 + 1
+	var visible_cells : Array[Vector3i] = []
 	
-	var next_pass : Array[Vector3i] = [Vector3i.ZERO]
-	for i in range:
-		var fresh_next_pass : Array[Vector3i] = []
-		#var fresh_row : Array[Tile] = []
+	for quad in range(4):
+		print(quad)
+		visible_cells.append_array(scan(
+			Row.new(1, Fraction.new(1,-1), Fraction.new(1,1)),
+			Quadrant.new(quad),
+			range - 1
+		))
+	
+	return visible_cells
+
+
+func scan(row : Row,quadrant : Quadrant, range : int):
+	
+	if row.depth > range:
+		return []
+	
+	var visible_cells : Array[Vector3i] = []
+	
+	var prev_cell : Vector3i
+	for tile in row.tiles():
+		var cell : Vector3i = quadrant.transform(tile)
 		
-		for rows in quadrants:
-			rows.append({})
-
-		while next_pass.size() > 0:
-			var new_cell = next_pass.pop_front()
-
-			#var occupied = map.is_cell_occupied(new_cell * Vector3i(2,0,2), global_position)
-			var free = map.is_cell_free(new_cell * Vector3i(2,0,2), global_position)
-
-			if !coords.has(new_cell):
-				coords.append(new_cell)
-
-				fresh_next_pass.append(new_cell + Vector3i(-1,0,0))
-				fresh_next_pass.append(new_cell + Vector3i(0,0,1))
-				fresh_next_pass.append(new_cell + Vector3i(1,0,0))
-				fresh_next_pass.append(new_cell + Vector3i(0,0,-1))
-				
-				
-				var tile = Vector2(new_cell.x,new_cell.z)
-				
-				
-				#if !free:
-					#tiles[tile] = true
-				#else:
-					#tiles[tile] = false
-				
-				var dir = Vector2.ZERO.direction_to(tile).normalized()
-				
-				if dir.x <= -0.6: #West
-					quadrants[0][i][tile] = !free #i represents row
-				if dir.y <= -0.6: #North
-					quadrants[1][i][tile] = !free
-				if dir.x >= 0.6: #East
-					quadrants[2][i][tile] = !free
-				if dir.y >= 0.6: #South
-					quadrants[3][i][tile] = !free
+		if is_free(cell) and is_symetric(row, tile):
+			visible_cells.append(cell)
+		if not is_free(prev_cell) and is_free(cell):
+			row.start_slope = slope(tile)
+		if is_free(prev_cell) and not is_free(cell):
+			var next_row = row.next()
+			next_row.end_slope = slope(tile)
+			visible_cells.append_array(scan(next_row, quadrant, range))
 		
-		#rows.append(fresh_row)
-		next_pass = fresh_next_pass
+		prev_cell = cell
 	
-	var visible_tiles : Array[Vector3i] = []
+	if is_free(prev_cell):
+		visible_cells.append_array(scan(row.next(), quadrant, range))
 	
-	for i in quadrants.size() - 2:
-		var rows = quadrants[i]
-		visible_tiles.append_array(scan(rows, 1, i))
-	
-	print(visible_tiles)
-	
-	return visible_tiles
+	return visible_cells
 
-func scan(rows, depth, quadrant) -> Array[Vector3i]:
-	
-	var visible_tiles : Array[Vector3i] = []
-	
-	var row = rows[depth]
-	for tile in row:
-		visible_tiles.append(Vector3i(tile.x, 0, tile.y))
-	
-	print(visible_tiles)
-	
-	if rows.size() - 1 > depth:
-		visible_tiles.append_array(scan(rows, depth + 1, quadrant)) 
-	
-	return visible_tiles
+func is_free(cell : Vector3i):
+	if cell == null:
+		return false
+	return map.is_cell_free(cell * Vector3i(2,0,2), global_position)
 
-	#for tile in tiles:
-		#print(tiles[tile])
-	#var visible_tiles : Array[Vector3i] = compute_fov(tiles,Vector3i.ZERO, 15)
-	#print(visible_tiles)
-#
-#
-	#return visible_tiles
-#
-#func compute_fov(is_blocking, mark_visible):
-	#var origin = Vector2.ZERO
-	#mark_visible(origin)
-	#
-	#for i in range(4):
-		#var quadrant = Quadrant.new(i, origin)
-#
-		#var reveal = func(tile):
-			#var pos = quadrant.transform(tile)
-			#mark_visible(pos)
-		#
-		#var is_wall 
+func slope(tile : Vector2i) -> Fraction:
+	var row_depth = tile.x
+	var col = tile.y
+	return Fraction.new((2 * col - 1), (2 * row_depth))
+
+func is_symetric(row : Row, tile : Vector2i):
+	var col = tile.y
+	return (col >= row.depth * row.start_slope.toFloat()
+			and col <= row.depth * row.end_slope.toFloat())
+
+class Row:
+	
+	var depth : int
+	var start_slope : Fraction
+	var end_slope : Fraction
+	
+	func _init(_depth, _start_slope, _end_slope) -> void:
+		depth = _depth
+		start_slope = _start_slope
+		end_slope = _end_slope
+	
+	func next() -> Row:
+		return Row.new(depth + 1, start_slope, end_slope)
+	
+	func tiles() -> Array[Vector2i]:
+		var tileArr : Array[Vector2i] = []
+		var min_col = round_ties_up(depth * start_slope.toFloat())
+		var max_col = round_ties_down(depth * end_slope.toFloat())
 		
+		for col in range(min_col, max_col+2):
+			tileArr.append(Vector2i(depth,col))
+		return tileArr
+	
+	func round_ties_up(n : float) -> float:
+		return floor(n + 0.5)
+	
+	func round_ties_down(n : float) -> float:
+		return floor(n - 0.5)
+
+class Quadrant:
+	
+	var cardinal : int
+	
+	func _init(_cardinal : int) -> void:
+		cardinal = _cardinal
+	
+	func transform(tile):
+		var row = tile.x
+		var col = tile.y
+		match cardinal:
+			0: #North
+				return Vector3i(col,0,-row)
+			1: #South
+				return Vector3i(col,0,row)
+			2: #East
+				return Vector3i(row,0,col)
+			3: #West
+				return Vector3i(-row,0,col)
+
+class Fraction:
+	var x : float
+	var y : float
+	
+	func _init(_x : float, _y : float):
+		x = _x
+		y = _y
+	
+	func toFloat() -> float:
+		return x / y
 
 ## Returns all cells with a unit in them, within the given range.
 ## Returns in form of an array [Coordinates, Units].

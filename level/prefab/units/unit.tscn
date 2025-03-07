@@ -1,9 +1,9 @@
 [gd_scene load_steps=16 format=3 uid="uid://cjmj3ublgdrr6"]
 
-[ext_resource type="Script" path="res://code/scripts/units/unit.gd" id="1_jxsjj"]
-[ext_resource type="Script" path="res://code/scripts/onfield_unit_status.gd" id="2_pksn5"]
+[ext_resource type="Script" uid="uid://b1psldgh2ug75" path="res://code/scripts/units/unit.gd" id="1_jxsjj"]
+[ext_resource type="Script" uid="uid://b2qqcak1qa03a" path="res://code/scripts/onfield_unit_status.gd" id="2_pksn5"]
 [ext_resource type="PackedScene" uid="uid://j7xt0cdh13f5" path="res://level/ui/unit_info.tscn" id="3_l8jd5"]
-[ext_resource type="Shader" path="res://code/shaders/flash.gdshader" id="4_yj8cv"]
+[ext_resource type="Shader" uid="uid://drunujftxv6hg" path="res://code/shaders/flash.gdshader" id="4_yj8cv"]
 
 [sub_resource type="ViewportTexture" id="ViewportTexture_tl6pe"]
 viewport_path = NodePath("onfield_unit_status/Unit_Hover_UI")
@@ -100,9 +100,9 @@ tracks/0/keys = {
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_8hbj7"]
 _data = {
-"RESET": SubResource("Animation_u0m6o"),
-"attack": SubResource("Animation_n4llc"),
-"hit": SubResource("Animation_jwlsi")
+&"RESET": SubResource("Animation_u0m6o"),
+&"attack": SubResource("Animation_n4llc"),
+&"hit": SubResource("Animation_jwlsi")
 }
 
 [node name="Unit" type="Node3D"]

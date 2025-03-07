@@ -1,6 +1,6 @@
 [gd_scene load_steps=3 format=3 uid="uid://djvedkfnhl6pm"]
 
-[ext_resource type="Script" path="res://code/scripts/spawns/ai_spawn.gd" id="1_2kyyb"]
+[ext_resource type="Script" uid="uid://ptejwrc7i0pc" path="res://code/scripts/spawns/ai_spawn.gd" id="1_2kyyb"]
 
 [sub_resource type="SphereMesh" id="SphereMesh_18ltc"]
 

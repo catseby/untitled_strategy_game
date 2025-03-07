@@ -1,6 +1,6 @@
 [gd_scene load_steps=2 format=3 uid="uid://dpou6dmq4wfop"]
 
-[ext_resource type="Script" path="res://code/scripts/symmetric_shadowcasting.gd" id="1_0upuv"]
+[ext_resource type="Script" uid="uid://6vrsvdxnudoc" path="res://code/scripts/symmetric_shadowcasting.gd" id="1_0upuv"]
 
 [node name="Symmetric_Shadowcasting" type="Node"]
 script = ExtResource("1_0upuv")

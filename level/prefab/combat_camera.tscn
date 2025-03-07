@@ -1,6 +1,6 @@
 [gd_scene load_steps=2 format=3 uid="uid://c644vfd66ieux"]
 
-[ext_resource type="Script" path="res://code/scripts/combat_camera.gd" id="1_x1pjw"]
+[ext_resource type="Script" uid="uid://qgv4xtmstogi" path="res://code/scripts/combat_camera.gd" id="1_x1pjw"]
 
 [node name="Combat_Camera" type="CharacterBody3D"]
 transform = Transform3D(0.707107, 0, 0.707107, 0, 1, 0, -0.707107, 0, 0.707107, 0, 0, 0)

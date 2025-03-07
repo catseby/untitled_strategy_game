@@ -1,7 +1,7 @@
 [gd_scene load_steps=5 format=3 uid="uid://duvwnynqo85h1"]
 
 [ext_resource type="MeshLibrary" uid="uid://dsve5dxv1ldse" path="res://art/mesh_libraries/indicator_meshlib.tres" id="1_httlo"]
-[ext_resource type="Script" path="res://code/scripts/controllers/player_controller.gd" id="2_l1ymw"]
+[ext_resource type="Script" uid="uid://brd4ouxi8bu70" path="res://code/scripts/controllers/player_controller.gd" id="2_l1ymw"]
 [ext_resource type="PackedScene" uid="uid://can3gonmfrh27" path="res://level/prefab/indicator.tscn" id="3_45jg7"]
 [ext_resource type="PackedScene" uid="uid://bbewjgskpwky" path="res://level/prefab/indicator_line.tscn" id="4_x78iq"]
 

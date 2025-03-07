@@ -1,10 +1,10 @@
 [gd_scene load_steps=11 format=3 uid="uid://cjgp38vxsy2j0"]
 
-[ext_resource type="Script" path="res://code/scripts/level.gd" id="1_k48ml"]
+[ext_resource type="Script" uid="uid://ckktfc4p2dqbp" path="res://code/scripts/level.gd" id="1_k48ml"]
 [ext_resource type="MeshLibrary" uid="uid://c2w55vytcwik" path="res://art/mesh_libraries/prototype_meshlib.tres" id="2_aivjf"]
 [ext_resource type="MeshLibrary" uid="uid://duo3br6hxtd60" path="res://art/mesh_libraries/seen_prototype_meshlib.tres" id="2_f4uu3"]
-[ext_resource type="Script" path="res://code/scripts/visible_level.gd" id="2_um61a"]
-[ext_resource type="Script" path="res://code/scripts/map.gd" id="3_su3en"]
+[ext_resource type="Script" uid="uid://fvsejqjkc11k" path="res://code/scripts/visible_level.gd" id="2_um61a"]
+[ext_resource type="Script" uid="uid://bppqudevvlngu" path="res://code/scripts/map.gd" id="3_su3en"]
 [ext_resource type="PackedScene" uid="uid://c644vfd66ieux" path="res://level/prefab/combat_camera.tscn" id="4_ukngq"]
 [ext_resource type="PackedScene" uid="uid://dtoh1am0ml7nc" path="res://level/ui/combat_ui.tscn" id="5_4vct5"]
 [ext_resource type="PackedScene" uid="uid://duvwnynqo85h1" path="res://level/prefab/controllers/player_controller.tscn" id="6_57ouj"]
