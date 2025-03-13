@@ -101,7 +101,7 @@ func get_available_visible_cells(range : int):
 	for quad in range(4):
 		print(quad)
 		visible_cells.append_array(scan(
-			Row.new(1, Fraction.new(1,-1), Fraction.new(1,1)),
+			Row.new(1, Fraction.new(1,-1), Fraction.new(1,1), range - 2),
 			Quadrant.new(quad),
 			range - 1
 		))
@@ -154,24 +154,33 @@ func is_symetric(row : Row, tile : Vector2i):
 class Row:
 	
 	var depth : int
+	var falloff : int
 	var start_slope : Fraction
 	var end_slope : Fraction
 	
-	func _init(_depth, _start_slope, _end_slope) -> void:
+	func _init(_depth, _start_slope, _end_slope, _falloff) -> void:
 		depth = _depth
 		start_slope = _start_slope
 		end_slope = _end_slope
+		falloff = _falloff
+		
+		print("f" + str(falloff))
 	
 	func next() -> Row:
-		return Row.new(depth + 1, start_slope, end_slope)
+		return Row.new(depth + 1, start_slope, end_slope, falloff - 1)
 	
 	func tiles() -> Array[Vector2i]:
 		var tileArr : Array[Vector2i] = []
-		var min_col = round_ties_up(depth * start_slope.toFloat())
-		var max_col = round_ties_down(depth * end_slope.toFloat())
+
+		var min_col = clamp(round_ties_up(depth * start_slope.toFloat()), -falloff, falloff)
+		var max_col = clamp(round_ties_down(depth * end_slope.toFloat()), -falloff+1, falloff-1)
 		
-		for col in range(min_col, max_col+2):
+		print("col min: " + str(min_col) + ", col max: " + str(max_col))
+		
+		for col in range(min_col, max_col + 2):
 			tileArr.append(Vector2i(depth,col))
+		
+		print(tileArr)
 		return tileArr
 	
 	func round_ties_up(n : float) -> float:
