@@ -52,5 +52,6 @@ func add_units() -> void:
 
 		units[i].await_command.connect(ai.fetch_action)
 		units[i].next.connect(get_parent().get_parent().next)
+		units[i].moved.connect(fog_of_war.unit_moved)
 
 	queue_free()

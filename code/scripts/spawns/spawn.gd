@@ -3,6 +3,7 @@ extends Node3D
 const UNIT = preload("res://level/prefab/units/human.tscn")
 
 @onready var map = get_parent().get_parent().get_node("Map")
+@onready var fog_of_war = get_parent().get_parent().get_node("VisibleLevel")
 
 enum TEAMS{
 	Hunters,

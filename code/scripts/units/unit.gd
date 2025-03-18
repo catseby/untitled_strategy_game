@@ -2,7 +2,6 @@ extends Node3D
 class_name Unit
 ## Basic controllable unit, which can be controlled using a controller.
 
-
 #----------------------------------------------------------------------------
 #------------------------------@ONREADY_NODES-----------------------------------
 
@@ -10,15 +9,12 @@ class_name Unit
 @onready var skills = $Skills
 @onready var anim = $AnimationPlayer
 
-
-
 #-----------------------------------------------------------------------------
 #---------------------------------UNIQUE VARIABLES----------------------------
 
 var first_name : String = "Unkown"
 var last_name : String = ""
 @onready var full_name : String = first_name + " " + last_name
-
 
 var group : String ## Units group (Controller)
 
@@ -33,14 +29,12 @@ var group : String ## Units group (Controller)
 
 var turn_order : int = 100 ## Current turn score. Higher values guarantee a higher spot in the turn order.
 
-
 #-----------------------------------------------------------------
 #--------------------------SIGNALS--------------------------------
 
 signal await_command(unit) ## Informs the controller that the unit is awaiting a command.
-signal action_fufilled
+signal moved(unit)
 signal next ## Informs the level that the unit has ended their turn.
-
 
 #------------------------------------------------------------------
 #----------------------------VARIABLES-----------------------------
@@ -96,6 +90,7 @@ func _physics_process(delta: float) -> void:
 			time = 0
 			if path.is_empty():
 				state = IDLE
+				moved.emit(self)
 				act()
 
 ## Deal damage to, attack, the unit.
