@@ -7,22 +7,6 @@ const SymetricShadowcasting = preload("res://code/scripts/symmetric_shadowcastin
 var map : GridMap ## Current map.
 var global_position : Vector3 ## Calculation position.
 
-#class Tile: ## Class for calculating symetric shadowcasting.
-	#var position : Vector3i
-	#var type
-	#enum {
-		#FLOOR,
-		#WALL,
-		#UNIT
-	#}
-	#var corner = Vector2(0,0.75)
-#
-	#func _init(pos : Vector3i, new_type = FLOOR, vertical : bool = false) -> void:
-		#position = pos
-		#type = new_type
-		#if vertical:
-			#corner = Vector2(0.75,0)
-
 func _init(_global_position : Vector3 = Vector3.ZERO, _map : GridMap = null) -> void:
 	map = _map
 	global_position = _global_position
@@ -96,12 +80,11 @@ func get_available_cells(range,include_all : bool = false) -> Array[Vector3i]:
 ## Just like the get_available_cells() function, except it also calculates if the cell is, or isn't infront of a wall.
 func get_available_visible_cells(range : int):
 	
-	var visible_cells : Array[Vector3i] = []
+	var visible_cells : Array[Vector3i] = [Vector3i.ZERO]
 	
 	for quad in range(4):
-		print(quad)
 		visible_cells.append_array(scan(
-			Row.new(1, Fraction.new(1,-1), Fraction.new(1,1), range - 2),
+			Row.new(1, Fraction.new(1,-1), Fraction.new(1,1), -(range/2) + 2),
 			Quadrant.new(quad),
 			range - 1
 		))
@@ -120,7 +103,7 @@ func scan(row : Row,quadrant : Quadrant, range : int):
 	for tile in row.tiles():
 		var cell : Vector3i = quadrant.transform(tile)
 		
-		if is_free(cell) and is_symetric(row, tile):
+		if is_free(cell) and  is_symetric(row, tile) and in_distance(cell, range):
 			visible_cells.append(cell)
 		if not is_free(prev_cell) and is_free(cell):
 			row.start_slope = slope(tile)
@@ -136,7 +119,7 @@ func scan(row : Row,quadrant : Quadrant, range : int):
 	
 	return visible_cells
 
-func is_free(cell : Vector3i):
+func is_free(cell : Vector3i) -> bool:
 	if cell == null:
 		return false
 	return map.is_cell_free(cell * Vector3i(2,0,2), global_position)
@@ -146,10 +129,13 @@ func slope(tile : Vector2i) -> Fraction:
 	var col = tile.y
 	return Fraction.new((2 * col - 1), (2 * row_depth))
 
-func is_symetric(row : Row, tile : Vector2i):
+func is_symetric(row : Row, tile : Vector2i) -> bool:
 	var col = tile.y
 	return (col >= row.depth * row.start_slope.toFloat()
 			and col <= row.depth * row.end_slope.toFloat())
+
+func in_distance(cell : Vector3i, range : int):
+	return abs(cell.x) + abs(cell.z) <= range
 
 class Row:
 	
@@ -167,20 +153,17 @@ class Row:
 		print("f" + str(falloff))
 	
 	func next() -> Row:
-		return Row.new(depth + 1, start_slope, end_slope, falloff - 1)
+		return Row.new(depth + 1, start_slope, end_slope, falloff + 1)
 	
 	func tiles() -> Array[Vector2i]:
 		var tileArr : Array[Vector2i] = []
-
-		var min_col = clamp(round_ties_up(depth * start_slope.toFloat()), -falloff, falloff)
-		var max_col = clamp(round_ties_down(depth * end_slope.toFloat()), -falloff+1, falloff-1)
 		
-		print("col min: " + str(min_col) + ", col max: " + str(max_col))
+		var min_col = round_ties_up(depth * start_slope.toFloat())
+		var max_col = round_ties_down(depth * end_slope.toFloat())
 		
 		for col in range(min_col, max_col + 2):
 			tileArr.append(Vector2i(depth,col))
 		
-		print(tileArr)
 		return tileArr
 	
 	func round_ties_up(n : float) -> float:

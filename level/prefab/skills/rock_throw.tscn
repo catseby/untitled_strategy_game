@@ -4,5 +4,4 @@
 
 [node name="RockThrow" instance=ExtResource("1_0bkli")]
 damage = 6
-range = 4
 value = 0.4
