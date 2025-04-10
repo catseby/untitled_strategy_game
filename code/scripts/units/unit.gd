@@ -2,6 +2,8 @@ extends Node3D
 class_name Unit
 ## Basic controllable unit, which can be controlled using a controller.
 
+const DamageIndicator = preload("res://level/prefab/damage_indicator.tscn")
+
 #----------------------------------------------------------------------------
 #------------------------------@ONREADY_NODES-----------------------------------
 
@@ -97,8 +99,14 @@ func _physics_process(delta: float) -> void:
 func hit(attack):
 	hit_points -= attack.damage
 	hit_points = clampi(hit_points,0,max_hit_points)
+	
+	var dmg_ind = DamageIndicator.instantiate()
+	dmg_ind.setup(global_position, attack.damage, max_hit_points)
+	add_child(dmg_ind)
+	
 	$AnimationPlayer2.play("hit")
 	await $AnimationPlayer2.animation_finished
+	
 	status.update(self)
 	if hit_points <= 0:
 		remove_from_group(group)
