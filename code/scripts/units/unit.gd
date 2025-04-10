@@ -102,7 +102,7 @@ func hit(attack):
 	
 	var dmg_ind = DamageIndicator.instantiate()
 	dmg_ind.setup(global_position, attack.damage, max_hit_points)
-	add_child(dmg_ind)
+	get_tree().root.add_child(dmg_ind)
 	
 	$AnimationPlayer2.play("hit")
 	await $AnimationPlayer2.animation_finished

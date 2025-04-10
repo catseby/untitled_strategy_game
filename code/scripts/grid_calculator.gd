@@ -208,7 +208,7 @@ class Fraction:
 ## Coordinates are the positions, tiles with units in them.
 ## Units are the unit nodes themselves.
 func get_aoe_cells(range):
-	var coords : Array[Vector3i] = []
+	var coords : Array[Vector3i] = get_available_cells(range, true)
 	var units : Array[Vector3i] = []
 	for coord in coords:
 		if map.is_cell_occupied(coord * Vector3i(2,0,2), global_position) and !units.has(coord):

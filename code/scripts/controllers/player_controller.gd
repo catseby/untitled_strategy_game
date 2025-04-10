@@ -179,13 +179,12 @@ func skill_indicators(unit,skill):
 	else:
 		var gc = GridCalculator.new(global_position,map)
 		var cells = gc.get_aoe_cells(skill.range)
-
+		
 		cell_default = cells[0]
 		current_aoe = cells[1]
-
+		
 		set_axis(cells[0],current_index)
 		set_axis(cells[1],current_index + 5)
-
 		print(current_aoe)
 
 func set_axis(coords : Array[Vector3i] = [Vector3i.ZERO],index = 1):
