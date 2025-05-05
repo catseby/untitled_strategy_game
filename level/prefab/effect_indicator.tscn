@@ -1,0 +1,11 @@
+[gd_scene load_steps=3 format=3 uid="uid://7e1m4v4lymto"]
+
+[ext_resource type="PackedScene" uid="uid://dg8xik3coe1hx" path="res://level/prefab/hit_indicator.tscn" id="1_byhlp"]
+[ext_resource type="Script" uid="uid://jxif6b0b46xm" path="res://code/scripts/effect_indicator.gd" id="2_lfp76"]
+
+[node name="EffectIndicator" instance=ExtResource("1_byhlp")]
+script = ExtResource("2_lfp76")
+
+[node name="PrimaryLabel" parent="Pivot" index="0"]
+modulate = Color(0.7, 0, 1, 0.8)
+text = "Debuff"
